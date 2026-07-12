@@ -1,0 +1,70 @@
+{
+  "package": "Website Design Dogs Complete Web Visual Package",
+  "version": "1.0",
+  "repo": "lacreativodesign/website-design-dogs-website",
+  "productionAssets": {
+    "logos": [
+      "/brand/logos/wdd-primary-full-color.svg",
+      "/brand/logos/wdd-primary-full-color.png",
+      "/brand/logos/wdd-primary-white-bg.png"
+    ],
+    "mascot": "/brand/mascot/wdd-mascot-transparent.png",
+    "favicons": "/brand/favicons/",
+    "icons": "/brand/icons/",
+    "backgrounds": "/brand/backgrounds/",
+    "scenes": "/brand/scenes/",
+    "og": "/brand/og/",
+    "portfolioConcepts": "/portfolio/concepts/",
+    "campaignHeroes": "/campaigns/"
+  },
+  "scenePairs": {
+    "home-hero": {
+      "dark": "/brand/scenes/home-hero-dark.webp",
+      "light": "/brand/scenes/home-hero-light.webp"
+    },
+    "services-hero": {
+      "dark": "/brand/scenes/services-hero-dark.webp",
+      "light": "/brand/scenes/services-hero-light.webp"
+    },
+    "portfolio-hero": {
+      "dark": "/brand/scenes/portfolio-hero-dark.webp",
+      "light": "/brand/scenes/portfolio-hero-light.webp"
+    },
+    "packages-hero": {
+      "dark": "/brand/scenes/packages-hero-dark.webp",
+      "light": "/brand/scenes/packages-hero-light.webp"
+    },
+    "about-hero": {
+      "dark": "/brand/scenes/about-hero-dark.webp",
+      "light": "/brand/scenes/about-hero-light.webp"
+    },
+    "contact-hero": {
+      "dark": "/brand/scenes/contact-hero-dark.webp",
+      "light": "/brand/scenes/contact-hero-light.webp"
+    },
+    "faq-hero": {
+      "dark": "/brand/scenes/faq-hero-dark.webp",
+      "light": "/brand/scenes/faq-hero-light.webp"
+    },
+    "privacy-hero": {
+      "dark": "/brand/scenes/privacy-hero-dark.webp",
+      "light": "/brand/scenes/privacy-hero-light.webp"
+    },
+    "terms-hero": {
+      "dark": "/brand/scenes/terms-hero-dark.webp",
+      "light": "/brand/scenes/terms-hero-light.webp"
+    },
+    "404-hero": {
+      "dark": "/brand/scenes/404-hero-dark.webp",
+      "light": "/brand/scenes/404-hero-light.webp"
+    }
+  },
+  "rules": {
+    "doNotRenameAfterImplementation": true,
+    "darkThemeDefault": true,
+    "legalOwner": "LA CREATIVO GROUP, LLC",
+    "slogan": "Loyal to the game.",
+    "portfolioConceptsMustBeLabeledConcept": true,
+    "referencesFolderIsNotForProductionServing": true
+  }
+}
