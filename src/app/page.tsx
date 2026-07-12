@@ -1,27 +1,14 @@
-import { BRAND_RELATIONSHIP, SITE_NAME, SITE_SLOGAN } from "@/lib/constants";
+import { BrandLogo } from "@/components/layout/brand-logo";
+import { ThemeScene } from "@/components/theme/theme-scene";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Container } from "@/components/ui/container";
+import { ArrowRightIcon } from "@/components/ui/icon";
+import { Section } from "@/components/ui/section";
+import { SectionHeading } from "@/components/ui/section-heading";
+import { siteConfig } from "@/content/site";
 
 export default function Home() {
-  return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top_right,rgba(255,106,0,0.20),transparent_32rem),linear-gradient(135deg,#061529_0%,#0B1F3A_48%,#102B4F_100%)] px-6 py-10 text-white">
-      <section className="mx-auto flex min-h-[calc(100vh-5rem)] w-full max-w-[var(--container-width)] items-center">
-        <div className="max-w-3xl">
-          <p className="mb-6 inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-semibold uppercase tracking-[0.22em] text-[var(--color-primary-orange)] shadow-[var(--shadow-sm)]">
-            {SITE_SLOGAN}
-          </p>
-          <h1 className="text-5xl font-black tracking-tight sm:text-6xl lg:text-7xl">{SITE_NAME}</h1>
-          <p className="mt-6 max-w-2xl text-2xl font-semibold text-white sm:text-3xl">
-            Professional websites built to deliver results.
-          </p>
-          <p className="mt-5 max-w-2xl text-lg leading-8 text-[var(--color-text-muted)]">
-            {BRAND_RELATIONSHIP}
-          </p>
-          <div className="mt-10 rounded-[var(--radius-lg)] border border-white/12 bg-white/10 p-6 shadow-[var(--shadow-md)] backdrop-blur">
-            <p className="text-base leading-7 text-white/90">
-              The full Website Design Dogs marketing website is being built. This temporary Next.js foundation is ready for the next implementation phase.
-            </p>
-          </div>
-        </div>
-      </section>
-    </main>
-  );
+  return <><Section className="relative overflow-hidden py-14 sm:py-20 lg:py-24"><Container className="grid items-center gap-10 lg:grid-cols-[1fr_0.92fr]"><div><Badge>LOYAL TO THE GAME.</Badge><h1 className="mt-6 max-w-4xl text-5xl font-black tracking-[-0.055em] sm:text-6xl lg:text-7xl">We Design Websites That Deliver Results.</h1><p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--color-text-muted)] sm:text-xl">Professional, mobile-ready websites created to help local and growing businesses build credibility and generate more opportunities online.</p><div className="mt-8 flex flex-col gap-3 sm:flex-row"><Button href={siteConfig.primaryCta.href} size="large" icon={<ArrowRightIcon />} fullWidthMobile>{siteConfig.primaryCta.label}</Button><Button href="/portfolio" variant="outline" size="large" fullWidthMobile>View Our Work</Button></div><p className="mt-6 text-sm font-semibold text-[var(--color-text-subtle)]">The complete Website Design Dogs website is currently being built.</p><p className="mt-2 text-sm text-[var(--color-text-subtle)]">A service brand of LA CREATIVO GROUP, LLC.</p></div><Card className="p-3"><ThemeScene darkSrc="/brand/scenes/home-hero-dark.webp" lightSrc="/brand/scenes/home-hero-light.webp" alt="Website Design Dogs mountain-inspired website design scene" width={1600} height={1000} priority sizes="(max-width: 1024px) 100vw, 46vw" className="aspect-[4/3]" /><div className="flex items-center justify-between gap-4 p-4"><BrandLogo /><Badge>Preview</Badge></div></Card></Container></Section><Section alternate><Container><SectionHeading eyebrow="Design System Preview" title="A reusable brand foundation for the pages coming next.">A compact preview of the Website Design Dogs theme engine, components, and coordinated light and dark visual system.</SectionHeading><div className="mt-10 grid gap-5 lg:grid-cols-3"><Card hover><Badge>Buttons</Badge><div className="mt-5 flex flex-wrap gap-3"><Button href="/get-started">Primary</Button><Button href="/portfolio" variant="secondary">Secondary</Button><Button href="/services" variant="outline">Outline</Button></div></Card><Card><Badge>Card Surface</Badge><h3 className="mt-5 text-2xl font-black">Theme-aware surfaces</h3><p className="mt-3 text-[var(--color-text-muted)]">Cards, borders, text, shadows, and focus states respond to the selected theme without image inversion.</p></Card><Card className="p-3"><ThemeScene darkSrc="/brand/scenes/services-hero-dark.webp" lightSrc="/brand/scenes/services-hero-light.webp" alt="Theme-aware Website Design Dogs services scene" width={1600} height={1000} sizes="(max-width: 1024px) 100vw, 25vw" className="aspect-[16/11]" /></Card></div></Container></Section></>;
 }
