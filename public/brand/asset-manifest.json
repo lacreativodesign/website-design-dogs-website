@@ -1,0 +1,15 @@
+{
+  "brand": "Website Design Dogs",
+  "version": "1.0",
+  "assets": {
+    "primaryLogoSvg": "/brand/logos/wdd-primary-full-color.svg",
+    "primaryLogoPng": "/brand/logos/wdd-primary-full-color.png",
+    "primaryLogoWhiteBackground": "/brand/logos/wdd-primary-white-bg.png",
+    "mascotTransparent": "/brand/mascot/wdd-mascot-transparent.png"
+  },
+  "rules": {
+    "doNotRename": true,
+    "legalOwner": "LA CREATIVO GROUP, LLC",
+    "slogan": "Loyal to the game."
+  }
+}
