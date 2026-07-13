@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "assets:verify": "node scripts/verify-assets.mjs"
+    "assets:verify": "node scripts/verify-assets.mjs",
+    "leads:test": "node --test tests/leads.test.mjs"
   },
   "dependencies": {
     "next": "16.2.10",

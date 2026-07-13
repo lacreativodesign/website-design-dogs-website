@@ -1,0 +1,3 @@
+import { createHash } from "crypto"; import { LeadError } from "./errors";
+type Bucket={count:number; resetAt:number}; const store = (globalThis as typeof globalThis & { __wddLeadRate?: Map<string,Bucket> }).__wddLeadRate ??= new Map<string,Bucket>();
+export function checkRateLimit(id:string, windowMs:number, max:number){const now=Date.now(); for(const [k,v] of store) if(v.resetAt<=now) store.delete(k); const key=createHash("sha256").update(id).digest("hex"); const b=store.get(key); if(!b){store.set(key,{count:1,resetAt:now+windowMs}); return} if(b.count>=max){const retry=Math.ceil((b.resetAt-now)/1000); throw new LeadError("RATE_LIMITED","Too many submission attempts were received. Please wait a little before trying again.",429,undefined,retry)} b.count+=1}
