@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import { FaqAccordion } from "@/components/home/faq-accordion";
 import { PortfolioTabs } from "@/components/home/portfolio-tabs";
@@ -12,15 +13,11 @@ import { Section } from "@/components/ui/section";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { homeHero, homeServices, industryTiles, packagesHome, reasons, valuePoints } from "@/content/home";
 
-export const metadata: Metadata = {
-  title: "Website Design Dogs | Professional Website Design for Growing Businesses",
-  description: "Website Design Dogs creates professional, mobile-ready websites for local and growing businesses, with clear packages, conversion-focused design, and dependable ongoing support.",
-};
-
 function SceneCard({ darkSrc, lightSrc, alt, className = "aspect-[4/3]" }: { darkSrc: string; lightSrc: string; alt: string; className?: string }) {
   return <Card className="p-3"><ThemeScene darkSrc={darkSrc} lightSrc={lightSrc} alt={alt} width={1400} height={1000} sizes="(max-width: 1024px) 100vw, 42vw" className={className} /></Card>;
 }
 
+export const metadata: Metadata = pageMetadata({ title: "Professional Website Design for Growing Businesses", description: "Website Design Dogs creates professional, mobile-ready websites for local and growing businesses with clear packages and dependable support.", path: "/" });
 export default function Home() {
   return <>
     <Section className="relative overflow-hidden py-10 sm:py-14 lg:py-16"><Container className="grid min-h-[calc(720px-var(--header-height))] items-center gap-10 lg:grid-cols-[0.95fr_1.05fr]"><div><Badge>{homeHero.eyebrow}</Badge><h1 className="mt-6 max-w-4xl text-5xl font-black tracking-[-0.055em] sm:text-6xl lg:text-7xl">{homeHero.title}</h1><p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--color-text-muted)] sm:text-xl">{homeHero.body}</p><div className="mt-8 flex flex-col gap-3 sm:flex-row"><Button href="/get-started" size="large" icon={<ArrowRightIcon />} fullWidthMobile>Get a Free Quote</Button><Button href="/portfolio" variant="outline" size="large" fullWidthMobile>View Our Work</Button></div><p className="mt-6 max-w-xl text-sm font-bold text-[var(--color-text-subtle)]">{homeHero.support}</p></div><Card className="p-3 lg:p-4"><ThemeScene darkSrc="/brand/scenes/home-hero-dark.webp" lightSrc="/brand/scenes/home-hero-light.webp" tabletDarkSrc="/brand/crops/tablet/home-dark.webp" tabletLightSrc="/brand/crops/tablet/home-light.webp" mobileDarkSrc="/brand/crops/mobile/home-dark.webp" mobileLightSrc="/brand/crops/mobile/home-light.webp" alt="Website Design Dogs mascot working on a professional website design scene" width={1600} height={1000} priority sizes="(max-width: 768px) 100vw, (max-width: 1024px) 60vw, 50vw" className="aspect-[4/3] sm:aspect-[16/11]" objectPosition="center" /></Card></Container></Section>

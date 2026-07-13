@@ -1,0 +1,1 @@
+"use client"; export function CookieSettingsButton(){ return <button type="button" className="footer-legal-link" onClick={()=>window.dispatchEvent(new Event("wdd:open-consent-preferences"))}>Cookie Settings</button>; }
