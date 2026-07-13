@@ -1,0 +1,296 @@
+{
+  "package": "Website Design Dogs Final Visual Package v2",
+  "status": "approved-production-assets",
+  "version": "2.0.0",
+  "approvalDate": "2026-07-12",
+  "repo": "lacreativodesign/website-design-dogs-website",
+  "legalOwner": "LA CREATIVO GROUP, LLC",
+  "slogan": "Loyal to the game.",
+  "lockedThemeRule": "Every dark visual has a matching light visual containing the same dog mascot, pose, composition, wardrobe, proportions, and scene purpose. Only lighting, atmosphere, illumination, and environmental effects change.",
+  "pageScenes": {
+    "home": {
+      "dark": {
+        "webp": "/brand/scenes/home-hero-dark.webp",
+        "png": "/brand/scenes/home-hero-dark.png"
+      },
+      "light": {
+        "webp": "/brand/scenes/home-hero-light.webp",
+        "png": "/brand/scenes/home-hero-light.png"
+      }
+    },
+    "services": {
+      "dark": {
+        "webp": "/brand/scenes/services-hero-dark.webp",
+        "png": "/brand/scenes/services-hero-dark.png"
+      },
+      "light": {
+        "webp": "/brand/scenes/services-hero-light.webp",
+        "png": "/brand/scenes/services-hero-light.png"
+      }
+    },
+    "portfolio": {
+      "dark": {
+        "webp": "/brand/scenes/portfolio-hero-dark.webp",
+        "png": "/brand/scenes/portfolio-hero-dark.png"
+      },
+      "light": {
+        "webp": "/brand/scenes/portfolio-hero-light.webp",
+        "png": "/brand/scenes/portfolio-hero-light.png"
+      }
+    },
+    "packages": {
+      "dark": {
+        "webp": "/brand/scenes/packages-hero-dark.webp",
+        "png": "/brand/scenes/packages-hero-dark.png"
+      },
+      "light": {
+        "webp": "/brand/scenes/packages-hero-light.webp",
+        "png": "/brand/scenes/packages-hero-light.png"
+      }
+    },
+    "about": {
+      "dark": {
+        "webp": "/brand/scenes/about-hero-dark.webp",
+        "png": "/brand/scenes/about-hero-dark.png"
+      },
+      "light": {
+        "webp": "/brand/scenes/about-hero-light.webp",
+        "png": "/brand/scenes/about-hero-light.png"
+      }
+    },
+    "contact": {
+      "dark": {
+        "webp": "/brand/scenes/contact-hero-dark.webp",
+        "png": "/brand/scenes/contact-hero-dark.png"
+      },
+      "light": {
+        "webp": "/brand/scenes/contact-hero-light.webp",
+        "png": "/brand/scenes/contact-hero-light.png"
+      }
+    },
+    "faq": {
+      "dark": {
+        "webp": "/brand/scenes/faq-hero-dark.webp",
+        "png": "/brand/scenes/faq-hero-dark.png"
+      },
+      "light": {
+        "webp": "/brand/scenes/faq-hero-light.webp",
+        "png": "/brand/scenes/faq-hero-light.png"
+      }
+    },
+    "privacy": {
+      "dark": {
+        "webp": "/brand/scenes/privacy-hero-dark.webp",
+        "png": "/brand/scenes/privacy-hero-dark.png"
+      },
+      "light": {
+        "webp": "/brand/scenes/privacy-hero-light.webp",
+        "png": "/brand/scenes/privacy-hero-light.png"
+      }
+    },
+    "terms": {
+      "dark": {
+        "webp": "/brand/scenes/terms-hero-dark.webp",
+        "png": "/brand/scenes/terms-hero-dark.png"
+      },
+      "light": {
+        "webp": "/brand/scenes/terms-hero-light.webp",
+        "png": "/brand/scenes/terms-hero-light.png"
+      }
+    },
+    "404": {
+      "dark": {
+        "webp": "/brand/scenes/404-hero-dark.webp",
+        "png": "/brand/scenes/404-hero-dark.png"
+      },
+      "light": {
+        "webp": "/brand/scenes/404-hero-light.webp",
+        "png": "/brand/scenes/404-hero-light.png"
+      }
+    }
+  },
+  "sectionScenes": {
+    "services": {
+      "dark": {
+        "webp": "/brand/sections/services-dark.webp",
+        "png": "/brand/sections/services-dark.png"
+      },
+      "light": {
+        "webp": "/brand/sections/services-light.webp",
+        "png": "/brand/sections/services-light.png"
+      }
+    },
+    "built-local": {
+      "dark": {
+        "webp": "/brand/sections/built-local-dark.webp",
+        "png": "/brand/sections/built-local-dark.png"
+      },
+      "light": {
+        "webp": "/brand/sections/built-local-light.webp",
+        "png": "/brand/sections/built-local-light.png"
+      }
+    },
+    "portfolio-showcase": {
+      "dark": {
+        "webp": "/brand/sections/portfolio-showcase-dark.webp",
+        "png": "/brand/sections/portfolio-showcase-dark.png"
+      },
+      "light": {
+        "webp": "/brand/sections/portfolio-showcase-light.webp",
+        "png": "/brand/sections/portfolio-showcase-light.png"
+      }
+    },
+    "packages-pricing": {
+      "dark": {
+        "webp": "/brand/sections/packages-pricing-dark.webp",
+        "png": "/brand/sections/packages-pricing-dark.png"
+      },
+      "light": {
+        "webp": "/brand/sections/packages-pricing-light.webp",
+        "png": "/brand/sections/packages-pricing-light.png"
+      }
+    },
+    "local-industries": {
+      "dark": {
+        "webp": "/brand/sections/local-industries-dark.webp",
+        "png": "/brand/sections/local-industries-dark.png"
+      },
+      "light": {
+        "webp": "/brand/sections/local-industries-light.webp",
+        "png": "/brand/sections/local-industries-light.png"
+      }
+    },
+    "client-proof": {
+      "dark": {
+        "webp": "/brand/sections/client-proof-dark.webp",
+        "png": "/brand/sections/client-proof-dark.png"
+      },
+      "light": {
+        "webp": "/brand/sections/client-proof-light.webp",
+        "png": "/brand/sections/client-proof-light.png"
+      }
+    },
+    "faq-support": {
+      "dark": {
+        "webp": "/brand/sections/faq-support-dark.webp",
+        "png": "/brand/sections/faq-support-dark.png"
+      },
+      "light": {
+        "webp": "/brand/sections/faq-support-light.webp",
+        "png": "/brand/sections/faq-support-light.png"
+      }
+    },
+    "cta": {
+      "dark": {
+        "webp": "/brand/sections/cta-dark.webp",
+        "png": "/brand/sections/cta-dark.png"
+      },
+      "light": {
+        "webp": "/brand/sections/cta-light.webp",
+        "png": "/brand/sections/cta-light.png"
+      }
+    }
+  },
+  "portfolioConcepts": [
+    "/portfolio/concepts/cleaning-concept.webp",
+    "/portfolio/concepts/roofing-concept.webp",
+    "/portfolio/concepts/landscaping-concept.webp",
+    "/portfolio/concepts/real-estate-concept.webp",
+    "/portfolio/concepts/restaurant-concept.webp",
+    "/portfolio/concepts/law-firm-concept.webp",
+    "/portfolio/concepts/dental-concept.webp",
+    "/portfolio/concepts/fitness-concept.webp",
+    "/portfolio/concepts/salon-concept.webp",
+    "/portfolio/concepts/ecommerce-concept.webp",
+    "/portfolio/concepts/home-services-concept.webp",
+    "/portfolio/concepts/consulting-concept.webp"
+  ],
+  "industryIcons": [
+    "/brand/icons/industries/cleaning.svg",
+    "/brand/icons/industries/roofing.svg",
+    "/brand/icons/industries/landscaping.svg",
+    "/brand/icons/industries/hvac.svg",
+    "/brand/icons/industries/plumbing.svg",
+    "/brand/icons/industries/electrician.svg",
+    "/brand/icons/industries/pest-control.svg",
+    "/brand/icons/industries/painting.svg",
+    "/brand/icons/industries/remodeling.svg",
+    "/brand/icons/industries/flooring.svg",
+    "/brand/icons/industries/real-estate.svg",
+    "/brand/icons/industries/restaurant.svg",
+    "/brand/icons/industries/dental.svg",
+    "/brand/icons/industries/medical.svg",
+    "/brand/icons/industries/legal.svg",
+    "/brand/icons/industries/accounting.svg",
+    "/brand/icons/industries/fitness.svg",
+    "/brand/icons/industries/salon-spa.svg",
+    "/brand/icons/industries/automotive.svg",
+    "/brand/icons/industries/moving.svg",
+    "/brand/icons/industries/storage.svg",
+    "/brand/icons/industries/security.svg",
+    "/brand/icons/industries/solar.svg",
+    "/brand/icons/industries/pool-services.svg",
+    "/brand/icons/industries/tree-service.svg",
+    "/brand/icons/industries/construction.svg",
+    "/brand/icons/industries/handyman.svg",
+    "/brand/icons/industries/photography.svg",
+    "/brand/icons/industries/consulting.svg",
+    "/brand/icons/industries/ecommerce.svg"
+  ],
+  "campaigns": {
+    "cleaning": {
+      "dark": "/campaigns/cleaning/hero-dark.webp",
+      "light": "/campaigns/cleaning/hero-light.webp"
+    },
+    "roofing": {
+      "dark": "/campaigns/roofing/hero-dark.webp",
+      "light": "/campaigns/roofing/hero-light.webp"
+    },
+    "landscaping": {
+      "dark": "/campaigns/landscaping/hero-dark.webp",
+      "light": "/campaigns/landscaping/hero-light.webp"
+    },
+    "home-services": {
+      "dark": "/campaigns/home-services/hero-dark.webp",
+      "light": "/campaigns/home-services/hero-light.webp"
+    }
+  },
+  "responsiveCrops": {
+    "mobile": {
+      "home": {
+        "dark": "/brand/crops/mobile/home-dark.webp",
+        "light": "/brand/crops/mobile/home-light.webp"
+      },
+      "services": {
+        "dark": "/brand/crops/mobile/services-dark.webp",
+        "light": "/brand/crops/mobile/services-light.webp"
+      },
+      "about": {
+        "dark": "/brand/crops/mobile/about-dark.webp",
+        "light": "/brand/crops/mobile/about-light.webp"
+      },
+      "404": {
+        "dark": "/brand/crops/mobile/404-dark.webp",
+        "light": "/brand/crops/mobile/404-light.webp"
+      }
+    },
+    "tablet": {
+      "home": {
+        "dark": "/brand/crops/tablet/home-dark.webp",
+        "light": "/brand/crops/tablet/home-light.webp"
+      },
+      "services": {
+        "dark": "/brand/crops/tablet/services-dark.webp",
+        "light": "/brand/crops/tablet/services-light.webp"
+      },
+      "about": {
+        "dark": "/brand/crops/tablet/about-dark.webp",
+        "light": "/brand/crops/tablet/about-light.webp"
+      },
+      "404": {
+        "dark": "/brand/crops/tablet/404-dark.webp",
+        "light": "/brand/crops/tablet/404-light.webp"
+      }
+    }
+  }
+}
