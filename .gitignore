@@ -28,3 +28,12 @@ pnpm-debug.log*
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+# Playwright artifacts
+/playwright-report/
+/test-results/
+/blob-report/
+/playwright/.cache/
+*.zip
+*.webm
+*.trace

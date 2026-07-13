@@ -11,3 +11,9 @@
 9. Legal: review legal pages, obtain attorney review when appropriate, confirm proposal alignment, campaign offer wording, refund language, and consent language.
 10. Final QA: desktop, tablet, mobile, dark, light, all forms, links, 404, campaigns, sitemap, robots, structured data, Lighthouse, accessibility, console and hydration errors.
 11. Rollback: set `LEAD_SUBMISSION_ENABLED=false`, set `NEXT_PUBLIC_ENABLE_GTM=false`, redeploy previous Vercel production deployment, remove optional verification values, preserve received lead records.
+
+## Final Launch Gate Addendum
+
+Before connecting the production domain or enabling external integrations, run `npm run env:check -- --production`, `npm run build:audit`, and `npm run test:e2e`. Pull requests and pushes to `main` are covered by the GitHub Actions quality gate in `.github/workflows/quality-gate.yml`.
+
+Verify preview and development deployments include `X-Robots-Tag: noindex, nofollow, noarchive`, while production deployments do not receive a global noindex header. Complete the sign-off template in `docs/GO-LIVE-ACCEPTANCE.md` and preserve all existing manual external configuration steps for Vercel, Bizosto, Turnstile, GTM, GA4, Meta, Google Search Console, and Bing Webmaster Tools.

@@ -10,7 +10,12 @@
     "typecheck": "tsc --noEmit",
     "assets:verify": "node scripts/verify-assets.mjs",
     "leads:test": "node --test tests/leads.test.mjs",
-    "launch:test": "node --test tests/launch.test.mjs"
+    "launch:test": "node --test tests/launch.test.mjs",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
+    "build:audit": "node scripts/audit-production-build.mjs",
+    "env:check": "node scripts/check-production-env.mjs",
+    "content:test": "node --test tests/content-integrity.test.mjs"
   },
   "dependencies": {
     "next": "16.2.10",
@@ -25,6 +30,7 @@
     "eslint": "9.39.5",
     "eslint-config-next": "16.2.10",
     "tailwindcss": "4.3.2",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "@playwright/test": "1.55.0"
   }
 }
