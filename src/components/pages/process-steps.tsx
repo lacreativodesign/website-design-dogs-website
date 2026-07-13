@@ -1,0 +1,2 @@
+import { Card } from "@/components/ui/card";
+export function ProcessSteps({ steps }: { steps: readonly (readonly [string,string])[] }) { return <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{steps.map(([title,body],i)=><Card key={title} hover><p className="text-sm font-black text-[var(--color-primary-orange)]">{String(i+1).padStart(2,"0")}</p><h3 className="mt-3 text-xl font-black">{title}</h3><p className="mt-3 text-sm text-[var(--color-text-muted)]">{body}</p></Card>)}</div>; }

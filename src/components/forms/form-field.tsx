@@ -1,0 +1,3 @@
+import { cn } from "@/lib/utils";
+export function Field({ id,label,required,error,children }: {id:string;label:string;required?:boolean;error?:string;children:React.ReactNode}){return <div><label htmlFor={id} className="block text-sm font-black">{label}{required?<span className="text-[var(--color-primary-orange)]"> *</span>:null}</label><div className="mt-2">{children}</div>{error?<p id={`${id}-error`} className="mt-2 text-sm font-bold text-orange-300">{error}</p>:null}</div>}
+export const inputClass=cn("w-full rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-3 text-[var(--color-foreground)] outline-none focus:border-[var(--color-primary-orange)]");
