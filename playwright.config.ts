@@ -1,15 +1,16 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const baseURL = process.env.PLAYWRIGHT_BASE_URL || 'http://127.0.0.1:3000';
-const reuseExistingServer = !process.env.CI || Boolean(process.env.PLAYWRIGHT_BASE_URL);
+const isCI = Boolean(process.env.CI);
+const useExternalServer = process.env.PLAYWRIGHT_EXTERNAL_SERVER === 'true';
 
 export default defineConfig({
   testDir: './tests/e2e',
   timeout: 30_000,
   expect: { timeout: 5_000 },
   fullyParallel: true,
-  retries: process.env.CI ? 1 : 0,
-  reporter: process.env.CI ? [['html', { open: 'never' }], ['list']] : 'list',
+  retries: isCI ? 1 : 0,
+  reporter: isCI ? [['html', { open: 'never' }], ['list']] : 'list',
   use: {
     baseURL,
     browserName: 'chromium',
@@ -17,11 +18,15 @@ export default defineConfig({
     trace: 'retain-on-failure',
     video: 'retain-on-failure',
   },
-  webServer: process.env.PLAYWRIGHT_BASE_URL ? undefined : {
-    command: 'npm run start',
-    url: baseURL,
-    reuseExistingServer,
-    timeout: 120_000,
-  },
+  webServer: useExternalServer
+    ? undefined
+    : {
+        command: 'npm run start',
+        url: baseURL,
+        reuseExistingServer: !isCI,
+        timeout: 120_000,
+        stdout: 'pipe',
+        stderr: 'pipe',
+      },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
 });
