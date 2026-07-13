@@ -5,6 +5,7 @@ const securityHeaders = [
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=()" },
   { key: "X-Frame-Options", value: "DENY" },
+  { key: "Content-Security-Policy", value: "object-src 'none'; frame-ancestors 'none'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; connect-src 'self' https://challenges.cloudflare.com; base-uri 'self'; form-action 'self'" },
 ];
 
 const nextConfig: NextConfig = {
@@ -16,8 +17,6 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  // TODO(security): Add a production Content Security Policy during the final
-  // security prompt after analytics, Meta integrations, and asset domains are known.
 };
 
 export default nextConfig;
