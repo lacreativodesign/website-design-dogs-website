@@ -108,3 +108,6 @@ h1, h2, h3 { text-wrap: balance; }
 .site-footer { background: radial-gradient(circle at top left, rgb(255 106 0 / .12), transparent 30rem), var(--color-footer-bg); color: white; }
 .footer-link, .footer-legal-link { color: rgb(255 255 255 / .74); }
 .footer-link:hover, .footer-legal-link:hover { color: white; text-decoration: underline; text-decoration-color: var(--color-primary-orange); text-underline-offset: .25rem; }
+.theme-scene__tablet, .theme-scene__mobile { display: none; }
+@media (min-width: 641px) and (max-width: 1023px) { .theme-scene:has(.theme-scene__tablet) .theme-scene__desktop { display: none; } .theme-scene:has(.theme-scene__tablet) .theme-scene__tablet { display: block; } }
+@media (max-width: 640px) { .theme-scene:has(.theme-scene__mobile) .theme-scene__desktop, .theme-scene:has(.theme-scene__mobile) .theme-scene__tablet { display: none; } .theme-scene:has(.theme-scene__mobile) .theme-scene__mobile { display: block; } }
