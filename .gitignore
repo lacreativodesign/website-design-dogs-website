@@ -37,3 +37,21 @@ next-env.d.ts
 *.zip
 *.webm
 *.trace
+
+# Generated Playwright artifacts
+/playwright-report/
+/test-results/
+/blob-report/
+
+# Generated visual comparison artifacts
+/tests/visual/reference/dark/
+/tests/visual/reference/light/
+/tests/visual/current/
+/tests/visual/diff/
+/visual-report/
+/screenshots/
+/traces/
+/videos/
+
+# Generated build files
+/tsconfig.tsbuildinfo

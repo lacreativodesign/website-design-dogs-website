@@ -15,7 +15,11 @@
     "test:e2e:headed": "playwright test --headed",
     "build:audit": "node scripts/audit-production-build.mjs",
     "env:check": "node scripts/check-production-env.mjs",
-    "content:test": "node --test tests/content-integrity.test.mjs"
+    "content:test": "node --test tests/content-integrity.test.mjs",
+    "visual:extract": "node scripts/extract-mockup-references.mjs",
+    "visual:capture": "node scripts/capture-mockup-pages.mjs",
+    "visual:compare": "node scripts/compare-mockup-pages.mjs",
+    "visual:test": "rm -rf test-results/visual && npm run assets:verify && npm run visual:extract && npm run build && sh -c 'npm run start > /tmp/wdd-next.log 2>&1 & echo $! > /tmp/wdd-next.pid; sleep 5; npm run visual:capture && npm run visual:compare; status=$?; kill $(cat /tmp/wdd-next.pid); exit $status'"
   },
   "dependencies": {
     "next": "16.2.10",

@@ -35,6 +35,7 @@ jobs:
       - run: npm run build
       - run: npm run build:audit
       - run: npx playwright install --with-deps chromium
+      - run: npm run visual:test
       - run: npm run test:e2e
       - name: Upload Playwright report on failure
         if: failure()
