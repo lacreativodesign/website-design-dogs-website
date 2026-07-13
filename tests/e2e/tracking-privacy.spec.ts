@@ -1,0 +1,2 @@
+import { test, expect } from '@playwright/test';
+test('no optional tracking requests or PII in dataLayer by default',async({page})=>{const bad:string[]=[];page.on('request',r=>{if(/googletagmanager|google-analytics|analytics\.google|connect\.facebook|facebook\.com\/tr/.test(r.url()))bad.push(r.url());});await page.goto('/campaigns/cleaning');expect(bad).toEqual([]);const dl=await page.evaluate(()=>JSON.stringify(window.dataLayer||[]));expect(dl).not.toMatch(/email|phone|businessName|referenceId|tenantId|apiKey|turnstileToken|address/i);});
