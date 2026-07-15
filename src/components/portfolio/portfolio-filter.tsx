@@ -1,3 +1,81 @@
 "use client";
-import Image from "next/image"; import { useMemo, useState } from "react"; import { Badge } from "@/components/ui/badge"; import { portfolioConcepts, portfolioFilters } from "@/content/portfolio"; import { cn } from "@/lib/utils";
-export function PortfolioFilter(){const [active,setActive]=useState<(typeof portfolioFilters)[number]>("All"); const concepts=useMemo(()=>active==="All"?portfolioConcepts:portfolioConcepts.filter(c=>c.category===active),[active]); return <div className="mt-10"><div className="flex flex-wrap justify-center gap-2" role="tablist" aria-label="Portfolio concept filters">{portfolioFilters.map(filter=><button key={filter} type="button" role="tab" aria-selected={active===filter} aria-controls="portfolio-panel" className={cn("min-h-11 rounded-full border px-4 py-2 text-sm font-black transition",active===filter?"border-[var(--color-primary-orange)] bg-[var(--color-primary-orange)] text-white":"border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-muted)] hover:text-[var(--color-foreground)]")} onClick={()=>setActive(filter)}>{filter}</button>)}</div><div id="portfolio-panel" role="tabpanel" className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">{concepts.map(c=><article key={c.image} className="group overflow-hidden rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-[var(--color-surface-elevated)] shadow-[var(--shadow-md)] transition hover:-translate-y-0.5 hover:border-[var(--color-primary-orange)]"><div className="relative aspect-[4/3] overflow-hidden"><Image src={c.image} alt={`${c.title} visual design concept`} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw" className="object-cover transition duration-300 group-hover:scale-[1.03]"/><span className="absolute left-3 top-3"><Badge className="bg-[var(--color-primary-orange)] text-white">DESIGN CONCEPT</Badge></span></div><div className="p-5"><p className="text-xs font-black uppercase tracking-[0.16em] text-[var(--color-primary-orange)]">{c.category}</p><h3 className="mt-2 text-lg font-black">{c.title}</h3><p className="mt-3 text-sm text-[var(--color-text-muted)]">{c.description}</p></div></article>)}</div></div>}
+
+import Image from "next/image";
+import { KeyboardEvent, useMemo, useState } from "react";
+import { portfolioConcepts, portfolioFilters } from "@/content/portfolio";
+import { cn } from "@/lib/utils";
+
+export function PortfolioFilter() {
+  const [active, setActive] = useState<(typeof portfolioFilters)[number]>("All");
+  const concepts = useMemo(
+    () => (active === "All" ? portfolioConcepts : portfolioConcepts.filter((concept) => concept.category === active)),
+    [active],
+  );
+
+  const moveTab = (filter: (typeof portfolioFilters)[number], direction: 1 | -1) => {
+    const currentIndex = portfolioFilters.indexOf(filter);
+    const nextIndex = (currentIndex + direction + portfolioFilters.length) % portfolioFilters.length;
+    setActive(portfolioFilters[nextIndex]);
+  };
+
+  const handleTabKeyDown = (event: KeyboardEvent<HTMLButtonElement>, filter: (typeof portfolioFilters)[number]) => {
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+      event.preventDefault();
+      moveTab(filter, 1);
+    }
+    if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+      event.preventDefault();
+      moveTab(filter, -1);
+    }
+    if (event.key === "Home") {
+      event.preventDefault();
+      setActive(portfolioFilters[0]);
+    }
+    if (event.key === "End") {
+      event.preventDefault();
+      setActive(portfolioFilters[portfolioFilters.length - 1]);
+    }
+  };
+
+  return (
+    <div className="portfolio-filter">
+      <div className="portfolio-filter__tabs" role="tablist" aria-label="Portfolio concept filters">
+        {portfolioFilters.map((filter) => (
+          <button
+            key={filter}
+            type="button"
+            role="tab"
+            aria-selected={active === filter}
+            aria-controls="portfolio-panel"
+            tabIndex={active === filter ? 0 : -1}
+            className={cn("portfolio-filter__tab", active === filter && "portfolio-filter__tab--active")}
+            onClick={() => setActive(filter)}
+            onKeyDown={(event) => handleTabKeyDown(event, filter)}
+          >
+            {filter}
+          </button>
+        ))}
+      </div>
+      <div id="portfolio-panel" role="tabpanel" className="portfolio-grid">
+        {concepts.map((concept) => (
+          <article key={concept.image} className="portfolio-concept-card">
+            <div className="portfolio-concept-card__media">
+              <Image
+                src={concept.image}
+                alt={`${concept.title} design concept`}
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
+                className="portfolio-concept-card__image"
+              />
+              <span className="portfolio-concept-card__label">DESIGN CONCEPT</span>
+            </div>
+            <div className="portfolio-concept-card__body">
+              <p>{concept.category}</p>
+              <h2>{concept.title}</h2>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  );
+}

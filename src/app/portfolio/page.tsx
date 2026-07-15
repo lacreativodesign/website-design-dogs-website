@@ -1,4 +1,58 @@
 import type { Metadata } from "next";
-import { pageMetadata } from "@/lib/seo"; import { PortfolioFilter } from "@/components/portfolio/portfolio-filter"; import { FeatureGrid } from "@/components/pages/feature-grid"; import { PageCta } from "@/components/pages/page-cta"; import { PageHero } from "@/components/pages/page-hero"; import { Card } from "@/components/ui/card"; import { Container } from "@/components/ui/container"; import { Section } from "@/components/ui/section"; import { SectionHeading } from "@/components/ui/section-heading"; import { conceptPrinciples } from "@/content/portfolio";
-export const metadata: Metadata = pageMetadata({ title: "Website Design Portfolio Concepts", description: "Explore Website Design Dogs portfolio concepts for local services, professional firms, health and wellness businesses, retailers, and growing companies.", path: "/portfolio" });
-export default function Page(){return <><PageHero eyebrow="PORTFOLIO CONCEPTS" title="Website concepts designed around real business needs." body="Explore a collection of Website Design Dogs concepts created to demonstrate how different industries can present services clearly, build credibility, and guide visitors toward action." darkSrc="/brand/scenes/portfolio-hero-dark.webp" lightSrc="/brand/scenes/portfolio-hero-light.webp" alt="Website Design Dogs portfolio preview scene"/><Section alternate><Container><Card className="text-center text-sm font-bold text-[var(--color-text-muted)]">These visuals are portfolio concepts created to demonstrate Website Design Dogs design direction and industry capabilities. They are not presented as completed client projects.</Card><PortfolioFilter/></Container></Section><Section><Container><SectionHeading className="mx-auto text-center" eyebrow="CONCEPT STRATEGY" title="What every concept is designed to solve."/><FeatureGrid items={conceptPrinciples}/></Container></Section><PageCta heading="Ready to create something built around your business?" cta="Get a Free Quote" href="/get-started"/></>}
+import Link from "next/link";
+import { PortfolioFilter } from "@/components/portfolio/portfolio-filter";
+import { ThemeScene } from "@/components/theme/theme-scene";
+import { Button } from "@/components/ui/button";
+import { Container } from "@/components/ui/container";
+import { ArrowRightIcon } from "@/components/ui/icon";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Website Design Portfolio Concepts",
+  description:
+    "Explore Website Design Dogs portfolio concepts for local services, professional firms, health and wellness businesses, retailers, and hospitality brands.",
+  path: "/portfolio",
+});
+
+export default function PortfolioPage() {
+  return (
+    <>
+      <section className="visual-page-hero visual-page-hero--wide" aria-labelledby="portfolio-page-title">
+        <ThemeScene
+          darkSrc="/brand/scenes/portfolio-hero-dark.webp"
+          lightSrc="/brand/scenes/portfolio-hero-light.webp"
+          alt="Website Design Dogs portfolio mascot with scenic city and mountain artwork"
+          width={1600}
+          height={1000}
+          priority
+          sizes="100vw"
+          className="visual-page-hero__scene"
+        />
+        <Container className="visual-page-hero__content">
+          <nav className="visual-breadcrumb" aria-label="Breadcrumb">
+            <Link href="/">Home</Link>
+            <span aria-hidden="true">›</span>
+            <span>Portfolio</span>
+          </nav>
+          <p className="home-eyebrow">Portfolio</p>
+          <h1 id="portfolio-page-title">Portfolio</h1>
+          <p>A collection of website concepts designed for growing businesses.</p>
+        </Container>
+      </section>
+
+      <section className="portfolio-directory" aria-labelledby="portfolio-directory-title">
+        <Container>
+          <div className="sr-only" id="portfolio-directory-title">
+            Portfolio concept filters and cards
+          </div>
+          <PortfolioFilter />
+          <div className="portfolio-directory__cta">
+            <Button href="/get-started" icon={<ArrowRightIcon />}>
+              View All Projects
+            </Button>
+          </div>
+        </Container>
+      </section>
+    </>
+  );
+}

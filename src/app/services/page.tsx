@@ -1,4 +1,79 @@
 import type { Metadata } from "next";
-import { pageMetadata } from "@/lib/seo"; import Image from "next/image"; import { PageHero } from "@/components/pages/page-hero"; import { PageCta } from "@/components/pages/page-cta"; import { ProcessSteps } from "@/components/pages/process-steps"; import { Card } from "@/components/ui/card"; import { Container } from "@/components/ui/container"; import { Section } from "@/components/ui/section"; import { SectionHeading } from "@/components/ui/section-heading"; import { services, serviceProcess, clientNeeds } from "@/content/services";
-export const metadata: Metadata = pageMetadata({ title: "Website Design Services", description: "Explore professional website design, development, e-commerce, SEO foundations, automation integrations, and ongoing website care for local and growing businesses.", path: "/services" });
-export default function Page(){return <><PageHero eyebrow="OUR SERVICES" title="Website services built around real business goals." body="From strategy and design to development and ongoing care, Website Design Dogs brings the essential parts of a professional website project together under one dependable team." darkSrc="/brand/scenes/services-hero-dark.webp" lightSrc="/brand/scenes/services-hero-light.webp" alt="Website Design Dogs services planning scene" primaryCta={{label:"Get a Free Quote",href:"/get-started"}} secondaryCta={{label:"View Packages",href:"/packages"}}/><Section alternate><Container><SectionHeading eyebrow="SERVICE OVERVIEW" title="Professional website support from planning through care."/><div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">{services.map(s=><Card key={s.title} hover><Image src={s.icon} alt="" width={44} height={44}/><h2 className="mt-5 text-2xl font-black">{s.title}</h2><p className="mt-3 text-sm text-[var(--color-text-muted)]">{s.description}</p><ul className="mt-5 grid gap-2 text-sm text-[var(--color-text-muted)]">{s.includes.map(i=><li key={i} className="flex gap-2"><span className="text-[var(--color-primary-orange)]">•</span>{i}</li>)}</ul></Card>)}</div></Container></Section><Section><Container><SectionHeading eyebrow="PROCESS" title="A clear process from first conversation to launch."/><ProcessSteps steps={serviceProcess}/></Container></Section><Section alternate><Container><SectionHeading eyebrow="CLIENT INPUTS" title="What helps a website project move smoothly."/><div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{clientNeeds.map(n=><Card key={n} className="font-black">{n}</Card>)}</div></Container></Section><PageCta heading="Not sure which service fits your project?" body="Tell us about your business, your current website, and what you want to improve. We’ll help you identify the most practical next step." cta="Start Your Project" href="/get-started"/></>}
+import Image from "next/image";
+import Link from "next/link";
+import { ThemeScene } from "@/components/theme/theme-scene";
+import { Button } from "@/components/ui/button";
+import { Container } from "@/components/ui/container";
+import { ArrowRightIcon } from "@/components/ui/icon";
+import { services } from "@/content/services";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Website Design Services",
+  description:
+    "Explore professional website design, development, e-commerce, SEO foundations, content support, hosting, security, analytics, and conversion services for growing businesses.",
+  path: "/services",
+});
+
+export default function ServicesPage() {
+  return (
+    <>
+      <section className="visual-page-hero" aria-labelledby="services-page-title">
+        <ThemeScene
+          darkSrc="/brand/scenes/services-hero-dark.webp"
+          lightSrc="/brand/scenes/services-hero-light.webp"
+          alt="Website Design Dogs services mascot holding a device in a scenic environment"
+          width={1600}
+          height={1000}
+          priority
+          sizes="100vw"
+          className="visual-page-hero__scene"
+        />
+        <Container className="visual-page-hero__content">
+          <nav className="visual-breadcrumb" aria-label="Breadcrumb">
+            <Link href="/">Home</Link>
+            <span aria-hidden="true">›</span>
+            <span>Services</span>
+          </nav>
+          <p className="home-eyebrow">Services</p>
+          <h1 id="services-page-title">Complete website solutions under one roof.</h1>
+          <p>We offer end-to-end website services designed to grow your business online.</p>
+        </Container>
+      </section>
+
+      <section className="directory-section" aria-labelledby="services-directory-title">
+        <Container>
+          <div className="directory-section__intro">
+            <p className="home-eyebrow">WHAT WE DO</p>
+            <h2 id="services-directory-title">Practical services for a stronger digital presence.</h2>
+            <p>
+              From first impressions to launch support, each service is structured to keep your website clear,
+              responsive, maintainable, and ready for real customer actions.
+            </p>
+          </div>
+          <div className="services-directory-grid">
+            {services.map((service) => (
+              <article key={service.title} className="directory-card">
+                <Image src={service.icon} alt="" width={38} height={38} className="directory-card__icon" />
+                <h2>{service.title}</h2>
+                <p>{service.description}</p>
+              </article>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section className="compact-cta-strip" aria-labelledby="services-cta-title">
+        <Container className="compact-cta-strip__inner">
+          <div>
+            <h2 id="services-cta-title">Ready to start your project?</h2>
+            <p>Let’s build a website that drives real results.</p>
+          </div>
+          <Button href="/get-started" icon={<ArrowRightIcon />} fullWidthMobile>
+            Get a Free Quote
+          </Button>
+        </Container>
+      </section>
+    </>
+  );
+}
