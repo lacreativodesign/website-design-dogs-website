@@ -1,5 +1,96 @@
 import type { Metadata } from "next";
-import { pageMetadata } from "@/lib/seo"; import { FeatureGrid } from "@/components/pages/feature-grid"; import { PageCta } from "@/components/pages/page-cta"; import { PageHero } from "@/components/pages/page-hero"; import { Card } from "@/components/ui/card"; import { Container } from "@/components/ui/container"; import { Section } from "@/components/ui/section"; import { SectionHeading } from "@/components/ui/section-heading";
-export const metadata: Metadata = pageMetadata({ title: "About Website Design Dogs", description: "Learn how Website Design Dogs approaches website strategy, design, development, communication, and ongoing support for local and growing businesses.", path: "/about" });
-const values=[["Clarity","Straightforward communication, scope, and expectations."],["Reliability","Thoughtful execution and dependable follow-through."],["Practical Design","Design decisions connected to real business needs."],["Respect for the Customer","Accessible experiences that make information and actions easier to find."],["Long-Term Thinking","Build foundations that can be maintained and improved over time."]] as const; const approach=[["Understand before designing","Projects begin with the business and customer journey."],["Organize before decorating","Page structure and content hierarchy come before visual polish."],["Build for mobile reality","Layouts account for how visitors browse on smaller screens."],["Make actions obvious","Important next steps should be clear and easy to find."],["Prepare for future growth","Foundations should be maintainable and adaptable over time."],["Communicate without unnecessary complexity","Project decisions should be clear, practical, and documented."]] as const;
-export default function Page(){return <><PageHero eyebrow="ABOUT WEBSITE DESIGN DOGS" title="Loyal to the work. Focused on your business." body="Website Design Dogs helps local and growing businesses create professional websites that are easier to understand, easier to use, and better prepared to support real business goals." darkSrc="/brand/scenes/about-hero-dark.webp" lightSrc="/brand/scenes/about-hero-light.webp" alt="Website Design Dogs about page scene"/><Section alternate><Container className="grid gap-6 lg:grid-cols-[1fr_0.55fr]"><Card><SectionHeading title="A practical website partner for growing businesses."/><div className="mt-5 grid gap-4 text-[var(--color-text-muted)]"><p>Website Design Dogs is a service brand of LA CREATIVO GROUP, LLC.</p><p>The brand combines website strategy, design, development, and ongoing care with an approach that prioritizes clear communication and practical outcomes.</p><p>Projects begin with understanding the business and customer journey. The website is treated as an operational business asset, not only a visual presentation.</p></div></Card><Card><h2 className="text-2xl font-black">Why the dog?</h2><p className="mt-4 text-[var(--color-text-muted)]">The Website Design Dogs identity represents loyalty, focus, dependability, and the determination to stay with the work until it is done properly.</p></Card></Container></Section><Section><Container><SectionHeading eyebrow="VALUES" title="What guides the work."/><FeatureGrid items={values}/></Container></Section><Section alternate><Container><SectionHeading eyebrow="APPROACH" title="How we think about website projects."/><FeatureGrid items={approach}/><Card className="mt-8 text-center text-lg font-black">Website Design Dogs is a service brand of LA CREATIVO GROUP, LLC.</Card></Container></Section><PageCta heading="Let’s build a website that works as hard as you do." cta="Start Your Project" href="/get-started"/></>}
+import Link from "next/link";
+import { ThemeScene } from "@/components/theme/theme-scene";
+import { Container } from "@/components/ui/container";
+import { aboutChecklist, aboutProcessTiles } from "@/content/about";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = pageMetadata({
+  title: "About Website Design Dogs",
+  description:
+    "Learn how Website Design Dogs combines website strategy, design, development, communication, and practical support for growing businesses.",
+  path: "/about",
+});
+
+export default function AboutPage() {
+  return (
+    <>
+      <section className="visual-page-hero visual-page-hero--about" aria-labelledby="about-page-title">
+        <ThemeScene
+          darkSrc="/brand/scenes/about-hero-dark.webp"
+          lightSrc="/brand/scenes/about-hero-light.webp"
+          tabletDarkSrc="/brand/crops/tablet/about-dark.webp"
+          tabletLightSrc="/brand/crops/tablet/about-light.webp"
+          mobileDarkSrc="/brand/crops/mobile/about-dark.webp"
+          mobileLightSrc="/brand/crops/mobile/about-light.webp"
+          alt="Website Design Dogs scenic campfire artwork"
+          width={1600}
+          height={1000}
+          priority
+          sizes="100vw"
+          className="visual-page-hero__scene"
+        />
+        <Container className="visual-page-hero__content">
+          <nav className="visual-breadcrumb" aria-label="Breadcrumb">
+            <Link href="/">Home</Link>
+            <span aria-hidden="true">›</span>
+            <span>About Us</span>
+          </nav>
+          <p className="home-eyebrow">About Us</p>
+          <h1 id="about-page-title">We’re more than just website designers.</h1>
+          <p>
+            Website Design Dogs combines strategy, design, development, and practical ongoing support to help growing
+            businesses present themselves clearly online.
+          </p>
+        </Container>
+      </section>
+
+      <section className="about-story-section" aria-labelledby="about-story-title">
+        <Container>
+          <div className="about-story-grid">
+            <div className="about-story-copy">
+              <p className="home-eyebrow">OUR MISSION</p>
+              <h2 id="about-story-title">Built for clear communication and confident growth.</h2>
+              <p>
+                Our mission is simple: build websites that not only look professional, but also help businesses
+                communicate clearly and grow with confidence.
+              </p>
+              <p>
+                Website Design Dogs is a service brand of LA CREATIVO GROUP, LLC. The brand brings together practical
+                planning, polished design, reliable development, and support that respects the way growing businesses
+                actually operate.
+              </p>
+            </div>
+            <div className="about-checklist" aria-label="Website Design Dogs values">
+              {aboutChecklist.map((item) => (
+                <div key={item} className="about-checklist__item">
+                  <span aria-hidden="true">✓</span>
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <ThemeScene
+            darkSrc="/brand/scenes/about-hero-dark.webp"
+            lightSrc="/brand/scenes/about-hero-light.webp"
+            alt="Website Design Dogs two-dog campfire scene"
+            width={1600}
+            height={1000}
+            sizes="100vw"
+            className="about-campfire-scene"
+          />
+
+          <div className="about-process-grid" aria-label="Website Design Dogs process">
+            {aboutProcessTiles.map((tile) => (
+              <div key={tile.number} className="about-process-tile">
+                <strong>{tile.number}</strong>
+                <span>{tile.title}</span>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+    </>
+  );
+}

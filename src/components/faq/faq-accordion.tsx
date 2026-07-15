@@ -1,3 +1,51 @@
 "use client";
-import { useState } from "react"; import { faqCategories } from "@/content/faqs";
-export function FullFaqAccordion(){const [open,setOpen]=useState("Pricing & Packages-0"); return <div className="grid gap-10">{faqCategories.map(category=><section key={category.title} id={category.title.toLowerCase().replaceAll(" ","-").replaceAll("&","and")}><h2 className="text-2xl font-black">{category.title}</h2><div className="mt-4 grid gap-3">{category.items.map((item,index)=>{const id=`${category.title}-${index}`; const is=open===id; const panel=`faq-panel-${id.replaceAll(" ","-")}`; return <div key={item.question} className="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface-elevated)]"><button type="button" className="flex w-full items-center justify-between gap-4 p-5 text-left font-black" aria-expanded={is} aria-controls={panel} onClick={()=>setOpen(is?"":id)}><span>{item.question}</span><span aria-hidden="true" className="text-2xl text-[var(--color-primary-orange)]">{is?"−":"+"}</span></button><div id={panel} role="region" className={is?"grid grid-rows-[1fr]":"grid grid-rows-[0fr]"} style={{transition:"grid-template-rows var(--transition-med)"}}><div className="overflow-hidden"><p className="px-5 pb-5 text-[var(--color-text-muted)]">{item.answer}</p></div></div></div>})}</div></section>)}</div>}
+
+import { useState } from "react";
+import { faqCategories, type FaqItem } from "@/content/faqs";
+
+type FullFaqAccordionProps = {
+  items?: readonly FaqItem[];
+};
+
+export function FullFaqAccordion({ items }: FullFaqAccordionProps) {
+  const flatItems = items ?? faqCategories.flatMap((category) => category.items);
+  const [open, setOpen] = useState(flatItems[0]?.question ?? "");
+
+  return (
+    <div className="faq-accordion-list">
+      {flatItems.map((item, index) => {
+        const isOpen = open === item.question;
+        const panel = `faq-panel-${index}`;
+        const button = `faq-button-${index}`;
+
+        return (
+          <div key={item.question} className="faq-accordion-row">
+            <button
+              id={button}
+              type="button"
+              className="faq-accordion-row__button"
+              aria-expanded={isOpen}
+              aria-controls={panel}
+              onClick={() => setOpen(isOpen ? "" : item.question)}
+            >
+              <span>{item.question}</span>
+              <span aria-hidden="true" className="faq-accordion-row__icon">
+                {isOpen ? "−" : "+"}
+              </span>
+            </button>
+            <div
+              id={panel}
+              role="region"
+              aria-labelledby={button}
+              className={isOpen ? "faq-accordion-row__panel faq-accordion-row__panel--open" : "faq-accordion-row__panel"}
+            >
+              <div>
+                <p>{item.answer}</p>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}

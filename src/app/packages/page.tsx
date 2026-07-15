@@ -1,5 +1,109 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { ThemeScene } from "@/components/theme/theme-scene";
+import { Button } from "@/components/ui/button";
+import { Container } from "@/components/ui/container";
+import { ArrowRightIcon } from "@/components/ui/icon";
+import { JsonLd } from "@/components/seo/json-ld";
+import { packageAssurances, websitePackages } from "@/content/packages";
 import { pageMetadata } from "@/lib/seo";
-import { JsonLd } from "@/components/seo/json-ld"; import { Badge } from "@/components/ui/badge"; import { Button } from "@/components/ui/button"; import { Card } from "@/components/ui/card"; import { Container } from "@/components/ui/container"; import { Section } from "@/components/ui/section"; import { SectionHeading } from "@/components/ui/section-heading"; import { PageHero } from "@/components/pages/page-hero"; import { PageCta } from "@/components/pages/page-cta"; import { comparisonRows, packageFaqs, pricingFactors, websitePackages } from "@/content/packages";
-export const metadata: Metadata = pageMetadata({ title: "Website Design Packages", description: "Compare Website Design Dogs Starter, Business, and Growth website packages for local and growing businesses.", path: "/packages" });
-export default function Page(){return <><JsonLd data={{"@context":"https://schema.org","@type":"OfferCatalog",name:"Website Design Packages",itemListElement:websitePackages.map((pkg)=>({"@type":"Offer",name:pkg.name,price:pkg.price.replace("$","").replace(",",""),priceCurrency:"USD",url:`/packages`}))}}/><PageHero eyebrow="WEBSITE PACKAGES" title="Clear starting points for different stages of growth." body="Choose the package that best matches your current needs. Final deliverables, integrations, content requirements, third-party costs, and timelines are confirmed in the project proposal." darkSrc="/brand/scenes/packages-hero-dark.webp" lightSrc="/brand/scenes/packages-hero-light.webp" alt="Website Design Dogs packages scene"/><Section alternate><Container><div className="grid gap-5 lg:grid-cols-3">{websitePackages.map(p=><Card key={p.name} hover className={p.label?"border-[var(--color-primary-orange)]":""}>{p.label?<Badge>{p.label}</Badge>:null}<h2 className="mt-4 text-3xl font-black">{p.name}</h2><p className="mt-3 text-5xl font-black">{p.price}</p><p className="mt-4 text-sm text-[var(--color-text-muted)]">{p.description}</p><ul className="mt-5 grid gap-3 text-sm text-[var(--color-text-muted)]">{p.features.map(f=><li key={f} className="flex gap-2"><span className="text-[var(--color-primary-orange)]">•</span>{f}</li>)}</ul><Button href={p.href} className="mt-6 w-full" variant={p.label?"primary":"outline"}>{p.cta}</Button></Card>)}</div></Container></Section><Section><Container><SectionHeading eyebrow="COMPARE PACKAGES" title="Package details at a glance."/><div className="mt-8 hidden overflow-hidden rounded-[var(--radius-xl)] border border-[var(--color-border)] md:block"><table className="w-full border-collapse"><thead><tr className="bg-[var(--color-surface-elevated)]"><th className="p-4 text-left">Feature</th><th>Starter</th><th>Business</th><th>Growth</th></tr></thead><tbody>{comparisonRows.map(r=><tr key={r[0]} className="border-t border-[var(--color-border)]"><th className="p-4 text-left">{r[0]}</th><td className="p-4">{r[1]}</td><td className="p-4">{r[2]}</td><td className="p-4">{r[3]}</td></tr>)}</tbody></table></div><div className="mt-8 grid gap-4 md:hidden">{comparisonRows.map(r=><Card key={r[0]}><h3 className="font-black">{r[0]}</h3><p className="mt-2 text-sm text-[var(--color-text-muted)]">Starter: {r[1]}</p><p className="text-sm text-[var(--color-text-muted)]">Business: {r[2]}</p><p className="text-sm text-[var(--color-text-muted)]">Growth: {r[3]}</p></Card>)}</div></Container></Section><Section alternate><Container><SectionHeading eyebrow="SCOPE FACTORS" title="What may affect final pricing."/><div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">{pricingFactors.map(f=><Card key={f} className="text-sm font-black">{f}</Card>)}</div></Container></Section><Section><Container><SectionHeading eyebrow="PACKAGE FAQ" title="Common package questions."/><div className="mt-8 grid gap-4 md:grid-cols-2">{packageFaqs.map(([q,a])=><Card key={q}><h3 className="text-lg font-black">{q}</h3><p className="mt-3 text-sm text-[var(--color-text-muted)]">{a}</p></Card>)}</div></Container></Section><PageCta heading="Need help choosing the right package?" cta="Tell Us About Your Project" href="/get-started"/></>}
+
+export const metadata: Metadata = pageMetadata({
+  title: "Website Design Packages",
+  description: "Compare Website Design Dogs Starter, Business, and Growth website packages for local and growing businesses.",
+  path: "/packages",
+});
+
+export default function PackagesPage() {
+  return (
+    <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "OfferCatalog",
+          name: "Website Design Packages",
+          itemListElement: websitePackages.map((pkg) => ({
+            "@type": "Offer",
+            name: pkg.name,
+            price: pkg.price.replace("$", "").replace(",", ""),
+            priceCurrency: "USD",
+            url: "/packages",
+          })),
+        }}
+      />
+
+      <section className="visual-page-hero visual-page-hero--packages" aria-labelledby="packages-page-title">
+        <ThemeScene
+          darkSrc="/brand/scenes/packages-hero-dark.webp"
+          lightSrc="/brand/scenes/packages-hero-light.webp"
+          alt="Website Design Dogs packages scenic artwork"
+          width={1600}
+          height={1000}
+          priority
+          sizes="100vw"
+          className="visual-page-hero__scene"
+        />
+        <Container className="visual-page-hero__content">
+          <nav className="visual-breadcrumb" aria-label="Breadcrumb">
+            <Link href="/">Home</Link>
+            <span aria-hidden="true">›</span>
+            <span>Packages</span>
+          </nav>
+          <p className="home-eyebrow">Packages</p>
+          <h1 id="packages-page-title">Packages</h1>
+          <p>Simple, transparent pricing that fits your business.</p>
+        </Container>
+      </section>
+
+      <section className="packages-pricing-section" aria-labelledby="packages-pricing-title">
+        <Container>
+          <div className="package-selector" aria-label="Package category selector">
+            <button type="button" className="package-selector__button package-selector__button--active" aria-pressed="true">
+              Website Packages
+            </button>
+            <button type="button" className="package-selector__button" aria-pressed="false">
+              Website Care
+            </button>
+          </div>
+
+          <div className="sr-only" id="packages-pricing-title">
+            Website package pricing options
+          </div>
+          <div className="pricing-card-grid">
+            {websitePackages.map((pkg) => (
+              <article key={pkg.slug} className={pkg.label ? "pricing-card pricing-card--featured" : "pricing-card"}>
+                {pkg.label ? <p className="pricing-card__label">{pkg.label}</p> : null}
+                <h2>{pkg.name}</h2>
+                <p className="pricing-card__price">{pkg.price}</p>
+                <p className="pricing-card__description">{pkg.description}</p>
+                <ul className="pricing-card__features">
+                  {pkg.features.map((feature) => (
+                    <li key={feature}>{feature}</li>
+                  ))}
+                </ul>
+                <Button href={pkg.href} variant={pkg.label ? "primary" : "outline"} className="pricing-card__button">
+                  {pkg.cta}
+                </Button>
+              </article>
+            ))}
+          </div>
+
+          <div className="package-assurance-grid" aria-label="Project scope assurances">
+            {packageAssurances.map((item) => (
+              <div key={item.title} className="package-assurance-item">
+                <h2>{item.title}</h2>
+                <p>{item.body}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="packages-final-cta">
+            <Button href="/get-started" icon={<ArrowRightIcon />}>
+              Get a Free Quote
+            </Button>
+          </div>
+        </Container>
+      </section>
+    </>
+  );
+}

@@ -32,3 +32,38 @@ export const faqCategories: FaqCategory[] = [
 {question:"Can you create campaign landing pages?",answer:"Campaign landing pages can be planned as future work when offer details, content, tracking requirements, and compliance needs are approved."},
 {question:"Can you help with future improvements?",answer:"Yes. Future improvements can be scoped after launch based on business goals, website performance, content needs, and operational priorities."},]},
 ];
+
+export const featuredFaqs: FaqItem[] = [
+  {
+    question: "How long does it take to build a website?",
+    answer: "Timing depends on scope, content readiness, approvals, integrations, and review cycles. The project proposal confirms expectations before work begins.",
+  },
+  {
+    question: "Will my website be mobile-friendly?",
+    answer: "Yes. Responsive layout, readable content, mobile navigation, touch-friendly controls, and cross-device behavior are part of the implementation approach.",
+  },
+  {
+    question: "Can I update my website myself?",
+    answer: "Update options depend on the selected implementation and content-management scope. This is confirmed before work begins.",
+  },
+  {
+    question: "Do you provide domain and hosting?",
+    answer: "Hosting, domains, external platforms, plugins, and licenses are not assumed in the package price. Any third-party costs are documented before work begins.",
+  },
+  {
+    question: "What is included in the package?",
+    answer: "Package inclusions depend on the selected scope and are confirmed in the project proposal, including pages, responsive design, forms, SEO foundations, performance work, and launch support where included.",
+  },
+  {
+    question: "What happens after my website is live?",
+    answer: "After launch, any included care period begins. Future updates, maintenance, or marketing work can be scoped separately.",
+  },
+  {
+    question: "Do you offer ongoing support and maintenance?",
+    answer: "Website care can include content updates, maintenance reviews, performance monitoring, security checks, and improvement planning depending on the approved plan.",
+  },
+  {
+    question: "How do I get started?",
+    answer: "Start by sending an enquiry or quote request with details about your business, goals, current website, desired scope, and timeline. We review the information and confirm the practical next step.",
+  },
+] as const;

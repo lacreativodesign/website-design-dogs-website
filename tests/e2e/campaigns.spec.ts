@@ -36,7 +36,10 @@ test("unknown campaign returns 404", async ({ page }) => {
   await expect(
     page.getByRole("heading", {
       level: 1,
-      name: /looks like this page wandered off/i,
+      name: /^page not found$/i,
     }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: /^back to home$/i }),
   ).toBeVisible();
 });

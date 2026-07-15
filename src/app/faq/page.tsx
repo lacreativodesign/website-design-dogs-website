@@ -1,5 +1,50 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { FullFaqAccordion } from "@/components/faq/faq-accordion";
+import { FaqJsonLd } from "@/components/seo/faq-json-ld";
+import { ThemeScene } from "@/components/theme/theme-scene";
+import { Container } from "@/components/ui/container";
+import { featuredFaqs } from "@/content/faqs";
 import { pageMetadata } from "@/lib/seo";
-import { FaqJsonLd } from "@/components/seo/faq-json-ld"; import { FullFaqAccordion } from "@/components/faq/faq-accordion"; import { PageCta } from "@/components/pages/page-cta"; import { PageHero } from "@/components/pages/page-hero"; import { Container } from "@/components/ui/container"; import { Section } from "@/components/ui/section"; import { faqCategories } from "@/content/faqs";
-export const metadata: Metadata = pageMetadata({ title: "Website Design FAQs", description: "Read answers about website pricing, timelines, content, ownership, mobile responsiveness, redesigns, e-commerce, maintenance, and project scope.", path: "/faq" });
-export default function Page(){const faqItems=faqCategories.flatMap((category)=>category.items);return <><FaqJsonLd items={faqItems}/><PageHero eyebrow="FREQUENTLY ASKED QUESTIONS" title="Straight answers before you get started." body="Review common questions about scope, pricing, content, ownership, launch preparation, and ongoing website care before you request a quote." darkSrc="/brand/scenes/faq-hero-dark.webp" lightSrc="/brand/scenes/faq-hero-light.webp" alt="Website Design Dogs FAQ scene"/><Section alternate><Container><nav aria-label="FAQ categories" className="mb-10 flex flex-wrap gap-2">{faqCategories.map(c=><a key={c.title} className="rounded-full border border-[var(--color-border)] px-4 py-2 text-sm font-black text-[var(--color-text-muted)] hover:text-[var(--color-foreground)]" href={`#${c.title.toLowerCase().replaceAll(" ","-").replaceAll("&","and")}`}>{c.title}</a>)}</nav><FullFaqAccordion/></Container></Section><PageCta heading="Still have a question about your project?" cta="Contact Us" href="/contact"/></>}
+
+export const metadata: Metadata = pageMetadata({
+  title: "Website Design FAQs",
+  description: "Read answers about Website Design Dogs services, process, scope, support, mobile readiness, hosting, and project launch expectations.",
+  path: "/faq",
+});
+
+export default function FaqPage() {
+  return (
+    <>
+      <FaqJsonLd items={featuredFaqs} />
+      <section className="visual-page-hero visual-page-hero--faq" aria-labelledby="faq-page-title">
+        <ThemeScene
+          darkSrc="/brand/scenes/faq-hero-dark.webp"
+          lightSrc="/brand/scenes/faq-hero-light.webp"
+          alt="Website Design Dogs FAQ mascot scene"
+          width={1600}
+          height={1000}
+          priority
+          sizes="100vw"
+          className="visual-page-hero__scene"
+        />
+        <Container className="visual-page-hero__content">
+          <nav className="visual-breadcrumb" aria-label="Breadcrumb">
+            <Link href="/">Home</Link>
+            <span aria-hidden="true">›</span>
+            <span>FAQ</span>
+          </nav>
+          <p className="home-eyebrow">FAQ</p>
+          <h1 id="faq-page-title">Frequently Asked Questions</h1>
+          <p>Find answers to common questions about our services, process, scope, and support.</p>
+        </Container>
+      </section>
+
+      <section className="faq-page-section" aria-label="Frequently asked questions">
+        <Container>
+          <FullFaqAccordion items={featuredFaqs} />
+        </Container>
+      </section>
+    </>
+  );
+}

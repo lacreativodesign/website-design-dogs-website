@@ -1,5 +1,94 @@
 import type { Metadata } from "next";
-import { pageMetadata } from "@/lib/seo"; import { ContactForm } from "@/components/forms/contact-form"; import { PageHero } from "@/components/pages/page-hero"; import { ProcessSteps } from "@/components/pages/process-steps"; import { Card } from "@/components/ui/card"; import { Container } from "@/components/ui/container"; import { Section } from "@/components/ui/section"; import { SectionHeading } from "@/components/ui/section-heading";
-export const metadata: Metadata = pageMetadata({ title: "Contact Website Design Dogs", description: "Contact Website Design Dogs to discuss website design, development, redesign, e-commerce, optimization, or ongoing website care.", path: "/contact" });
-const steps=[["We Review the Details","The information helps us understand the business, scope, and current priorities."],["We Clarify the Project","Additional questions may be needed before recommending a package or scope."],["We Confirm the Next Step","Scope, pricing, timing, responsibilities, and integrations are documented before work begins."]] as const;
-export default function Page(){return <><PageHero eyebrow="CONTACT US" title="Tell us what you want your website to do better." body="Share a few details about your business, your current website, and your goals. We’ll use that information to understand the project and identify the most practical next step." darkSrc="/brand/scenes/contact-hero-dark.webp" lightSrc="/brand/scenes/contact-hero-light.webp" alt="Website Design Dogs contact page scene"/><Section alternate><Container className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]"><div><SectionHeading eyebrow="PROJECT DETAILS" title="Start with the essentials." >The form validates your details and is ready for secure server-side lead routing in Prompt 5.</SectionHeading></div><Card><ContactForm/></Card></Container></Section><Section><Container><SectionHeading eyebrow="EXPECTATIONS" title="What happens after you contact us."/><ProcessSteps steps={steps}/></Container></Section></>}
+import Link from "next/link";
+import { ContactForm } from "@/components/forms/contact-form";
+import { ThemeScene } from "@/components/theme/theme-scene";
+import { Container } from "@/components/ui/container";
+import { pageMetadata } from "@/lib/seo";
+
+const contactRows = [
+  "Project Enquiries",
+  "Secure Online Quote Form",
+  "New Websites and Redesigns",
+  "Website Design Dogs — a service brand of LA CREATIVO GROUP, LLC",
+] as const;
+
+const quickLinks = [
+  { label: "Services", href: "/services" },
+  { label: "Portfolio", href: "/portfolio" },
+  { label: "Packages", href: "/packages" },
+  { label: "FAQ", href: "/faq" },
+] as const;
+
+export const metadata: Metadata = pageMetadata({
+  title: "Contact Website Design Dogs",
+  description: "Contact Website Design Dogs to discuss website design, development, redesign, e-commerce, optimization, or ongoing website care.",
+  path: "/contact",
+});
+
+export default function ContactPage() {
+  return (
+    <>
+      <section className="compact-title-section" aria-labelledby="contact-page-title">
+        <Container>
+          <nav className="visual-breadcrumb" aria-label="Breadcrumb">
+            <Link href="/">Home</Link>
+            <span aria-hidden="true">›</span>
+            <span>Contact Us</span>
+          </nav>
+          <p className="home-eyebrow">Contact Us</p>
+          <h1 id="contact-page-title">Let’s start a conversation.</h1>
+          <p>Have a project in mind? Tell us what you need and what you want your website to accomplish.</p>
+        </Container>
+      </section>
+
+      <section className="contact-panel-section" aria-labelledby="contact-form-title">
+        <Container>
+          <div className="contact-layout-grid">
+            <aside className="contact-info-card" aria-label="Contact information">
+              <h2>Project details that help us respond clearly.</h2>
+              <div className="contact-info-list">
+                {contactRows.map((row) => (
+                  <div key={row} className="contact-info-row">
+                    <span aria-hidden="true">•</span>
+                    {row}
+                  </div>
+                ))}
+              </div>
+              <nav className="contact-quick-links" aria-label="Quick links">
+                {quickLinks.map((link) => (
+                  <Link key={link.href} href={link.href}>
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
+            </aside>
+
+            <div className="contact-form-card">
+              <h2 id="contact-form-title">Send Enquiry</h2>
+              <ContactForm />
+            </div>
+          </div>
+
+          <div className="coverage-panel" aria-labelledby="coverage-panel-title">
+            <ThemeScene
+              darkSrc="/brand/backgrounds/grid-dark.webp"
+              lightSrc="/brand/backgrounds/grid-light.webp"
+              alt=""
+              width={1600}
+              height={800}
+              sizes="100vw"
+              className="coverage-panel__background"
+            />
+            <div className="coverage-panel__content">
+              <div className="coverage-panel__pin" aria-hidden="true">⌖</div>
+              <div>
+                <h2 id="coverage-panel-title">Online Project Coverage</h2>
+                <p>Project availability and scope are confirmed after enquiry review.</p>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
+    </>
+  );
+}

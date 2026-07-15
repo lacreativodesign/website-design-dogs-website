@@ -1,7 +1,7 @@
 export const homeHero = {
   eyebrow: "LOYAL TO THE GAME.",
-  title: "We Design Websites That Deliver Results.",
-  body: "Professional, mobile-ready websites created to help local and growing businesses build credibility, generate leads, and turn more visitors into customers.",
+  title: "WE DESIGN WEBSITES THAT DELIVER RESULTS.",
+  body: "Custom websites that look amazing, work flawlessly, and help your business grow online.",
   support: "Strategy, design, development, and ongoing care—handled by one reliable team.",
 };
 
@@ -12,15 +12,29 @@ export const valuePoints = [
   ["Reliable Ongoing Support", "Keep the website secure, updated, polished, and ready to grow."],
 ] as const;
 
+export const homeIndustryStrip = [
+  { title: "Home Services", icon: "/brand/icons/industries/construction.svg" },
+  { title: "Professional Services", icon: "/brand/icons/industries/consulting.svg" },
+  { title: "Health & Wellness", icon: "/brand/icons/industries/medical.svg" },
+  { title: "Retail", icon: "/brand/icons/industries/ecommerce.svg" },
+  { title: "Hospitality", icon: "/brand/icons/industries/restaurant.svg" },
+  { title: "Growing Businesses", icon: "/brand/icons/services/development.svg" },
+] as const;
+
 export const homeServices = [
-  ["Website Design", "Custom, responsive website experiences shaped around your business, audience, and goals.", "/brand/icons/services/website-design.svg"],
-  ["Website Development", "Fast, reliable, maintainable websites built with modern technology and clean implementation.", "/brand/icons/services/development.svg"],
-  ["E-Commerce Solutions", "Professional online stores designed to make browsing, buying, and managing products easier.", "/brand/icons/services/ecommerce.svg"],
-  ["SEO & Local Optimization", "Strong technical and on-page foundations that help search engines understand your business.", "/brand/icons/services/seo-local.svg"],
-  ["Social Media Integration", "Connect your website with the platforms and content channels your audience already uses.", "/brand/icons/services/social-media.svg"],
-  ["Mobile-Responsive Experiences", "Make every important page clear, usable, and conversion-ready on smaller screens.", "/brand/icons/services/mobile-app.svg"],
-  ["AI & Workflow Integrations", "Connect practical tools and automations that reduce repetitive work and improve follow-up.", "/brand/icons/services/ai-automation.svg"],
-  ["Website Care", "Ongoing updates, maintenance, security checks, and performance support.", "/brand/icons/services/website-care.svg"],
+  { title: "Custom Website Design", body: "Tailored visual systems and page layouts shaped around your business goals.", icon: "/brand/icons/services/website-design.svg" },
+  { title: "Website Development", body: "Fast, reliable implementation using reusable components and modern code.", icon: "/brand/icons/services/development.svg" },
+  { title: "E-Commerce Solutions", body: "Clear storefront experiences for presenting products and supporting purchases.", icon: "/brand/icons/services/ecommerce.svg" },
+  { title: "SEO & Local Optimization", body: "Technical and on-page foundations that help search engines understand your business.", icon: "/brand/icons/services/seo-local.svg" },
+  { title: "Website Care", body: "Ongoing updates, maintenance, performance support, and launch follow-through.", icon: "/brand/icons/services/website-care.svg" },
+] as const;
+
+export const homeCapabilities = [
+  { value: "5", label: "Core Pages" },
+  { value: "100%", label: "Responsive Layout" },
+  { value: "1", label: "Contact or Quote Form" },
+  { value: "SEO", label: "Foundation Setup" },
+  { value: "CARE", label: "Launch Support" },
 ] as const;
 
 export const portfolioConcepts = [
