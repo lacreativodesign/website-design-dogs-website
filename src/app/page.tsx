@@ -90,12 +90,8 @@ export default function Home() {
         </Container>
       </section>
 
-      <section className="home-section home-capabilities" aria-labelledby="home-capabilities-title">
+      <section className="home-capabilities" aria-label="Starter website package capabilities">
         <Container>
-          <div className="home-section__heading home-section__heading--compact">
-            <p className="home-eyebrow">STARTER WEBSITE FOUNDATION</p>
-            <h2 id="home-capabilities-title">A focused launch package with the essentials covered.</h2>
-          </div>
           <div className="home-capabilities__grid">
             {homeCapabilities.map((capability) => (
               <div key={`${capability.value}-${capability.label}`} className="home-capability-tile">
@@ -103,23 +99,6 @@ export default function Home() {
                 <span>{capability.label}</span>
               </div>
             ))}
-          </div>
-        </Container>
-      </section>
-
-      <section className="home-ending" aria-labelledby="home-ending-title">
-        <Container className="home-ending__inner">
-          <div>
-            <p className="home-eyebrow">READY WHEN YOU ARE</p>
-            <h2 id="home-ending-title">Let’s build a website that works as hard as you do.</h2>
-          </div>
-          <div className="home-ending__actions">
-            <Button href="/get-started" icon={<ArrowRightIcon />} fullWidthMobile>
-              Get a Free Quote
-            </Button>
-            <Button href="/portfolio" variant="outline" fullWidthMobile>
-              View Our Work
-            </Button>
           </div>
         </Container>
       </section>
