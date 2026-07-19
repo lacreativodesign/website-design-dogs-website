@@ -1,23 +1,22 @@
 # GTM Event Dictionary
 
-Application events are no-PII `dataLayer` events configured in GTM, not hardcoded GA4 or Meta scripts. Forbidden for every event: names, emails, phones, business names, websites, form text, reference IDs, submission IDs, IP addresses, Turnstile tokens, arbitrary query strings, Bizosto IDs, tenant IDs, purchase/revenue data.
+Website Design Dogs (`lacreativodesign/website-design-dogs-website`) emits no-PII `dataLayer` events only after the applicable optional consent category is granted and GTM is enabled. GTM is the single intended delivery path for GA4 and Meta; this repository contains no direct Meta Pixel or Conversions API implementation.
 
-| Event | Trigger | Allowed properties | Consent | GA4 mapping | Meta mapping | Deduplication/Test |
-|---|---|---|---|---|---|---|
-| `wdd_page_view` | App route view | pagePath,pageType,utmSource,utmMedium,utmCampaign | analytics | page_view | none/custom | Use this or GTM history, not both. Navigate once. |
-| `wdd_theme_changed` | Theme toggle | theme,pagePath | analytics | custom | none | Toggle once. |
-| `wdd_primary_cta_click` | CTA click | placement,pagePath,pageType | analytics | custom | none | Click CTA. |
-| `wdd_portfolio_filter_used` | Portfolio filter | portfolioCategory,pagePath | analytics | custom | none | Filter once. |
-| `wdd_faq_opened` | FAQ opened | faqId,faqPosition,pagePath | analytics | custom | none | Open answer. |
-| `wdd_package_selected` | Package CTA | packageCategory,pagePath | analytics | select_item/custom | none | Click package. |
-| `wdd_lead_submit_started` | Contact/quote submit attempt | formType,packageCategory,serviceCategory,pagePath,utmSource,utmMedium,utmCampaign | analytics | custom | none | Submit valid form. |
-| `wdd_lead_submit_success` | Confirmed API success | formType,packageCategory,serviceCategory,pagePath,utmSource,utmMedium,utmCampaign | analytics/marketing | generate_lead | Lead | One success only after API success. |
-| `wdd_lead_submit_failed` | API or validation failure | formType,failureCategory,pagePath | analytics | custom | none | Force failure. |
-| `wdd_campaign_page_view` | Campaign route view | pagePath,pageType,campaignSlug,offerCode | analytics/marketing | page_view/custom | PageView/custom | Avoid duplicate GTM page views. |
-| `wdd_campaign_cta_click` | Campaign CTA | campaignSlug,placement,offerCode,pagePath | analytics/marketing | custom | custom | Click CTA. |
-| `wdd_campaign_form_started` | Campaign form interaction | campaignSlug,formType,offerCode,pagePath | analytics | custom | none | Focus form. |
-| `wdd_campaign_form_submit_started` | Campaign submit attempt | campaignSlug,formType,offerCode,pagePath | analytics | custom | none | Submit. |
-| `wdd_campaign_form_submit_success` | Confirmed campaign API success | campaignSlug,formType,offerCode,pagePath,utmSource,utmMedium,utmCampaign | analytics/marketing | generate_lead | Lead | No purchase/revenue. |
-| `wdd_campaign_form_submit_failed` | Campaign failure | campaignSlug,formType,failureCategory,pagePath | analytics | custom | none | Force failure. |
-| `wdd_consent_banner_viewed` | Banner shown | pagePath | none | custom optional | none | First visit. |
-| `wdd_consent_updated` | Preferences saved | consentAnalytics,consentMarketing | necessary | custom optional | none | Save preferences. |
+Never map names, email addresses, phone numbers, business names, websites, message text, reference IDs, submission IDs, IP addresses, Turnstile tokens, tenant IDs, secrets, arbitrary query strings, or monetary conversion values into GTM.
+
+| Event | Trigger | Allowed properties | Consent | GTM mapping |
+| --- | --- | --- | --- | --- |
+| `wdd_view_packages` | Packages route view, once per client mount | `pagePath`, `pageType` | Analytics or marketing | Meta `ViewContent`; optional GA4 custom event |
+| `wdd_select_package` | A package CTA is selected | `pagePath`, `packageSlug` | Analytics or marketing | Meta `ViewContent` or a custom package-selection event |
+| `wdd_quote_start` | First interaction with a contact/quote/campaign form | `pagePath`, `formType`, `packageSlug`, `serviceSlug`, `campaignSlug`, `offerCode`, selected UTM fields | Analytics or marketing | Meta `Contact`; optional GA4 custom event |
+| `wdd_lead_submit` | Locally valid form submission is sent to `/api/leads` | Safe form, package/service/campaign, page, and selected UTM properties | Analytics or marketing | Optional diagnostic custom event; never Meta Lead |
+| `wdd_lead_success` | `/api/leads` returns accepted success, once per accepted submission | Safe form, package/service/campaign, page, and selected UTM properties | Analytics or marketing | GA4 `generate_lead`; Meta `Lead` |
+| `wdd_lead_error` | `/api/leads` rejects or cannot accept a locally valid submission | Safe form, package/service/campaign, page, `failureCategory`, selected UTM properties | Analytics or marketing | Optional diagnostic custom event; never Meta Lead |
+
+## GTM configuration
+
+1. Enable GTM only with `NEXT_PUBLIC_ENABLE_GTM=true`, a valid `NEXT_PUBLIC_GTM_ID`, and the consent banner enabled.
+2. Configure Consent Initialization defaults as denied for analytics and advertising storage; honor the application updates for analytics and marketing selections.
+3. Use either these application page events or GTM History Change page views—not both for the same measurement destination.
+4. Gate GA4 tags on analytics consent and Meta tags on marketing consent. The `wdd_lead_success` trigger must be the only Meta Lead trigger.
+5. Validate with GTM Preview and Meta Events Manager before claiming Pixel or Lead delivery is live.

@@ -36,3 +36,19 @@ test("global metadata avoids conflicting robots directives and guards verificati
   assert.doesNotMatch(source, /robots\s*:\s*\{[^}]*index\s*:\s*true/i);
   assert.match(source, /isValidVerification/);
 });
+
+test('conversion event contract uses safe names, safe fields, and consent gating', () => {
+  const source = fs.readFileSync('src/lib/tracking/events.ts', 'utf8');
+  for (const name of ['wdd_view_packages', 'wdd_select_package', 'wdd_quote_start', 'wdd_lead_submit', 'wdd_lead_success', 'wdd_lead_error']) assert.match(source, new RegExp(name));
+  assert.match(source, /readConsent/);
+  assert.match(source, /packageSlug/);
+  assert.match(source, /serviceSlug/);
+  assert.equal(/fullName|email|phone|businessName|referenceId|turnstileToken/.test(source), false);
+});
+
+test('package and service query preselection is allowlisted', () => {
+  const form = fs.readFileSync('src/components/forms/contact-form.tsx', 'utf8');
+  assert.match(form, /starter:"Starter — \$499"/);
+  assert.match(form, /SERVICES\.includes/);
+  assert.match(form, /requestedPackage \|\| undefined/);
+});
