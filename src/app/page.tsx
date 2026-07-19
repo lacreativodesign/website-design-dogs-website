@@ -1,107 +1,23 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { ThemeScene } from "@/components/theme/theme-scene";
+import { ContactForm } from "@/components/forms/contact-form";
+import { TestimonialsSection } from "@/components/home/testimonials-section";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { ArrowRightIcon } from "@/components/ui/icon";
-import { homeCapabilities, homeHero, homeIndustryStrip, homeServices } from "@/content/home";
+import { homeHero, homeIndustryStrip, homeServices } from "@/content/home";
+import { websitePackages } from "@/content/packages";
+import { portfolioConcepts } from "@/content/portfolio";
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = pageMetadata({
-  title: "Professional Website Design for Growing Businesses",
-  description:
-    "Website Design Dogs creates professional, mobile-ready websites for local and growing businesses with clear packages and dependable support.",
-  path: "/",
-});
+export const metadata: Metadata = pageMetadata({ title: "Professional Website Design for Growing Businesses", description: "Website Design Dogs creates professional, mobile-ready websites for local and growing businesses with clear packages and dependable support.", path: "/" });
 
-export default function Home() {
-  return (
-    <>
-      <section className="home-hero" aria-labelledby="home-hero-title">
-        <ThemeScene
-          darkSrc="/brand/scenes/home-hero-dark.webp"
-          lightSrc="/brand/scenes/home-hero-light.webp"
-          tabletDarkSrc="/brand/crops/tablet/home-dark.webp"
-          tabletLightSrc="/brand/crops/tablet/home-light.webp"
-          mobileDarkSrc="/brand/crops/mobile/home-dark.webp"
-          mobileLightSrc="/brand/crops/mobile/home-light.webp"
-          alt="Website Design Dogs mascot working outdoors on a professional website design scene"
-          width={1600}
-          height={1000}
-          priority
-          sizes="100vw"
-          className="home-hero__scene"
-          objectPosition="center"
-        />
-        <Container className="home-hero__content">
-          <div className="home-hero__copy">
-            <p className="home-eyebrow">{homeHero.eyebrow}</p>
-            <h1 id="home-hero-title" className="home-hero__title">
-              WE DESIGN WEBSITES
-              <span>THAT DELIVER RESULTS.</span>
-            </h1>
-            <p className="home-hero__body">{homeHero.body}</p>
-            <div className="home-hero__actions">
-              <Button href="/get-started" icon={<ArrowRightIcon />} fullWidthMobile>
-                Get a Free Quote
-              </Button>
-              <Button href="/portfolio" variant="outline" fullWidthMobile>
-                View Our Work
-              </Button>
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      <section className="home-industry-strip" aria-labelledby="home-industry-strip-title">
-        <Container>
-          <p id="home-industry-strip-title" className="home-strip-heading">
-            BUILT FOR LOCAL BUSINESSES
-          </p>
-          <div className="home-industry-strip__grid">
-            {homeIndustryStrip.map((industry) => (
-              <div key={industry.title} className="home-industry-strip__item">
-                <Image src={industry.icon} alt="" width={34} height={34} className="home-industry-strip__icon" />
-                <span>{industry.title}</span>
-              </div>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      <section className="home-section home-services" aria-labelledby="home-services-title">
-        <Container>
-          <div className="home-section__heading">
-            <p className="home-eyebrow">WHAT WE DO</p>
-            <h2 id="home-services-title">Services That Help Your Business Grow</h2>
-          </div>
-          <div className="home-services__grid">
-            {homeServices.map((service) => (
-              <article key={service.title} className="home-service-card">
-                <Image src={service.icon} alt="" width={40} height={40} className="home-service-card__icon" />
-                <h3>{service.title}</h3>
-                <p>{service.body}</p>
-                <a href="/services" className="home-card-link">
-                  Learn More <span aria-hidden="true">→</span>
-                </a>
-              </article>
-            ))}
-          </div>
-        </Container>
-      </section>
-
-      <section className="home-capabilities" aria-label="Starter website package capabilities">
-        <Container>
-          <div className="home-capabilities__grid">
-            {homeCapabilities.map((capability) => (
-              <div key={`${capability.value}-${capability.label}`} className="home-capability-tile">
-                <strong>{capability.value}</strong>
-                <span>{capability.label}</span>
-              </div>
-            ))}
-          </div>
-        </Container>
-      </section>
-    </>
-  );
-}
+export default function Home() { return <>
+  <section className="home-hero" aria-labelledby="home-hero-title"><div aria-hidden="true" className="home-hero__scene theme-scene--placeholder" /><Container className="home-hero__content"><div className="home-hero__copy"><p className="home-eyebrow">{homeHero.eyebrow}</p><h1 id="home-hero-title" className="home-hero__title">WE DESIGN WEBSITES<span>THAT DELIVER RESULTS.</span></h1><p className="home-hero__body">{homeHero.body}</p><div className="home-hero__actions"><Button href="/get-started" icon={<ArrowRightIcon />} fullWidthMobile>Get a Free Quote</Button><Button href="/portfolio" variant="outline" fullWidthMobile>View Our Work</Button></div></div></Container></section>
+  <section className="home-industry-strip" aria-labelledby="home-industry-strip-title"><Container><p id="home-industry-strip-title" className="home-strip-heading">WEBSITES DESIGNED FOR SERVICE BUSINESSES</p><div className="home-industry-strip__grid">{homeIndustryStrip.map((industry) => <div key={industry.title} className="home-industry-strip__item"><Image src={industry.icon} alt="" width={34} height={34} className="home-industry-strip__icon" /><span>{industry.title}</span></div>)}</div></Container></section>
+  <section className="home-section home-services" aria-labelledby="home-services-title"><Container><div className="home-section__heading"><p className="home-eyebrow">WHAT WE DO</p><h2 id="home-services-title">Services That Help Your Business Grow</h2></div><div className="home-services__grid">{homeServices.map((service) => <article key={service.title} className="home-service-card"><Image src={service.icon} alt="" width={40} height={40} className="home-service-card__icon" /><h3>{service.title}</h3><p>{service.body}</p><a href="/services" className="home-card-link">Learn More <span aria-hidden="true">→</span></a></article>)}</div><div className="mt-7 text-center"><Button href="/services" variant="outline">View Services →</Button></div></Container></section>
+  <section className="home-section" aria-labelledby="home-portfolio-title"><Container><div className="home-section__heading"><p className="home-eyebrow">SELECTED WORK</p><h2 id="home-portfolio-title">Website Concepts Built Around Real Business Needs</h2></div><div className="home-portfolio-grid">{portfolioConcepts.slice(0,6).map((concept) => <article key={concept.image} className="portfolio-concept-card"><div className="portfolio-concept-card__media"><Image src={concept.image} alt={`${concept.title} design concept`} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="portfolio-concept-card__image"/><span className="portfolio-concept-card__label">DESIGN CONCEPT</span></div><div className="portfolio-concept-card__body"><p>{concept.category}</p><h3>{concept.title}</h3></div></article>)}</div><div className="mt-7 text-center"><Button href="/portfolio" variant="outline">View Full Portfolio →</Button></div></Container></section>
+  <section className="home-section home-packages" aria-labelledby="home-packages-title"><Container><div className="home-section__heading"><p className="home-eyebrow">WEBSITE PACKAGES</p><h2 id="home-packages-title">Choose the Right Foundation</h2></div><div className="home-packages-grid">{websitePackages.map((pkg) => <article key={pkg.slug} className={`home-package-card${pkg.slug === "business" ? " home-package-card--featured" : ""}`}>{pkg.label ? <p className="badge">{pkg.label}</p> : null}<h3>{pkg.name}</h3><p className="home-package-price">{pkg.price}</p><p className="home-package-once">One Time</p><p>{pkg.description}</p><ul>{pkg.features.map((feature) => <li key={feature}>{feature}</li>)}</ul><Button href={pkg.href}>{pkg.cta}</Button></article>)}</div><div className="mt-7 text-center"><Button href="/packages" variant="outline">View Full Packages →</Button></div></Container></section>
+  <TestimonialsSection />
+  <section className="home-section home-lead" aria-labelledby="home-lead-title"><Container><div className="home-lead-grid"><div><p className="home-eyebrow">START YOUR PROJECT</p><h2 id="home-lead-title">Tell Us What You Need</h2><p>Share a few details about your project, and we’ll recommend the right next step.</p></div><div className="card"><ContactForm /></div></div></Container></section>
+</>; }

@@ -18,15 +18,7 @@ const services = [
   "Website Care",
 ];
 
-const capabilities = [
-  "Core Pages",
-  "Responsive Layout",
-  "Contact or Quote Form",
-  "Foundation Setup",
-  "Launch Support",
-];
-
-test("Home route matches locked content structure", async ({ page }) => {
+test("Home route provides the conversion sequence", async ({ page }) => {
   await page.goto("/");
 
   await expect(page.locator("main h1")).toHaveCount(1);
@@ -45,15 +37,18 @@ test("Home route matches locked content structure", async ({ page }) => {
     await expect(page.locator(".home-service-card", { hasText: service })).toHaveCount(1);
   }
 
-  await expect(page.locator(".home-capability-tile")).toHaveCount(5);
-  for (const capability of capabilities) {
-    await expect(page.locator(".home-capability-tile", { hasText: capability })).toHaveCount(1);
-  }
+  await expect(page.locator(".home-portfolio-grid .portfolio-concept-card")).toHaveCount(6);
+  await expect(page.locator(".home-portfolio-grid .portfolio-concept-card__label")).toHaveCount(6);
+  await expect(page.locator(".home-package-card")).toHaveCount(3);
+  await expect(page.locator(".home-package-card", { hasText: "Starter" })).toContainText("$499");
+  await expect(page.locator(".home-package-card", { hasText: "Business" })).toContainText("$899");
+  await expect(page.locator(".home-package-card", { hasText: "Growth" })).toContainText("$1,499");
+  await expect(page.getByRole("heading", { name: "Tell Us What You Need" })).toBeVisible();
+  await expect(page.locator(".site-footer")).toBeVisible();
 
   await expect(page.locator(".home-ending")).toHaveCount(0);
   await expect(page.getByText("READY WHEN YOU ARE")).toHaveCount(0);
   await expect(page.getByText("STARTER WEBSITE FOUNDATION")).toHaveCount(0);
-  await expect(page.locator(".site-footer")).toHaveCount(0);
   await expect(page.getByText(/trusted by/i)).toHaveCount(0);
   await expect(page.getByText(/logogipsum/i)).toHaveCount(0);
   await expect(page.getByText(/123 Main/i)).toHaveCount(0);
@@ -67,17 +62,15 @@ test("Footer renders on standard internal routes", async ({ page }) => {
   await expect(page.getByRole("navigation", { name: "Legal navigation" })).toBeVisible();
 });
 
-test("Home theme switches coordinated hero scene", async ({ page }) => {
+test("Home theme keeps its CSS-only hero placeholder", async ({ page }) => {
   await page.goto("/");
-  const darkHero = page.locator(".home-hero__scene .theme-scene__image-dark.theme-scene__desktop");
-  const lightHero = page.locator(".home-hero__scene .theme-scene__image-light.theme-scene__desktop");
-  await expect(darkHero).toHaveAttribute("src", /home-hero-dark/);
-  await expect(lightHero).toHaveAttribute("src", /home-hero-light/);
+  const hero = page.locator(".home-hero__scene.theme-scene--placeholder");
+  await expect(hero).toBeVisible();
+  await expect(hero.locator("img")).toHaveCount(0);
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  await expect(darkHero).toBeVisible();
 
   await page.getByRole("button", { name: /Switch to light theme/i }).first().click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
-  await expect(lightHero).toBeVisible();
+  await expect(hero).toBeVisible();
   await expectNoOverflow(page);
 });

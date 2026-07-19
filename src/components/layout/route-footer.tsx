@@ -6,7 +6,7 @@ import { SiteFooter } from "./site-footer";
 export function RouteFooter() {
   const pathname = usePathname();
 
-  if (pathname === "/" || pathname.startsWith("/campaigns/")) {
+  if (pathname.startsWith("/campaigns/")) {
     return null;
   }
 
