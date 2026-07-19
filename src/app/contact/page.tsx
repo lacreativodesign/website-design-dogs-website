@@ -37,7 +37,7 @@ export default function ContactPage() {
           </nav>
           <p className="home-eyebrow">Contact Us</p>
           <h1 id="contact-page-title">Let’s start a conversation.</h1>
-          <p>Have a project in mind? Tell us what you need and what you want your website to accomplish.</p>
+          <p>Tell us what you need, and we’ll review your project requirements and recommend the appropriate next step.</p>
         </Container>
       </section>
 
@@ -45,7 +45,7 @@ export default function ContactPage() {
         <Container>
           <div className="contact-layout-grid">
             <aside className="contact-info-card" aria-label="Contact information">
-              <h2>Project details that help us respond clearly.</h2>
+              <h2>Tell us about your project.</h2>
               <div className="contact-info-list">
                 {contactRows.map((row) => (
                   <div key={row} className="contact-info-row">
@@ -79,12 +79,17 @@ export default function ContactPage() {
               sizes="100vw"
               className="coverage-panel__background"
             />
-            <div className="coverage-panel__content">
-              <div className="coverage-panel__pin" aria-hidden="true">⌖</div>
+            <div className="coverage-panel__content coverage-panel__content--steps">
               <div>
-                <h2 id="coverage-panel-title">Online Project Coverage</h2>
+                <p className="home-eyebrow">PROJECT START</p>
+                <h2 id="coverage-panel-title">A clear path from enquiry to project.</h2>
                 <p>Project availability and scope are confirmed after enquiry review.</p>
               </div>
+              <ol className="coverage-panel__steps">
+                {['Submit your requirements', 'Receive the recommended scope', 'Review the quote', 'Begin the project'].map((step, index) => (
+                  <li key={step}><span>{index + 1}</span>{step}</li>
+                ))}
+              </ol>
             </div>
           </div>
         </Container>

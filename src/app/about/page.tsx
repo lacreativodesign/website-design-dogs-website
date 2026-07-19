@@ -37,11 +37,8 @@ export default function AboutPage() {
             <span>About Us</span>
           </nav>
           <p className="home-eyebrow">About Us</p>
-          <h1 id="about-page-title">We’re more than just website designers.</h1>
-          <p>
-            Website Design Dogs combines strategy, design, development, and practical ongoing support to help growing
-            businesses present themselves clearly online.
-          </p>
+          <h1 id="about-page-title">We’re more than website designers.</h1>
+          <p>Website design and development for a clear, professional online presence.</p>
         </Container>
       </section>
 
@@ -50,15 +47,14 @@ export default function AboutPage() {
           <div className="about-story-grid">
             <div className="about-story-copy">
               <p className="home-eyebrow">OUR MISSION</p>
-              <h2 id="about-story-title">Built for clear communication and confident growth.</h2>
+              <h2 id="about-story-title">Practical design and development for each project.</h2>
               <p>
-                Our mission is simple: build websites that not only look professional, but also help businesses
-                communicate clearly and grow with confidence.
+                Website Design Dogs is a website design and development service focused on helping businesses establish
+                a clear, professional online presence.
               </p>
               <p>
-                Website Design Dogs is a service brand of LA CREATIVO GROUP, LLC. The brand brings together practical
-                planning, polished design, reliable development, and support that respects the way growing businesses
-                actually operate.
+                We combine practical design, responsive development, clear communication, and launch support around
+                the needs of each project. Website Design Dogs is a service brand of LA CREATIVO GROUP, LLC.
               </p>
             </div>
             <div className="about-checklist" aria-label="Website Design Dogs values">
