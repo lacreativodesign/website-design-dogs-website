@@ -18,7 +18,7 @@ export const metadata: Metadata = pageMetadata({
 export default function ServicesPage() {
   return (
     <>
-      <section className="visual-page-hero" aria-labelledby="services-page-title">
+      <section className="services-hero" aria-labelledby="services-page-title">
         <ThemeScene
           darkSrc="/brand/scenes/services-hero-dark.webp"
           lightSrc="/brand/scenes/services-hero-light.webp"
@@ -27,35 +27,31 @@ export default function ServicesPage() {
           height={1000}
           priority
           sizes="100vw"
-          className="visual-page-hero__scene"
+          className="services-hero__scene"
         />
-        <Container className="visual-page-hero__content">
-          <nav className="visual-breadcrumb" aria-label="Breadcrumb">
+        <Container className="services-hero__content">
+          <div className="services-hero__copy">
+            <p className="home-eyebrow">Services</p>
+            <h1 id="services-page-title">Services</h1>
+            <nav className="visual-breadcrumb" aria-label="Breadcrumb">
             <Link href="/">Home</Link>
             <span aria-hidden="true">›</span>
-            <span>Services</span>
-          </nav>
-          <p className="home-eyebrow">Services</p>
-          <h1 id="services-page-title">Complete website solutions under one roof.</h1>
-          <p>We offer end-to-end website services designed to grow your business online.</p>
+              <span aria-current="page">Services</span>
+            </nav>
+            <h2>Complete website solutions under one roof.</h2>
+            <p>We offer end-to-end website services designed to support your business online.</p>
+          </div>
         </Container>
       </section>
 
-      <section className="directory-section" aria-labelledby="services-directory-title">
+      <section className="services-directory" aria-labelledby="services-directory-title">
         <Container>
-          <div className="directory-section__intro">
-            <p className="home-eyebrow">WHAT WE DO</p>
-            <h2 id="services-directory-title">Practical services for a stronger digital presence.</h2>
-            <p>
-              From first impressions to launch support, each service is structured to keep your website clear,
-              responsive, maintainable, and ready for real customer actions.
-            </p>
-          </div>
+          <h2 id="services-directory-title" className="sr-only">Our services</h2>
           <div className="services-directory-grid">
             {services.map((service) => (
-              <article key={service.title} className="directory-card">
-                <Image src={service.icon} alt="" width={38} height={38} className="directory-card__icon" />
-                <h2>{service.title}</h2>
+              <article key={service.title} className="services-directory-card">
+                <Image src={service.icon} alt="" width={32} height={32} className="services-directory-card__icon" />
+                <h3>{service.title}</h3>
                 <p>{service.description}</p>
               </article>
             ))}
@@ -67,7 +63,7 @@ export default function ServicesPage() {
         <Container className="compact-cta-strip__inner">
           <div>
             <h2 id="services-cta-title">Ready to start your project?</h2>
-            <p>Let’s build a website that drives real results.</p>
+            <p>Tell us what you need, and we’ll recommend the right next step.</p>
           </div>
           <Button href="/get-started" icon={<ArrowRightIcon />} fullWidthMobile>
             Get a Free Quote
