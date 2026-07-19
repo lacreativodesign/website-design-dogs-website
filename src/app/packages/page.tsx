@@ -6,6 +6,7 @@ import { Container } from "@/components/ui/container";
 import { ArrowRightIcon } from "@/components/ui/icon";
 import { JsonLd } from "@/components/seo/json-ld";
 import { PackageSelector } from "@/components/packages/package-selector";
+import { PackageLeadButton, PackagesViewTracker } from "@/components/packages/package-tracking";
 import { packageAssurances, websitePackages } from "@/content/packages";
 import { pageMetadata } from "@/lib/seo";
 
@@ -33,6 +34,7 @@ export default function PackagesPage() {
         }}
       />
 
+      <PackagesViewTracker />
       <section className="visual-page-hero visual-page-hero--packages" aria-labelledby="packages-page-title">
         <ThemeScene
           darkSrc="/brand/scenes/packages-hero-dark.webp"
@@ -76,9 +78,9 @@ export default function PackagesPage() {
                     <li key={feature}>{feature}</li>
                   ))}
                 </ul>
-                <Button href={pkg.href} variant={pkg.label ? "primary" : "outline"} className="pricing-card__button">
+                <PackageLeadButton href={pkg.href} slug={pkg.slug} featured={Boolean(pkg.label)}>
                   {pkg.cta}
-                </Button>
+                </PackageLeadButton>
               </article>
             ))}
           </div>
