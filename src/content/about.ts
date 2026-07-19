@@ -1,13 +1,13 @@
 export const aboutChecklist = [
-  "Results Focused",
-  "Clear Communication",
-  "Clean & Modern Design",
-  "Reliable Follow-Through",
+  "Clear Project Scope",
+  "Responsive-First Design",
+  "Direct Communication",
+  "Practical Launch Support",
 ] as const;
 
 export const aboutProcessTiles = [
-  { number: "01", title: "Strategy" },
+  { number: "01", title: "Discover" },
   { number: "02", title: "Design" },
-  { number: "03", title: "Development" },
-  { number: "04", title: "Support" },
+  { number: "03", title: "Build" },
+  { number: "04", title: "Launch" },
 ] as const;

@@ -1,8 +1,8 @@
 export type Package = { name:string; slug:string; price:string; label?:string; description:string; features:string[]; href:string; cta:string };
 export const websitePackages: Package[] = [
-{name:"Starter",slug:"starter",price:"$499",description:"A focused professional website for businesses that need a credible online presence.",features:["Up to 5 core pages","Responsive custom layout","Contact or quote form interface","Basic on-page SEO setup","Essential performance optimization","Launch support"],href:"/get-started?package=starter",cta:"Choose Starter"},
-{name:"Business",slug:"business",price:"$899",label:"RECOMMENDED",description:"A stronger lead-generation website for established local and service businesses.",features:["Up to 10 core pages","Conversion-focused page structure","Service and location content sections","Analytics-ready implementation","Enhanced performance optimization","30 days of website care"],href:"/get-started?package=business",cta:"Choose Business"},
-{name:"Growth",slug:"growth",price:"$1,499",description:"A broader website foundation for businesses preparing to scale marketing and lead generation.",features:["Up to 15 core pages","Advanced lead-generation structure","Blog or content-management setup","Speed and technical optimization","Priority launch support","60 days of website care"],href:"/get-started?package=growth",cta:"Choose Growth"},
+{name:"Starter",slug:"starter",price:"$499",description:"A focused professional website for businesses that need a credible online presence.",features:["Up to 5 pages","Mobile-responsive layout","Basic on-page SEO setup","Contact or quote form","1 revision round"],href:"/contact?package=starter",cta:"Choose Starter"},
+{name:"Business",slug:"business",price:"$899",label:"Recommended",description:"A stronger website foundation for established service businesses.",features:["Up to 10 pages","Mobile-responsive layout","Expanded on-page SEO setup","Performance optimization","3 revision rounds"],href:"/contact?package=business",cta:"Choose Business"},
+{name:"Growth",slug:"growth",price:"$1,499",description:"A broader website foundation for businesses with more complex needs.",features:["Up to 20 pages","E-commerce functionality","Mobile-responsive layout","SEO and performance setup","5 revision rounds"],href:"/contact?package=growth",cta:"Choose Growth"},
 ];
 export const comparisonRows = [["Core pages","Up to 5","Up to 10","Up to 15"],["Responsive design","Included","Included","Included"],["Contact or quote form","Included","Included","Included"],["SEO foundation","Basic","Enhanced","Advanced"],["Conversion-focused structure","Core pages","Expanded","Advanced"],["Service/location sections","Limited","Included","Expanded"],["Content-management setup","Not included","Optional scope","Included where appropriate"],["Performance optimization","Essential","Enhanced","Advanced"],["Website care","Launch support","30 days","60 days"],["Launch support","Included","Included","Priority"]] as const;
 export const pricingFactors = ["Additional pages","E-commerce functionality","Full copywriting","Custom illustrations","Complex integrations","Advanced automation","Membership systems","Third-party licensing","Ongoing marketing requirements","Hosting or external platform costs"];
@@ -10,6 +10,6 @@ export const packageFaqs = [["Are the listed prices one-time fees?","The listed 
 
 export const packageAssurances = [
   { title: "Clear Project Scope", body: "Deliverables, pages, and launch responsibilities are defined before work begins." },
-  { title: "Third-Party Costs Confirmed", body: "Hosting, tools, licensing, and external platform costs are identified separately where needed." },
-  { title: "Launch Support as Scoped", body: "Launch assistance follows the approved package scope and project proposal." },
+  { title: "Responsive-First Design", body: "Layouts are planned to remain clear and usable across supported screen sizes." },
+  { title: "Secure Quote Request", body: "Project enquiries use the protected server-side lead submission flow." },
 ] as const;

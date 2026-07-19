@@ -36,7 +36,7 @@ export default function PortfolioPage() {
           </nav>
           <p className="home-eyebrow">Portfolio</p>
           <h1 id="portfolio-page-title">Portfolio</h1>
-          <p>A collection of website concepts designed for growing businesses.</p>
+          <p>Website design concepts created for different service-business needs.</p>
         </Container>
       </section>
 
@@ -47,8 +47,8 @@ export default function PortfolioPage() {
           </div>
           <PortfolioFilter />
           <div className="portfolio-directory__cta">
-            <Button href="/get-started" icon={<ArrowRightIcon />}>
-              View All Projects
+            <Button href="/contact" icon={<ArrowRightIcon />}>
+              Start Your Project
             </Button>
           </div>
         </Container>

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { ArrowRightIcon } from "@/components/ui/icon";
 import { JsonLd } from "@/components/seo/json-ld";
+import { PackageSelector } from "@/components/packages/package-selector";
 import { packageAssurances, websitePackages } from "@/content/packages";
 import { pageMetadata } from "@/lib/seo";
 
@@ -51,20 +52,13 @@ export default function PackagesPage() {
           </nav>
           <p className="home-eyebrow">Packages</p>
           <h1 id="packages-page-title">Packages</h1>
-          <p>Simple, transparent pricing that fits your business.</p>
+          <p>Clear one-time website package pricing for different project needs.</p>
         </Container>
       </section>
 
       <section className="packages-pricing-section" aria-labelledby="packages-pricing-title">
         <Container>
-          <div className="package-selector" aria-label="Package category selector">
-            <button type="button" className="package-selector__button package-selector__button--active" aria-pressed="true">
-              Website Packages
-            </button>
-            <button type="button" className="package-selector__button" aria-pressed="false">
-              Website Care
-            </button>
-          </div>
+          <PackageSelector />
 
           <div className="sr-only" id="packages-pricing-title">
             Website package pricing options
@@ -75,6 +69,7 @@ export default function PackagesPage() {
                 {pkg.label ? <p className="pricing-card__label">{pkg.label}</p> : null}
                 <h2>{pkg.name}</h2>
                 <p className="pricing-card__price">{pkg.price}</p>
+                <p className="pricing-card__one-time">One Time</p>
                 <p className="pricing-card__description">{pkg.description}</p>
                 <ul className="pricing-card__features">
                   {pkg.features.map((feature) => (
@@ -98,8 +93,8 @@ export default function PackagesPage() {
           </div>
 
           <div className="packages-final-cta">
-            <Button href="/get-started" icon={<ArrowRightIcon />}>
-              Get a Free Quote
+            <Button href="/contact?package=custom" icon={<ArrowRightIcon />}>
+              Request a Custom Quote
             </Button>
           </div>
         </Container>
