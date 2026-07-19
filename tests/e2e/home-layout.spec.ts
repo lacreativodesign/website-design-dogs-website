@@ -40,9 +40,25 @@ test("Home route provides the conversion sequence", async ({ page }) => {
   await expect(page.locator(".home-portfolio-grid .portfolio-concept-card")).toHaveCount(6);
   await expect(page.locator(".home-portfolio-grid .portfolio-concept-card__label")).toHaveCount(6);
   await expect(page.locator(".home-package-card")).toHaveCount(3);
-  await expect(page.locator(".home-package-card", { hasText: "Starter" })).toContainText("$499");
-  await expect(page.locator(".home-package-card", { hasText: "Business" })).toContainText("$899");
-  await expect(page.locator(".home-package-card", { hasText: "Growth" })).toContainText("$1,499");
+  const packageCard = (name: string) =>
+    page.locator(".home-package-card").filter({
+      has: page.getByRole("heading", { name, exact: true }),
+    });
+  const starterCard = packageCard("Starter");
+  const businessCard = packageCard("Business");
+  const growthCard = packageCard("Growth");
+
+  await expect(starterCard).toHaveCount(1);
+  await expect(businessCard).toHaveCount(1);
+  await expect(growthCard).toHaveCount(1);
+  await expect(starterCard).toContainText("$499");
+  await expect(businessCard).toContainText("$899");
+  await expect(growthCard).toContainText("$1,499");
+  await expect(businessCard).toHaveClass(/home-package-card--featured/);
+  await expect(businessCard).toContainText("Recommended");
+  await expect(starterCard.getByRole("link", { name: "Choose Starter" })).toHaveAttribute("href", "/contact?package=starter");
+  await expect(businessCard.getByRole("link", { name: "Choose Business" })).toHaveAttribute("href", "/contact?package=business");
+  await expect(growthCard.getByRole("link", { name: "Choose Growth" })).toHaveAttribute("href", "/contact?package=growth");
   await expect(page.getByRole("heading", { name: "Tell Us What You Need" })).toBeVisible();
   await expect(page.locator(".site-footer")).toBeVisible();
 
