@@ -72,7 +72,7 @@ export function MobileNavigation() {
                   key={item.href}
                   href={item.href}
                   className="mobile-nav__link"
-                  aria-current={pathname === item.href ? "page" : undefined}
+                  aria-current={pathname === item.href || (item.href === "/services" && pathname.startsWith("/services/")) ? "page" : undefined}
                   onClick={closeWithoutFocusReturn}
                 >
                   {item.label}

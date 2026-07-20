@@ -53,6 +53,7 @@ export default function ServicesPage() {
                 <Image src={service.icon} alt="" width={32} height={32} className="services-directory-card__icon" />
                 <h3>{service.title}</h3>
                 <p>{service.description}</p>
+                <Link href={`/services/${service.slug}`} className="services-directory-card__link" aria-label={`Explore ${service.title}`}>Explore service <span aria-hidden="true">→</span></Link>
               </article>
             ))}
           </div>

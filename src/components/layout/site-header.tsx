@@ -18,7 +18,7 @@ export function SiteHeader() {
         <BrandLogo priority />
         <nav className="site-header__nav" aria-label="Primary navigation">
           {siteConfig.primaryNav.map((item) => (
-            <Link key={item.href} href={item.href} className="nav-link" aria-current={pathname === item.href ? "page" : undefined}>
+            <Link key={item.href} href={item.href} className="nav-link" aria-current={pathname === item.href || (item.href === "/services" && pathname.startsWith("/services/")) ? "page" : undefined}>
               {item.label}
             </Link>
           ))}
