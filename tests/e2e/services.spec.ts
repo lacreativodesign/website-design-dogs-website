@@ -23,7 +23,25 @@ test("service routes, links, metadata, schema, and quote preselection", async ({
     await expect(page.getByRole("checkbox", { name: serviceProjectType(service.slug) })).toBeChecked();
   }
   await page.goto("/get-started?service=unknown-service");
+  await page.waitForURL((url) => url.pathname === "/get-started" && url.searchParams.get("service") === "custom-website-design");
+  await expect(page).toHaveURL(/\/get-started\?service=custom-website-design$/);
+  await expect(page.getByRole("checkbox", { name: serviceProjectType("custom-website-design") })).toBeChecked();
+
+  await page.goto("/get-started?service=unknown-service&utm_source=search&utm_medium=cpc&utm_campaign=summer&gclid=test-gclid&fbclid=test-fbclid");
+  await page.waitForURL((url) => url.pathname === "/get-started" && url.searchParams.get("service") === "custom-website-design");
+  const canonicalUrl = new URL(page.url());
+  expect(canonicalUrl.searchParams.get("utm_source")).toBe("search");
+  expect(canonicalUrl.searchParams.get("utm_medium")).toBe("cpc");
+  expect(canonicalUrl.searchParams.get("utm_campaign")).toBe("summer");
+  expect(canonicalUrl.searchParams.get("gclid")).toBe("test-gclid");
+  expect(canonicalUrl.searchParams.get("fbclid")).toBe("test-fbclid");
+  await expect(page.getByRole("checkbox", { name: serviceProjectType("custom-website-design") })).toBeChecked();
+
+  await page.goto("/get-started?service=");
   await expect(page.getByRole("checkbox", { checked: true })).toHaveCount(0);
+  await page.goto("/get-started?service=%F0");
+  await page.waitForURL((url) => url.pathname === "/get-started" && url.searchParams.get("service") === "custom-website-design");
+  await expect(page.getByRole("checkbox", { name: serviceProjectType("custom-website-design") })).toBeChecked();
   await page.goto("/get-started");
   await expect(page.getByRole("checkbox", { checked: true })).toHaveCount(0);
 
