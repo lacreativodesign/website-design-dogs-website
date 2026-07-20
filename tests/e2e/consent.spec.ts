@@ -44,7 +44,10 @@ test("accept persists and grants analytics and advertising consent", async ({ pa
 
 test("settings saves a customized category selection and footer reopens the dialog", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Settings" }).click();
+  const banner = page.getByRole("region", { name: "Privacy choices", exact: true });
+  await expect(banner).toBeVisible();
+  const settingsButton = banner.getByRole("button", { name: "Settings", exact: true });
+  await settingsButton.click();
   const dialog = page.getByRole("dialog", { name: /privacy choices/i });
   await expect(dialog).toBeVisible();
   await dialog.getByRole("checkbox", { name: "Allow analytics" }).check();
@@ -69,9 +72,11 @@ test("Global Privacy Control persists a denied choice and is disclosed in settin
 
 for (const width of [1440, 390, 320]) test(`privacy choices remain keyboard-operable at ${width}px`, async ({ page }) => {
   await page.setViewportSize({ width, height: 844 }); await page.goto("/");
-  const settings = page.getByRole("button", { name: "Settings" });
-  await settings.focus(); await page.keyboard.press("Enter");
+  const banner = page.getByRole("region", { name: "Privacy choices", exact: true });
+  await expect(banner).toBeVisible();
+  const settingsButton = banner.getByRole("button", { name: "Settings", exact: true });
+  await settingsButton.focus(); await page.keyboard.press("Enter");
   const dialog = page.getByRole("dialog", { name: /privacy choices/i });
   await expect(dialog).toBeVisible(); await page.keyboard.press("Escape");
-  await expect(dialog).toHaveCount(0); await expect(settings).toBeFocused();
+  await expect(dialog).toHaveCount(0); await expect(settingsButton).toBeFocused();
 });
