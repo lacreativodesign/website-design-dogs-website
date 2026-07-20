@@ -38,6 +38,7 @@ test("Portfolio filter supports clicks and roving keyboard selection", async ({ 
   await expect(page.locator("#portfolio-panel")).toHaveAttribute("data-active-filter", "Health & Wellness");
   await healthAndWellness.press("ArrowRight");
   const retailAndHospitality = tabs.getByRole("tab", { name: "Retail & Hospitality", exact: true });
+  await expect(retailAndHospitality).toBeFocused();
   await expect(retailAndHospitality).toHaveAttribute("aria-selected", "true");
   await expect(page.locator("[data-concept-id]")).toHaveCount(3);
   await page.setViewportSize({ width: 320, height: 720 });

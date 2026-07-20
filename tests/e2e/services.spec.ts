@@ -11,8 +11,12 @@ test("service routes, links, metadata, schema, and quote preselection", async ({
     await expect(page.locator("h1")).toHaveText(service.title);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", new RegExp(`${route}$`));
     await expect(page.getByRole("link", { name: `Explore ${service.title}` })).toHaveCount(0);
-    await page.getByRole("link", { name: /get a free quote/i }).first().click();
-    await expect(page).toHaveURL(new RegExp(`service=${service.slug}`));
+    const serviceHero = page.getByRole("region", { name: service.title });
+    const quoteCta = serviceHero.getByRole("link", { name: "Get a Free Quote", exact: true });
+    await expect(quoteCta).toHaveAttribute("href", `/get-started?service=${service.slug}`);
+    await expect(quoteCta).not.toHaveAttribute("target", "_blank");
+    await quoteCta.click();
+    await expect(page).toHaveURL(new RegExp(`/get-started\?service=${service.slug}$`));
     await expect(page.getByRole("checkbox", { name: serviceProjectType(service.slug) })).toBeChecked();
   }
   await page.goto("/services");
