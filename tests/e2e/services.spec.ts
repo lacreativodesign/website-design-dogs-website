@@ -19,7 +19,9 @@ test("service routes, links, metadata, schema, and quote preselection", async ({
       page.waitForURL((url) => url.pathname === "/get-started" && url.searchParams.get("service") === service.slug),
       quoteCta.click(),
     ]);
-    await expect(page).toHaveURL(new RegExp(`/get-started\?service=${service.slug}$`));
+    const quoteUrl = new URL(page.url());
+    expect(quoteUrl.pathname).toBe("/get-started");
+    expect(quoteUrl.searchParams.get("service")).toBe(service.slug);
     await expect(page.getByRole("checkbox", { name: serviceProjectType(service.slug) })).toBeChecked();
   }
   await page.goto("/get-started?service=unknown-service");
