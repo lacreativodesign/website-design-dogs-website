@@ -1,4 +1,22 @@
 "use client";
+
 import { useEffect } from "react";
 import { trackEvent } from "@/lib/tracking/events";
-export function ConsentBanner({ onAccept, onReject, onCustomize }: { onAccept: () => void; onReject: () => void; onCustomize: () => void }) { useEffect(() => trackEvent("wdd_consent_banner_viewed", {}), []); return <section role="region" aria-label="Cookie consent" className="consent-banner-compact fixed inset-x-4 bottom-4 z-50 mx-auto max-w-3xl rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-5 shadow-2xl"><div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-end"><div><h2 className="text-lg font-black">Your privacy choices</h2><p className="mt-2 text-sm leading-6 text-[var(--color-text-muted)]">We use necessary cookies to keep the website working. With your permission, we also use analytics and marketing technologies to understand performance and improve our advertising.</p></div><div className="grid gap-2 sm:grid-cols-3"><button className="button button-outline" onClick={onReject}>Reject Non-Essential</button><button className="button button-outline" onClick={onCustomize}>Customize</button><button className="button button-primary" onClick={onAccept}>Accept All</button></div></div></section>; }
+
+type Props = { onAccept: () => void; onReject: () => void; onSettings: () => void };
+
+export function ConsentBanner({ onAccept, onReject, onSettings }: Props) {
+  useEffect(() => trackEvent("wdd_consent_banner_viewed", {}), []);
+
+  return <section className="consent-banner" role="region" aria-labelledby="privacy-choices-title">
+    <div>
+      <h2 id="privacy-choices-title">Privacy choices</h2>
+      <p>We use necessary technologies to keep the site working. With your permission, we also use analytics and advertising technologies to measure performance and improve our marketing.</p>
+    </div>
+    <div className="consent-banner__actions">
+      <button type="button" className="consent-button consent-button--neutral" onClick={onReject}>Reject optional</button>
+      <button type="button" className="consent-button consent-button--neutral" onClick={onSettings}>Settings</button>
+      <button type="button" className="consent-button consent-button--accent" onClick={onAccept}>Accept optional</button>
+    </div>
+  </section>;
+}

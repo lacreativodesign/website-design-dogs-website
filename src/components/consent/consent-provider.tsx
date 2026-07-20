@@ -1,4 +1,37 @@
 "use client";
-import { createContext, useCallback, useEffect, useMemo, useState } from "react"; import { trackEvent } from "@/lib/tracking/events"; import { makeConsent, readConsent, writeConsent } from "./consent-storage"; import type { ConsentPreferences } from "./consent-types"; import { updateConsent } from "./consent-mode"; import { TrackingLoader } from "./tracking-loader"; import { ConsentPreferencesDialog } from "./consent-preferences-dialog"; import { ConsentBanner } from "./consent-banner";
-export const ConsentContext=createContext<{prefs:ConsentPreferences|null; setPrefs:(p:ConsentPreferences)=>void}>({prefs:null,setPrefs:()=>undefined});
-export function ConsentProvider({children}:{children:React.ReactNode}){ const enabled=process.env.NEXT_PUBLIC_CONSENT_BANNER_ENABLED!=="false"; const [prefs,setPrefsState]=useState<ConsentPreferences|null>(()=>typeof document==="undefined"?null:readConsent()); const [dialog,setDialog]=useState(false); useEffect(()=>{ const open=()=>setDialog(true); window.addEventListener("wdd:open-consent-preferences",open); return()=>window.removeEventListener("wdd:open-consent-preferences",open);},[]); const setPrefs=useCallback((p:ConsentPreferences)=>{writeConsent(p); setPrefsState(p); updateConsent(p); window.dispatchEvent(new CustomEvent("wdd:consent-updated",{detail:{analytics:p.analytics,marketing:p.marketing}})); trackEvent("wdd_consent_updated",{consentAnalytics:p.analytics,consentMarketing:p.marketing});},[]); const ctx=useMemo(()=>({prefs,setPrefs}),[prefs,setPrefs]); const show=enabled&&!prefs; return <ConsentContext.Provider value={ctx}>{children}<TrackingLoader prefs={prefs}/>{show?<ConsentBanner onAccept={()=>setPrefs(makeConsent(true,true))} onReject={()=>setPrefs(makeConsent(false,false))} onCustomize={()=>setDialog(true)}/>:null}<ConsentPreferencesDialog key={prefs?.updatedAt || "new"} open={dialog} prefs={prefs} onClose={()=>setDialog(false)} onSave={(a,m)=>{setPrefs(makeConsent(a,m)); setDialog(false);}} /></ConsentContext.Provider>; }
+
+import { createContext, useCallback, useEffect, useMemo, useState } from "react";
+import { trackEvent } from "@/lib/tracking/events";
+import { updateConsent } from "./consent-mode";
+import { ConsentBanner } from "./consent-banner";
+import { ConsentPreferencesDialog } from "./consent-preferences-dialog";
+import { makeConsent, readConsent, writeConsent } from "./consent-storage";
+import type { ConsentPreferences } from "./consent-types";
+import { TrackingLoader } from "./tracking-loader";
+
+export const ConsentContext = createContext<{ prefs: ConsentPreferences | null; setPrefs: (prefs: ConsentPreferences) => void }>({ prefs: null, setPrefs: () => undefined });
+
+export function ConsentProvider({ children }: { children: React.ReactNode }) {
+  const enabled = process.env.NEXT_PUBLIC_CONSENT_BANNER_ENABLED !== "false";
+  const [prefs, setPrefsState] = useState<ConsentPreferences | null>(null);
+  const [dialog, setDialog] = useState(false);
+  const [globalPrivacyControl] = useState(() => typeof navigator !== "undefined" && navigator.globalPrivacyControl === true);
+
+  const setPrefs = useCallback((next: ConsentPreferences) => {
+    writeConsent(next); setPrefsState(next); updateConsent(next);
+    window.dispatchEvent(new CustomEvent("wdd:consent-updated", { detail: { analytics: next.analytics, marketing: next.marketing } }));
+    trackEvent("wdd_consent_updated", { consentAnalytics: next.analytics, consentMarketing: next.marketing });
+  }, []);
+
+  useEffect(() => {
+    const saved = readConsent();
+    const gpc = navigator.globalPrivacyControl === true;
+    if (saved) { queueMicrotask(() => setPrefsState(saved)); updateConsent(saved); return; }
+    if (gpc) queueMicrotask(() => setPrefs(makeConsent(false, false, "rejected")));
+  }, [setPrefs]);
+
+  useEffect(() => { const open = () => setDialog(true); window.addEventListener("wdd:open-consent-preferences", open); return () => window.removeEventListener("wdd:open-consent-preferences", open); }, []);
+
+  const context = useMemo(() => ({ prefs, setPrefs }), [prefs, setPrefs]);
+  return <ConsentContext.Provider value={context}>{children}<TrackingLoader prefs={prefs} />{enabled && !prefs ? <ConsentBanner onAccept={() => setPrefs(makeConsent(true, true, "accepted"))} onReject={() => setPrefs(makeConsent(false, false, "rejected"))} onSettings={() => setDialog(true)} /> : null}<ConsentPreferencesDialog open={dialog} prefs={prefs} globalPrivacyControl={globalPrivacyControl} onClose={() => setDialog(false)} onSave={(analytics, marketing) => { setPrefs(makeConsent(analytics, marketing, "customized")); setDialog(false); }} /></ConsentContext.Provider>;
+}

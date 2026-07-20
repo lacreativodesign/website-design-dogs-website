@@ -26,7 +26,7 @@ test("consent cookie does not store pii", () => {
     "src/components/consent/consent-types.ts",
     "utf8",
   );
-  assert.match(source, /wdd-consent-v1/);
+  assert.match(source, /wdd-consent-v2/);
   assert.doesNotMatch(source, /email|phone|name|business/);
 });
 
