@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { services } from "../../src/content/services";
 
 test("service routes, links, metadata, schema, and quote preselection", async ({ page, request }) => {
@@ -22,11 +22,14 @@ test("service routes, links, metadata, schema, and quote preselection", async ({
     const quoteUrl = new URL(page.url());
     expect(quoteUrl.pathname).toBe("/get-started");
     expect(quoteUrl.searchParams.get("service")).toBe(service.slug);
+    await openProjectTypeStep(page);
     await expect(page.getByRole("checkbox", { name: serviceProjectType(service.slug) })).toBeChecked();
   }
+
   await page.goto("/get-started?service=unknown-service");
   await page.waitForURL((url) => url.pathname === "/get-started" && url.searchParams.get("service") === "custom-website-design");
   await expect(page).toHaveURL(/\/get-started\?service=custom-website-design$/);
+  await openProjectTypeStep(page);
   await expect(page.getByRole("checkbox", { name: serviceProjectType("custom-website-design") })).toBeChecked();
 
   await page.goto("/get-started?service=unknown-service&utm_source=search&utm_medium=cpc&utm_campaign=summer&gclid=test-gclid&fbclid=test-fbclid");
@@ -37,14 +40,20 @@ test("service routes, links, metadata, schema, and quote preselection", async ({
   expect(canonicalUrl.searchParams.get("utm_campaign")).toBe("summer");
   expect(canonicalUrl.searchParams.get("gclid")).toBe("test-gclid");
   expect(canonicalUrl.searchParams.get("fbclid")).toBe("test-fbclid");
+  await openProjectTypeStep(page);
   await expect(page.getByRole("checkbox", { name: serviceProjectType("custom-website-design") })).toBeChecked();
 
   await page.goto("/get-started?service=");
+  await openProjectTypeStep(page);
   await expect(page.getByRole("checkbox", { checked: true })).toHaveCount(0);
+
   await page.goto("/get-started?service=%F0");
   await page.waitForURL((url) => url.pathname === "/get-started" && url.searchParams.get("service") === "custom-website-design");
+  await openProjectTypeStep(page);
   await expect(page.getByRole("checkbox", { name: serviceProjectType("custom-website-design") })).toBeChecked();
+
   await page.goto("/get-started");
+  await openProjectTypeStep(page);
   await expect(page.getByRole("checkbox", { checked: true })).toHaveCount(0);
 
   await page.goto("/services");
@@ -53,4 +62,14 @@ test("service routes, links, metadata, schema, and quote preselection", async ({
   const sitemap = await (await request.get("/sitemap.xml")).text();
   for (const service of services) expect(sitemap).toContain(`/services/${service.slug}`);
 });
+
+async function openProjectTypeStep(page: Page) {
+  await page.getByRole("textbox", { name: /^Full name/ }).fill("Website Design Dogs QA");
+  await page.getByRole("textbox", { name: /^Business name/ }).fill("QA Business");
+  await page.getByRole("textbox", { name: /^Email/ }).fill("qa@example.com");
+  await page.getByRole("textbox", { name: /^Industry/ }).fill("Professional Services");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Project Type" })).toBeVisible();
+}
+
 function serviceProjectType(slug: string) { return ({"custom-website-design":"Custom Website Design","website-development":"Website Development","e-commerce-solutions":"E-Commerce Website","conversion-optimization":"Conversion Optimization","seo-local-optimization":"SEO & Local Optimization","content-copywriting":"Content & Copywriting","hosting-security":"Hosting & Security","analytics-reporting":"Analytics & Reporting"} as Record<string,string>)[slug]; }
