@@ -13,11 +13,14 @@ test("Portfolio presents twelve explicitly labelled design concepts", async ({ p
 test("Portfolio filter supports clicks and roving keyboard selection", async ({ page }) => {
   await page.goto("/portfolio");
   const tabs = page.getByRole("tablist", { name: "Portfolio concept filters" });
-  await tabs.getByRole("tab", { name: "Health & Wellness" }).click();
+  const healthAndWellness = tabs.getByRole("tab", { name: "Health & Wellness", exact: true });
+  await healthAndWellness.click();
+  await expect(healthAndWellness).toHaveAttribute("aria-selected", "true");
   await expect(page.locator("[data-concept-id]")).toHaveCount(2);
   await expect(page.locator("#portfolio-panel")).toHaveAttribute("data-active-filter", "Health & Wellness");
-  await tabs.getByRole("tab", { name: "Health & Wellness" }).press("ArrowRight");
-  await expect(tabs.getByRole("tab", { name: "Retail & Hospitality" })).toHaveAttribute("aria-selected", "true");
+  await healthAndWellness.press("ArrowRight");
+  const retailAndHospitality = tabs.getByRole("tab", { name: "Retail & Hospitality", exact: true });
+  await expect(retailAndHospitality).toHaveAttribute("aria-selected", "true");
   await expect(page.locator("[data-concept-id]")).toHaveCount(3);
   await page.setViewportSize({ width: 320, height: 720 });
   await expectNoOverflow(page);

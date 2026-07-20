@@ -15,8 +15,11 @@ test("packages show approved pricing, distinct choices, and active navigation", 
 test("comparison link, FAQ, package preselection, and form are usable", async ({ page }) => {
   await page.goto("/packages");
   await page.getByRole("link", { name: "Compare Packages" }).click();
-  await expect(page.locator("#compare")).toBeInViewport();
-  await expect(page.getByRole("columnheader", { name: "Feature" })).toBeVisible();
+  const comparison = page.locator("#compare");
+  await expect(comparison).toBeInViewport();
+  const table = comparison.getByRole("table");
+  await expect(table).toBeVisible();
+  await expect(table.getByRole("columnheader", { name: "Feature", exact: true })).toBeVisible();
 
   const faq = page.getByRole("button", { name: "What is included in the one-time price?" });
   await expect(faq).toHaveAttribute("aria-expanded", "false");
@@ -35,5 +38,5 @@ test("packages mobile layout has no horizontal page overflow", async ({ page }) 
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto("/packages");
   await expectNoOverflow(page);
-  await expect(page.locator("[data-package='starter'] .btn")).toHaveCSS("min-height", "40px");
+  await expect(page.locator("[data-package='starter'] .btn")).toHaveCSS("min-height", "44px");
 });
