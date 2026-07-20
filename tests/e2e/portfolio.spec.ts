@@ -1,13 +1,31 @@
 import { expect, test } from "@playwright/test";
 import { expectNoOverflow } from "./helpers";
 
-test("Portfolio presents twelve explicitly labelled design concepts", async ({ page }) => {
+test("Portfolio presents twelve borderless portrait design concepts", async ({ page }) => {
   await page.goto("/portfolio");
   await expect(page.locator("[data-concept-id]")).toHaveCount(12);
-  await expect(page.locator(".portfolio-concept-card__label")).toHaveCount(12);
+  await expect(page.locator(".portfolio-thumbnail")).toHaveCount(12);
+  await expect(page.locator(".portfolio-thumbnail").first()).toHaveCSS("border-top-width", "0px");
   await expect(page.locator(".portfolio-filter__tab--active")).toHaveText("All");
   await expect(page.getByRole("link", { name: "Portfolio" }).first()).toHaveAttribute("aria-current", "page");
   await expectNoOverflow(page);
+});
+
+test("Portfolio gallery supports keyboard controls, wrapping, and focus restoration", async ({ page }) => {
+  await page.goto("/portfolio");
+  const first = page.locator(".portfolio-thumbnail").first();
+  await first.focus();
+  await first.press("Enter");
+  const dialog = page.locator(".portfolio-lightbox");
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByText("1 of 12")).toBeVisible();
+  await page.keyboard.press("ArrowLeft");
+  await expect(dialog.getByText("12 of 12")).toBeVisible();
+  await page.keyboard.press("ArrowRight");
+  await expect(dialog.getByText("1 of 12")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(dialog).not.toBeVisible();
+  await expect(first).toBeFocused();
 });
 
 test("Portfolio filter supports clicks and roving keyboard selection", async ({ page }) => {
