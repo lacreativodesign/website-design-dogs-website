@@ -1,5 +1,50 @@
 "use client";
+
 import { useEffect, useRef, useState } from "react";
 import type { ConsentPreferences } from "./consent-types";
+
 const focusable = 'button:not([disabled]), input:not([disabled])';
-export function ConsentPreferencesDialog({ open, prefs, onClose, onSave }: { open: boolean; prefs: ConsentPreferences | null; onClose: () => void; onSave: (analytics: boolean, marketing: boolean) => void }) { const ref = useRef<HTMLDivElement>(null); const last = useRef<HTMLElement | null>(null); const [analytics, setAnalytics] = useState(Boolean(prefs?.analytics)); const [marketing, setMarketing] = useState(Boolean(prefs?.marketing)); useEffect(() => { if (!open) return; last.current = document.activeElement as HTMLElement; const first = ref.current?.querySelector<HTMLElement>(focusable); first?.focus(); const key = (event: KeyboardEvent) => { if (event.key === "Escape") { onClose(); return; } if (event.key !== "Tab") return; const items = Array.from(ref.current?.querySelectorAll<HTMLElement>(focusable) ?? []); if (!items.length) return; const firstItem = items[0], lastItem = items[items.length - 1]; if (event.shiftKey && document.activeElement === firstItem) { event.preventDefault(); lastItem.focus(); } else if (!event.shiftKey && document.activeElement === lastItem) { event.preventDefault(); firstItem.focus(); } }; document.addEventListener("keydown", key); return () => { document.removeEventListener("keydown", key); last.current?.focus(); }; }, [open, onClose]); if (!open) return null; return <div className="fixed inset-0 z-[60] grid place-items-center bg-black/55 p-4" role="presentation"><div ref={ref} role="dialog" aria-modal="true" aria-labelledby="consent-title" aria-describedby="consent-desc" className="max-h-[88vh] w-full max-w-2xl overflow-auto rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 shadow-2xl"><h2 id="consent-title" className="text-2xl font-black">Cookie settings</h2><p id="consent-desc" className="mt-2 text-sm leading-6 text-[var(--color-text-muted)]">Choose which optional technologies may be used. Necessary cookies remain enabled for theme, security, consent choices, and form operation.</p><div className="mt-6 grid gap-4"><label className="flex items-start justify-between gap-4 rounded-2xl border border-[var(--color-border)] p-4"><span><strong>Necessary Cookies</strong><span className="block text-sm text-[var(--color-text-muted)]">Required to provide essential website functions.</span></span><input type="checkbox" checked readOnly aria-label="Necessary Cookies always enabled" /></label><label className="flex items-start justify-between gap-4 rounded-2xl border border-[var(--color-border)] p-4"><span><strong>Analytics Cookies</strong><span className="block text-sm text-[var(--color-text-muted)]">Help us understand performance when enabled.</span></span><input type="checkbox" checked={analytics} onChange={(event) => setAnalytics(event.target.checked)} aria-label="Enable Analytics Cookies" /></label><label className="flex items-start justify-between gap-4 rounded-2xl border border-[var(--color-border)] p-4"><span><strong>Marketing Cookies</strong><span className="block text-sm text-[var(--color-text-muted)]">Control advertising technologies, including Meta tags.</span></span><input type="checkbox" checked={marketing} onChange={(event) => setMarketing(event.target.checked)} aria-label="Enable Marketing Cookies" /></label></div><div className="mt-6 grid gap-3 sm:flex sm:flex-wrap sm:justify-end"><button className="button button-outline" onClick={() => onSave(false, false)}>Reject Non-Essential</button><button className="button button-outline" onClick={() => onSave(true, true)}>Accept All</button><button className="button button-primary" onClick={() => onSave(analytics, marketing)}>Save Preferences</button></div></div></div>; }
+
+type Props = { open: boolean; prefs: ConsentPreferences | null; globalPrivacyControl: boolean; onClose: () => void; onSave: (analytics: boolean, marketing: boolean) => void };
+
+export function ConsentPreferencesDialog({ open, prefs, globalPrivacyControl, onClose, onSave }: Props) {
+  if (!open) return null;
+  return <OpenDialog key={prefs?.updatedAt ?? "unset"} prefs={prefs} globalPrivacyControl={globalPrivacyControl} onClose={onClose} onSave={onSave} />;
+}
+
+function OpenDialog({ prefs, globalPrivacyControl, onClose, onSave }: Omit<Props, "open">) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const restoreFocusRef = useRef<HTMLElement | null>(null);
+  const [analytics, setAnalytics] = useState(Boolean(prefs?.analytics));
+  const [marketing, setMarketing] = useState(Boolean(prefs?.marketing));
+
+  useEffect(() => {
+    restoreFocusRef.current = document.activeElement as HTMLElement;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    dialogRef.current?.querySelector<HTMLElement>(focusable)?.focus();
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") return onClose();
+      if (event.key !== "Tab") return;
+      const items = Array.from(dialogRef.current?.querySelectorAll<HTMLElement>(focusable) ?? []);
+      if (!items.length) return;
+      const first = items[0]; const last = items.at(-1)!;
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => { document.body.style.overflow = previousOverflow; document.removeEventListener("keydown", handleKeyDown); restoreFocusRef.current?.focus(); };
+  }, [onClose]);
+  return <div className="consent-dialog-backdrop" role="presentation">
+    <div ref={dialogRef} className="consent-dialog" role="dialog" aria-modal="true" aria-labelledby="privacy-settings-title" aria-describedby="privacy-settings-description">
+      <div className="consent-dialog__header"><div><h2 id="privacy-settings-title">Privacy choices</h2><p id="privacy-settings-description">Necessary technologies are always enabled. Choose whether optional categories may be used.</p></div><button type="button" className="consent-close" onClick={onClose} aria-label="Close privacy choices">×</button></div>
+      {globalPrivacyControl ? <p className="consent-gpc-status" role="status">Global Privacy Control is enabled in your browser. Optional categories are currently denied.</p> : null}
+      <div className="consent-categories">
+        <label><span><strong>Necessary</strong><small>Required for security, forms, theme, and saving this preference.</small></span><input type="checkbox" checked readOnly aria-label="Necessary technologies always enabled" /></label>
+        <label><span><strong>Analytics</strong><small>Measure site performance when you allow it.</small></span><input type="checkbox" checked={analytics} onChange={(event) => setAnalytics(event.target.checked)} aria-label="Allow analytics" /></label>
+        <label><span><strong>Advertising</strong><small>Allow advertising and remarketing technologies, including configured Meta tags.</small></span><input type="checkbox" checked={marketing} onChange={(event) => setMarketing(event.target.checked)} aria-label="Allow advertising" /></label>
+      </div>
+      <div className="consent-dialog__actions"><button type="button" className="consent-button consent-button--neutral" onClick={onClose}>Close</button><button type="button" className="consent-button consent-button--accent" onClick={() => onSave(analytics, marketing)}>Save preferences</button></div>
+    </div>
+  </div>;
+}

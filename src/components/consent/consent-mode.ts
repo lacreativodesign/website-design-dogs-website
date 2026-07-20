@@ -1,5 +1,5 @@
 import type { ConsentPreferences } from "./consent-types";
-declare global{interface Window{dataLayer?:Array<Record<string,unknown>>; gtag?: (...args: unknown[])=>void;}}
+declare global { interface Window { dataLayer?: Array<Record<string, unknown>>; gtag?: (...args: unknown[]) => void; __wddGtmLoaded?: boolean; } interface Navigator { globalPrivacyControl?: boolean; } }
 export function ensureDataLayer(){ window.dataLayer=window.dataLayer||[]; window.gtag=window.gtag||((...args: unknown[])=>{ window.dataLayer?.push(args as unknown as Record<string,unknown>); }); }
 export function defaultConsent(){ ensureDataLayer(); window.gtag?.("consent","default",{analytics_storage:"denied",ad_storage:"denied",ad_user_data:"denied",ad_personalization:"denied",functionality_storage:"granted",security_storage:"granted",personalization_storage:"denied"}); }
 export function updateConsent(prefs:ConsentPreferences){ ensureDataLayer(); window.gtag?.("consent","update",{analytics_storage:prefs.analytics?"granted":"denied",ad_storage:prefs.marketing?"granted":"denied",ad_user_data:prefs.marketing?"granted":"denied",ad_personalization:prefs.marketing?"granted":"denied",functionality_storage:"granted",security_storage:"granted",personalization_storage:"denied"}); }
