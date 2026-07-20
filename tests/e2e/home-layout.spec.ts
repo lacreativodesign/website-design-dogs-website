@@ -8,8 +8,7 @@ test("Home route provides the approved conversion sequence", async ({ page }) =>
   await expect(page.getByText("Custom websites that look incredible, load fast, rank higher, and convert visitors into customers.")).toBeVisible();
   await expect(page.locator(".home-trust-strip article")).toHaveCount(4);
   await expect(page.locator(".home-process__grid article")).toHaveCount(5);
-  await expect(page.locator(".home-portfolio-grid .portfolio-concept-card")).toHaveCount(6);
-  await expect(page.locator(".home-portfolio-grid .portfolio-concept-card__label")).toHaveCount(6);
+  await expect(page.locator(".home-portfolio-grid .portfolio-thumbnail")).toHaveCount(6);
 
   const starter = page.locator('[data-package="starter"]');
   const business = page.locator('[data-package="business"]');
