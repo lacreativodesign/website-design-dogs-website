@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { ContactForm } from "@/components/forms/contact-form";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Container } from "@/components/ui/container";
@@ -65,7 +66,9 @@ export default function ContactPage() {
 
             <div className="contact-form-card">
               <h2 id="contact-form-title">Send Enquiry</h2>
-              <ContactForm />
+              <Suspense fallback={<p className="rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-accent-soft)] p-4 text-sm font-bold text-[var(--color-text-muted)]">Loading secure enquiry form…</p>}>
+                <ContactForm />
+              </Suspense>
             </div>
           </div>
 
