@@ -6,6 +6,24 @@ export const siteConfig = {
   legalDisclosure: "Website Design Dogs is a service brand of LA CREATIVO GROUP, LLC.",
   logo: "/brand/logos/wdd-primary-full-color.svg",
   mascot: "/brand/mascot/wdd-mascot-transparent.png",
+  contact: {
+    email: {
+      label: "Email",
+      value: "hello@websitedesigndogs.com",
+      href: "mailto:hello@websitedesigndogs.com",
+    },
+    phone: {
+      label: "Phone",
+      value: "+1 (415) 900-2374",
+      e164: "+14159002374",
+      href: "tel:+14159002374",
+    },
+    whatsapp: {
+      label: "WhatsApp Business",
+      value: "Message us on WhatsApp",
+      href: "https://wa.me/14159002374?text=Hi%20Website%20Design%20Dogs%2C%20I%27d%20like%20to%20discuss%20a%20website%20project.",
+    },
+  },
   primaryCta: { label: "Get a Free Quote", href: "/get-started" },
   primaryNav: [
     { label: "Home", href: "/" },

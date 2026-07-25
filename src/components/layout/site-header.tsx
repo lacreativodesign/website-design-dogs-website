@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { siteConfig } from "@/content/site";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { BrandLogo } from "./brand-logo";
 import { MobileNavigation } from "./mobile-navigation";
 
@@ -24,7 +23,6 @@ export function SiteHeader() {
           ))}
         </nav>
         <div className="site-header__actions">
-          <ThemeToggle />
           <Button href={siteConfig.primaryCta.href} size="small">
             {siteConfig.primaryCta.label}
           </Button>

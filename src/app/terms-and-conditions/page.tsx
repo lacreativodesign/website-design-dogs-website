@@ -6,11 +6,11 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: "Terms of Service",
-  description: "General Website Design Dogs website terms, campaign offer terms, and project agreement controls.",
+  description: "General Website Design Dogs website terms, campaign page terms, and project agreement controls.",
   path: "/terms-and-conditions",
 });
 
-const updated = "July 13, 2026";
+const updated = "July 25, 2026";
 
 const termsGroups = [
   {
@@ -56,7 +56,7 @@ const termsGroups = [
     intro: "These terms may be updated, and campaign or project terms may be controlled by more specific written terms.",
     items: [
       "These terms may change and the Last updated date will be revised. Contact Website Design Dogs through /contact.",
-      "Main website pricing starts at $499 for Starter. Campaign pages may show regular package price $499, promotional campaign price $249, and savings of $250 for qualifying Campaign Starter scope. Submission does not automatically confirm eligibility, no expiry date is represented, and acceptance is not guaranteed.",
+      "Main website and campaign pages use the same $499 one-time Starter package price. Final requirements, exclusions, responsibilities, timing, and any work outside the listed Starter scope are confirmed in the written proposal before work begins.",
       "When a signed proposal, order form, statement of work, or written agreement conflicts with these general website terms, the signed or written project terms control for that project.",
     ],
   },

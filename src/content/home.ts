@@ -1,12 +1,12 @@
 export const homeHero = {
   eyebrow: "LOYAL TO THE GAME.",
-  body: "Custom websites that look incredible, load fast, rank higher, and convert visitors into customers.",
+  body: "Custom websites designed to look credible, load quickly, support search visibility, and make it easier for visitors to take action.",
 };
 
 export const homeTrustPoints = [
   ["MOBILE-READY", "Seamless experience on every device."],
   ["CLEAR SCOPE", "Defined deliverables and transparent pricing."],
-  ["CONVERSION-FOCUSED", "Built to turn visitors into paying customers."],
+  ["CONVERSION-FOCUSED", "Structured around clear visitor next steps."],
   ["ONGOING CARE", "Support and updates when you need them."],
 ] as const;
 

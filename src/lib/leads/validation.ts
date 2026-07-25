@@ -25,8 +25,8 @@ export function validateLeadPayload(input: unknown): LeadSubmissionEnvelope { co
   const note = opt(p.project?.note, 2500);
   if (!Object.prototype.hasOwnProperty.call(campaignMap, slug)) errs.campaignSlug = "Invalid campaign slug.";
   envelope.business = { ...envelope.business, industry: campaignMap[slug] };
-  envelope.enquiry = { service: "Campaign Landing Page", summary: note || `${projectType} campaign starter enquiry.` };
-  envelope.project = { types: [projectType], pages: "1–5 pages", goal: "Qualifying Campaign Starter website scope review", features: ["Contact or quote form"], contentStatus: "Not sure yet", brandingStatus: "Not sure yet", notWorking: "Campaign starter enquiry submitted for review.", accomplish: "Confirm whether the promotional Starter website scope fits the project.", ...(note ? { details: note } : {}) };
-  envelope.campaign = { slug, industry: campaignMap[slug] || "", offerCode: "WDD-CAMPAIGN-STARTER-249", regularPrice: 499, promotionalPrice: 249, savings: 250, currency: "USD", qualifyingScope: "Campaign Starter" };
+  envelope.enquiry = { service: "Campaign Landing Page", summary: note || `${projectType} Starter website enquiry.` };
+  envelope.project = { types: [projectType], pages: "1–5 pages", goal: "Starter website scope review", features: ["Contact or quote form"], contentStatus: "Not sure yet", brandingStatus: "Not sure yet", notWorking: "Starter website enquiry submitted for review.", accomplish: "Confirm the project requirements and whether the Starter package fits the requested scope.", ...(note ? { details: note } : {}) };
+  envelope.campaign = { slug, industry: campaignMap[slug] || "", offerCode: "WDD-STARTER-499", regularPrice: 499, promotionalPrice: 499, savings: 0, currency: "USD", qualifyingScope: "Campaign Starter" };
  }
  if (Object.keys(errs).length) throw new LeadError("VALIDATION_FAILED", "Please review the highlighted fields and try again.", 400, errs); return envelope; }

@@ -2,8 +2,8 @@ export type Package = { name: string; slug: string; price: string; label?: strin
 
 export const websitePackages: Package[] = [
   { name: "Starter", slug: "starter", price: "$499", description: "A focused website to get your business online with confidence.", features: ["Up to 5 Pages", "Mobile-Responsive Design", "Basic On-Page SEO Setup", "Contact or Quote Form", "1 Revision Round"], href: "/contact?package=starter", cta: "Choose Starter" },
-  { name: "Business", slug: "business", price: "$899", label: "Recommended", description: "A strategic website built to convert and grow your business online.", features: ["Up to 10 Pages", "Mobile-Responsive Design", "Expanded On-Page SEO Setup", "Performance Optimization", "3 Revision Rounds"], href: "/contact?package=business", cta: "Choose Business" },
-  { name: "Growth", slug: "growth", price: "$1,499", description: "A powerful website for businesses ready to scale and sell online.", features: ["Up to 20 Pages", "E-Commerce Functionality", "Mobile-Responsive Design", "SEO & Performance Setup", "5 Revision Rounds"], href: "/contact?package=growth", cta: "Choose Growth" },
+  { name: "Business", slug: "business", price: "$899", label: "Recommended", description: "A strategic website with more room for services, content, and customer journeys.", features: ["Up to 10 Pages", "Mobile-Responsive Design", "Expanded On-Page SEO Setup", "Performance Optimization", "3 Revision Rounds"], href: "/contact?package=business", cta: "Choose Business" },
+  { name: "Growth", slug: "growth", price: "$1,499", description: "An expanded website for businesses that need e-commerce or a broader content structure.", features: ["Up to 20 Pages", "E-Commerce Functionality", "Mobile-Responsive Design", "SEO & Performance Setup", "5 Revision Rounds"], href: "/contact?package=growth", cta: "Choose Growth" },
 ];
 
 export const packageTrustItems = ["One-Time Website Build", "Clear Project Scope", "Mobile-Responsive", "Optional Ongoing Care"] as const;

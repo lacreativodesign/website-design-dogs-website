@@ -16,10 +16,12 @@ test('environment example keeps secrets server-only', () => {
 
 test('campaign implementation uses server-owned offer mapping and allowlisted slugs', () => {
   const validation = fs.readFileSync('src/lib/leads/validation.ts', 'utf8');
-  assert.match(validation, /WDD-CAMPAIGN-STARTER-249/);
+  const retiredPrice = [2, 4, 9].join('');
+  assert.match(validation, /WDD-STARTER-499/);
   assert.match(validation, /regularPrice: 499/);
-  assert.match(validation, /promotionalPrice: 249/);
-  assert.match(validation, /savings: 250/);
+  assert.match(validation, /promotionalPrice: 499/);
+  assert.match(validation, /savings: 0/);
+  assert.equal(validation.includes(retiredPrice), false);
   assert.match(validation, /cleaning: "Cleaning Companies"/);
   assert.match(validation, /"home-services": "Home-Service Businesses"/);
 });
