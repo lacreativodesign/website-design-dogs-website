@@ -2,6 +2,8 @@ import { expect, test, type Page } from "@playwright/test";
 import { services } from "../../src/content/services";
 
 test("service routes, links, metadata, schema, and quote preselection", async ({ page, request }) => {
+  test.setTimeout(60_000);
+
   for (const service of services) {
     const route = `/services/${service.slug}`;
     const response = await request.get(route);

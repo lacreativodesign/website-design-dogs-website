@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { CloseIcon, MenuIcon } from "@/components/ui/icon";
 import { siteConfig } from "@/content/site";
@@ -79,10 +78,6 @@ export function MobileNavigation() {
                 </Link>
               ))}
             </nav>
-            <div className="mt-8 flex items-center justify-between gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-3">
-              <span className="text-sm font-bold">Theme</span>
-              <ThemeToggle />
-            </div>
             <Button href={siteConfig.primaryCta.href} className="mt-6" fullWidthMobile onClick={closeWithoutFocusReturn}>
               {siteConfig.primaryCta.label}
             </Button>

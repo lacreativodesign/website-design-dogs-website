@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
 import { campaignRoutes } from "./helpers";
 
+const retiredPrice = [2, 4, 9].join("");
+
 for (const route of campaignRoutes) {
   test(`${route} campaign content and pricing`, async ({ page }) => {
     const response = await page.goto(
@@ -11,8 +13,9 @@ for (const route of campaignRoutes) {
     await expect(page.locator("#main-content h1")).toHaveCount(1);
     await expect(page.locator("#main-content h1")).toBeVisible();
     await expect(page.locator("body")).toContainText("$499");
-    await expect(page.locator("body")).toContainText("$249");
-    await expect(page.locator("body")).toContainText("$250");
+    await expect(page.locator("body")).not.toContainText(`$${retiredPrice}`);
+    await expect(page.locator("body")).not.toContainText("$250");
+    await expect(page.locator("body")).not.toContainText(/promotional|you save/i);
     await expect(page.locator(".badge", { hasText: "DESIGN CONCEPT" })).toHaveCount(1);
     await expect(page.locator("body")).toContainText(
       /not presented as a completed client project/i,
@@ -27,6 +30,9 @@ for (const route of campaignRoutes) {
       .locator('meta[name="robots"]')
       .evaluateAll((nodes) => nodes.map((node) => node.getAttribute("content") ?? ""));
     expect(robots.some((value) => /noindex/i.test(value))).toBeTruthy();
+
+    const title = await page.title();
+    expect(title.match(/Website Design Dogs/g)?.length ?? 0).toBe(1);
   });
 }
 

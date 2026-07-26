@@ -17,12 +17,12 @@ Repository: `lacreativodesign/website-design-dogs-website`.
 - Never invent client logos, testimonials, portfolio results, awards, addresses, phone numbers, statistics, or business claims.
 - Do not represent concept portfolio projects as real client projects.
 - Website Design Dogs must be disclosed as a service brand of LA CREATIVO GROUP, LLC.
-- Dark and light themes must use coordinated assets, not simple image inversion.
+- Public launch is dark-theme only. Do not expose a light-theme toggle or honor a saved light-theme preference unless the founder explicitly approves a finished light experience.
 - Final visual files will be placed under `public/brand`, `public/portfolio`, and `public/campaigns`.
 - Do not rename approved asset files after they are introduced.
-- Main website pricing will show $499 for the Starter Website.
-- Campaign landing pages added later will show regular price $499 and promotional price $249, saving $250.
-- The promotional landing-page offer has no expiry timer.
+- Main website and campaign landing pages will show the same $499 one-time Starter Website price.
+- The retired promotional price must not appear in public copy, metadata, schema, forms, analytics identifiers, legal copy, or tests.
+- Do not render testimonial placeholders. Testimonials may return only after genuine, approved client feedback is available.
 - There will be no separate Industries page; industries will appear as a homepage section.
 - Essential legal pages planned for later are Privacy Policy, Terms and Conditions, Refund and Cancellation Policy, and Cookie Policy.
 

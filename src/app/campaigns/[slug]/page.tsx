@@ -81,12 +81,12 @@ export default async function CampaignPage({ params }: CampaignPageProps) {
         data={{
           "@context": "https://schema.org",
           "@type": "Offer",
-          name: "Campaign Starter Website Offer",
-          price: "249",
+          name: "Starter Website Package",
+          price: "499",
           priceCurrency: "USD",
           url: absoluteUrl(campaign.path),
           category: "Website design lead request",
-          identifier: "WDD-CAMPAIGN-STARTER-249",
+          identifier: "WDD-STARTER-499",
         }}
       />
       <CampaignHeader />

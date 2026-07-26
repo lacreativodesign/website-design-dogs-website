@@ -49,17 +49,26 @@ test("campaigns are noindex and self canonical", async ({ page }) => {
   }
 });
 
-test("structured data parses and avoids fake local proof", async ({ page }) => {
+test("structured data parses, exposes verified contacts, and avoids fake local proof", async ({ page }) => {
   await page.goto("/");
 
   const blocks = await page
     .locator('script[type="application/ld+json"]')
     .allTextContents();
+  const serializedBlocks: string[] = [];
 
   for (const block of blocks) {
     const data = JSON.parse(block);
-    expect(JSON.stringify(data)).not.toMatch(
-      /LocalBusiness|aggregateRating|review|telephone|sameAs|address/i,
+    const serialized = JSON.stringify(data);
+    serializedBlocks.push(serialized);
+    expect(serialized).not.toMatch(
+      /LocalBusiness|aggregateRating|review|sameAs|address/i,
     );
   }
+
+  const structuredData = serializedBlocks.join("");
+  expect(structuredData).toContain(
+    '"email":"hello@websitedesigndogs.com"',
+  );
+  expect(structuredData).toContain('"telephone":"+14159002374"');
 });

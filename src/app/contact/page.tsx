@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Suspense } from "react";
 import { ContactForm } from "@/components/forms/contact-form";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Container } from "@/components/ui/container";
+import { siteConfig } from "@/content/site";
 import { pageMetadata } from "@/lib/seo";
 
-const contactRows = [
-  "Project Enquiries",
-  "Secure Online Quote Form",
-  "New Websites and Redesigns",
-  "Website Design Dogs — a service brand of LA CREATIVO GROUP, LLC",
+const contactMethods = [
+  siteConfig.contact.email,
+  siteConfig.contact.phone,
+  siteConfig.contact.whatsapp,
 ] as const;
 
 const quickLinks = [
@@ -48,12 +47,27 @@ export default function ContactPage() {
             <aside className="contact-info-card" aria-label="Contact information">
               <h2>Tell us about your project.</h2>
               <div className="contact-info-list">
-                {contactRows.map((row) => (
-                  <div key={row} className="contact-info-row">
+                {contactMethods.map((method) => (
+                  <div key={method.label} className="contact-info-row">
                     <span aria-hidden="true">•</span>
-                    {row}
+                    <div>
+                      <strong>{method.label}</strong>
+                      <br />
+                      <a
+                        href={method.href}
+                        {...(method.label === "WhatsApp Business"
+                          ? { target: "_blank", rel: "noopener noreferrer" }
+                          : {})}
+                      >
+                        {method.value}
+                      </a>
+                    </div>
                   </div>
                 ))}
+                <div className="contact-info-row">
+                  <span aria-hidden="true">•</span>
+                  {siteConfig.legalDisclosure}
+                </div>
               </div>
               <nav className="contact-quick-links" aria-label="Quick links">
                 {quickLinks.map((link) => (
@@ -66,9 +80,7 @@ export default function ContactPage() {
 
             <div className="contact-form-card">
               <h2 id="contact-form-title">Send Enquiry</h2>
-              <Suspense fallback={<p className="rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-accent-soft)] p-4 text-sm font-bold text-[var(--color-text-muted)]">Loading secure enquiry form…</p>}>
-                <ContactForm />
-              </Suspense>
+              <ContactForm />
             </div>
           </div>
 

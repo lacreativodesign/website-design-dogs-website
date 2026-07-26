@@ -29,8 +29,12 @@ test("contact form validation, failure preservation, and mocked success", async 
   const consent = page.getByRole("checkbox");
   const status = page.locator("#contact-status");
 
+  await expect(status).toHaveClass("sr-only");
+  await expect(page.getByText(/loading secure enquiry/i)).toHaveCount(0);
+
   await submit.click();
   await expect(status).toContainText(/review the highlighted fields/i);
+  await expect(status).not.toHaveClass("sr-only");
 
   await email.fill("bad");
   await submit.click();
@@ -74,11 +78,66 @@ test("contact form validation, failure preservation, and mocked success", async 
 });
 
 test("quote package query renders and privacy link works", async ({ page }) => {
-  for (const packageName of ["starter", "business", "growth", "invalid"]) {
+  test.setTimeout(60_000);
+
+  const packageLabels = new Map([
+    ["starter", "Starter — $499"],
+    ["business", "Business — $899"],
+    ["growth", "Growth — $1,499"],
+  ]);
+
+  for (const packageName of [...packageLabels.keys(), "invalid"]) {
     await page.goto(`/get-started?package=${packageName}`);
     await expect(page.locator("#main-content")).toBeVisible();
+    await expect(page.getByText(/loading quote form/i)).toHaveCount(0);
+    await page.getByLabel("Full name").fill("Test Person");
+    await page.getByLabel("Business name").fill("Test Business");
+    await page.getByLabel("Email").fill("test@example.test");
+    await page.getByLabel("Industry").fill("Home services");
+    await page.getByRole("button", { name: "Next" }).click();
+    await page.getByLabel("New Website").check();
+    await page.getByRole("button", { name: "Next" }).click();
+    await page.getByLabel("Estimated number of pages").selectOption("1–5 pages");
+    await page.getByLabel("Main business goal").fill("Generate qualified enquiries");
+    await page.getByLabel("Contact or quote form").check();
+    await page.getByLabel("Content status").selectOption("Ready");
+    await page.getByLabel("Branding status").selectOption("Brand materials ready");
+    await page.getByRole("button", { name: "Next" }).click();
+
+    const preferred = page.getByLabel("Preferred package");
+    if (packageLabels.has(packageName)) {
+      await expect(preferred).toHaveValue(packageLabels.get(packageName)!);
+    } else {
+      await expect(preferred).toHaveValue("");
+    }
   }
 
-  await page.getByRole("link", { name: /privacy policy/i }).first().click();
+  await page.goto("/get-started");
+  for (let step = 0; step < 4; step += 1) {
+    if (step === 0) {
+      await page.getByLabel("Full name").fill("Test Person");
+      await page.getByLabel("Business name").fill("Test Business");
+      await page.getByLabel("Email").fill("test@example.test");
+      await page.getByLabel("Industry").fill("Home services");
+    } else if (step === 1) {
+      await page.getByLabel("New Website").check();
+    } else if (step === 2) {
+      await page.getByLabel("Estimated number of pages").selectOption("1–5 pages");
+      await page.getByLabel("Main business goal").fill("Generate qualified enquiries");
+      await page.getByLabel("Contact or quote form").check();
+      await page.getByLabel("Content status").selectOption("Ready");
+      await page.getByLabel("Branding status").selectOption("Brand materials ready");
+    } else {
+      await page.getByLabel("Preferred package").selectOption("Starter — $499");
+      await page.getByLabel("Budget range").selectOption("$500–$999");
+      await page.getByLabel("Preferred start timing").selectOption("Within 30 days");
+    }
+    await page.getByRole("button", { name: "Next" }).click();
+  }
+
+  await page
+    .locator("#main-content")
+    .getByRole("link", { name: /privacy policy/i })
+    .click();
   await expect(page).toHaveURL(/privacy-policy/);
 });
