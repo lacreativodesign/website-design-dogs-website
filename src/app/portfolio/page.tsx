@@ -11,6 +11,7 @@ import { Container } from "@/components/ui/container";
 import { ArrowRightIcon } from "@/components/ui/icon";
 import { portfolioLeadBenefits, portfolioProcess, portfolioStrategy, portfolioTrustPoints } from "@/content/portfolio";
 import { homeLeadAsset } from "@/content/home";
+import { illustrationScenes } from "@/content/illustrations";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({ title: "Website Design Portfolio Concepts", description: "Explore Website Design Dogs design concepts for common business categories, created to show layout, hierarchy, and responsive thinking.", path: "/portfolio" });
@@ -24,7 +25,20 @@ export default function PortfolioPage() {
     <BreadcrumbJsonLd items={[{ name: "Home", path: "/" }, { name: "Portfolio", path: "/portfolio" }]} />
     <WebPageJsonLd type="CollectionPage" name="Website Design Portfolio Concepts" description="Explore Website Design Dogs design concepts for common business categories, created to show layout, hierarchy, and responsive thinking." path="/portfolio" />
     <section className="portfolio-hero" aria-labelledby="portfolio-page-title">
-      <ThemeScene darkSrc="/brand/scenes/portfolio-hero-dark.webp" lightSrc="/brand/scenes/portfolio-hero-light.webp" alt="Website Design Dogs mascot beside website design screens" width={1600} height={1000} priority sizes="100vw" className="portfolio-hero__scene" />
+      <ThemeScene
+        darkSrc={illustrationScenes.portfolio.desktop.webp}
+        darkAvifSrc={illustrationScenes.portfolio.desktop.avif}
+        tabletDarkSrc={illustrationScenes.portfolio.tablet.webp}
+        tabletDarkAvifSrc={illustrationScenes.portfolio.tablet.avif}
+        mobileDarkSrc={illustrationScenes.portfolio.mobile.webp}
+        mobileDarkAvifSrc={illustrationScenes.portfolio.mobile.avif}
+        alt="Border collie designer reviewing a wall of website concepts in a creative studio"
+        width={1600}
+        height={1000}
+        priority
+        sizes="100vw"
+        className="portfolio-hero__scene"
+      />
       <Container className="portfolio-hero__content"><div className="portfolio-hero__copy"><nav className="visual-breadcrumb" aria-label="Breadcrumb"><Link href="/">Home</Link><span aria-hidden="true">›</span><span>Portfolio</span></nav><p className="home-eyebrow">OUR WORK</p><h1 id="portfolio-page-title">WEBSITE CONCEPTS<br />BUILT FOR<br /><em>REAL BUSINESSES.</em></h1><p>Explore industry-focused website concepts created to show the strategy, clarity, and responsive experience we can build around your business.</p><div className="portfolio-hero__actions"><Button href="/get-started" icon={<ArrowRightIcon />} fullWidthMobile>Start Your Project</Button><Button href="/packages" variant="outline" fullWidthMobile>View Packages</Button></div></div></Container>
     </section>
 
@@ -38,6 +52,6 @@ export default function PortfolioPage() {
 
     <section className="home-section portfolio-process" aria-labelledby="portfolio-process-title"><Container><PortfolioHeading number="05" eyebrow="YOUR PROJECT" id="portfolio-process-title" title={<>A Design Built<br />Around Your Business.</>} /><div>{portfolioProcess.map(([number, title, body]) => <article key={number}><span>{number}</span><h3>{title}</h3><p>{body}</p></article>)}</div></Container></section>
 
-    <section className="home-section home-lead portfolio-lead" aria-labelledby="portfolio-lead-title"><Container><div className="home-lead-grid"><div className="home-lead-copy"><PortfolioHeading number="06" eyebrow="START YOUR PROJECT" id="portfolio-lead-title" title={<>Let’s Build a Website<br />Worth <em>Showing.</em></>} /><ul>{portfolioLeadBenefits.map((benefit) => <li key={benefit}>{benefit}</li>)}</ul><Image src={homeLeadAsset} alt="Website Design Dogs mascot working at a laptop" width={560} height={315} sizes="(max-width: 1023px) 100vw, 42vw" className="home-lead__image" /></div><div className="home-lead-form"><ContactForm /></div></div></Container></section>
+    <section className="home-section home-lead portfolio-lead" aria-labelledby="portfolio-lead-title"><Container><div className="home-lead-grid"><div className="home-lead-copy"><PortfolioHeading number="06" eyebrow="START YOUR PROJECT" id="portfolio-lead-title" title={<>Let’s Build a Website<br />Worth <em>Showing.</em></>} /><ul>{portfolioLeadBenefits.map((benefit) => <li key={benefit}>{benefit}</li>)}</ul><Image src={homeLeadAsset} alt="Website Design Dogs mascot working at a laptop" width={960} height={960} sizes="(max-width: 1023px) 100vw, 42vw" className="home-lead__image" /></div><div className="home-lead-form"><ContactForm /></div></div></Container></section>
   </>;
 }

@@ -1,17 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { ThemeScene } from "@/components/theme/theme-scene";
+import { illustrationScenes } from "@/content/illustrations";
 
 export default function NotFound() {
   return (
     <section className="not-found-page" aria-labelledby="not-found-title">
       <ThemeScene
-        darkSrc="/brand/scenes/404-hero-dark.webp"
-        lightSrc="/brand/scenes/404-hero-light.webp"
-        mobileDarkSrc="/brand/crops/mobile/404-dark.webp"
-        mobileLightSrc="/brand/crops/mobile/404-light.webp"
-        tabletDarkSrc="/brand/crops/tablet/404-dark.webp"
-        tabletLightSrc="/brand/crops/tablet/404-light.webp"
-        alt="Website Design Dogs explorer mascot in a moonlit mountain scene"
+        darkSrc={illustrationScenes.notFound.desktop.webp}
+        darkAvifSrc={illustrationScenes.notFound.desktop.avif}
+        tabletDarkSrc={illustrationScenes.notFound.tablet.webp}
+        tabletDarkAvifSrc={illustrationScenes.notFound.tablet.avif}
+        mobileDarkSrc={illustrationScenes.notFound.mobile.webp}
+        mobileDarkAvifSrc={illustrationScenes.notFound.mobile.avif}
+        alt="Border collie explorer finding the way back through a moonlit mountain landscape"
         width={1600}
         height={1000}
         priority

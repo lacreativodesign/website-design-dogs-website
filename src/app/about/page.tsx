@@ -11,6 +11,7 @@ import {
   aboutPrinciples,
   aboutProcessTiles,
 } from "@/content/about";
+import { illustrationScenes } from "@/content/illustrations";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
@@ -37,13 +38,13 @@ export default function AboutPage() {
       />
       <section className="visual-page-hero visual-page-hero--about" aria-labelledby="about-page-title">
         <ThemeScene
-          darkSrc="/brand/scenes/about-hero-dark.webp"
-          lightSrc="/brand/scenes/about-hero-light.webp"
-          tabletDarkSrc="/brand/crops/tablet/about-dark.webp"
-          tabletLightSrc="/brand/crops/tablet/about-light.webp"
-          mobileDarkSrc="/brand/crops/mobile/about-dark.webp"
-          mobileLightSrc="/brand/crops/mobile/about-light.webp"
-          alt="Website Design Dogs scenic campfire artwork"
+          darkSrc={illustrationScenes.about.desktop.webp}
+          darkAvifSrc={illustrationScenes.about.desktop.avif}
+          tabletDarkSrc={illustrationScenes.about.tablet.webp}
+          tabletDarkAvifSrc={illustrationScenes.about.tablet.avif}
+          mobileDarkSrc={illustrationScenes.about.mobile.webp}
+          mobileDarkAvifSrc={illustrationScenes.about.mobile.avif}
+          alt="Website Design Dogs team planning a project around a campfire beneath the mountains"
           width={1600}
           height={1000}
           priority
@@ -88,8 +89,12 @@ export default function AboutPage() {
           </div>
 
           <ThemeScene
-            darkSrc="/brand/scenes/about-hero-dark.webp"
-            lightSrc="/brand/scenes/about-hero-light.webp"
+            darkSrc={illustrationScenes.about.desktop.webp}
+            darkAvifSrc={illustrationScenes.about.desktop.avif}
+            tabletDarkSrc={illustrationScenes.about.tablet.webp}
+            tabletDarkAvifSrc={illustrationScenes.about.tablet.avif}
+            mobileDarkSrc={illustrationScenes.about.mobile.webp}
+            mobileDarkAvifSrc={illustrationScenes.about.mobile.avif}
             alt=""
             width={1600}
             height={1000}

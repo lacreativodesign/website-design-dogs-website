@@ -1,6 +1,6 @@
 {
   "package": "Website Design Dogs Complete Web Visual Package",
-  "version": "1.0",
+  "version": "2.0",
   "repo": "lacreativodesign/website-design-dogs-website",
   "productionAssets": {
     "logos": [
@@ -15,7 +15,8 @@
     "scenes": "/brand/scenes/",
     "og": "/brand/og/",
     "portfolioConcepts": "/portfolio/concepts/",
-    "campaignHeroes": "/campaigns/"
+    "campaignHeroes": "/campaigns/",
+    "finalIllustrations": "/brand/illustrations/final/"
   },
   "scenePairs": {
     "home-hero": {
@@ -66,5 +67,111 @@
     "slogan": "Loyal to the game.",
     "portfolioConceptsMustBeLabeledConcept": true,
     "referencesFolderIsNotForProductionServing": true
+  },
+  "finalIllustrations": {
+    "mascot": {
+      "avif": "/brand/illustrations/final/mascot-designer.avif",
+      "webp": "/brand/illustrations/final/mascot-designer.webp"
+    },
+    "scenes": {
+      "home": {
+        "desktop": {
+          "avif": "/brand/illustrations/final/home-desktop.avif",
+          "webp": "/brand/illustrations/final/home-desktop.webp"
+        },
+        "tablet": {
+          "avif": "/brand/illustrations/final/home-tablet.avif",
+          "webp": "/brand/illustrations/final/home-tablet.webp"
+        },
+        "mobile": {
+          "avif": "/brand/illustrations/final/home-mobile.avif",
+          "webp": "/brand/illustrations/final/home-mobile.webp"
+        }
+      },
+      "services": {
+        "desktop": {
+          "avif": "/brand/illustrations/final/services-desktop.avif",
+          "webp": "/brand/illustrations/final/services-desktop.webp"
+        },
+        "tablet": {
+          "avif": "/brand/illustrations/final/services-tablet.avif",
+          "webp": "/brand/illustrations/final/services-tablet.webp"
+        },
+        "mobile": {
+          "avif": "/brand/illustrations/final/services-mobile.avif",
+          "webp": "/brand/illustrations/final/services-mobile.webp"
+        }
+      },
+      "portfolio": {
+        "desktop": {
+          "avif": "/brand/illustrations/final/portfolio-desktop.avif",
+          "webp": "/brand/illustrations/final/portfolio-desktop.webp"
+        },
+        "tablet": {
+          "avif": "/brand/illustrations/final/portfolio-tablet.avif",
+          "webp": "/brand/illustrations/final/portfolio-tablet.webp"
+        },
+        "mobile": {
+          "avif": "/brand/illustrations/final/portfolio-mobile.avif",
+          "webp": "/brand/illustrations/final/portfolio-mobile.webp"
+        }
+      },
+      "about": {
+        "desktop": {
+          "avif": "/brand/illustrations/final/about-desktop.avif",
+          "webp": "/brand/illustrations/final/about-desktop.webp"
+        },
+        "tablet": {
+          "avif": "/brand/illustrations/final/about-tablet.avif",
+          "webp": "/brand/illustrations/final/about-tablet.webp"
+        },
+        "mobile": {
+          "avif": "/brand/illustrations/final/about-mobile.avif",
+          "webp": "/brand/illustrations/final/about-mobile.webp"
+        }
+      },
+      "contact": {
+        "desktop": {
+          "avif": "/brand/illustrations/final/contact-desktop.avif",
+          "webp": "/brand/illustrations/final/contact-desktop.webp"
+        },
+        "tablet": {
+          "avif": "/brand/illustrations/final/contact-tablet.avif",
+          "webp": "/brand/illustrations/final/contact-tablet.webp"
+        },
+        "mobile": {
+          "avif": "/brand/illustrations/final/contact-mobile.avif",
+          "webp": "/brand/illustrations/final/contact-mobile.webp"
+        }
+      },
+      "getStarted": {
+        "desktop": {
+          "avif": "/brand/illustrations/final/get-started-desktop.avif",
+          "webp": "/brand/illustrations/final/get-started-desktop.webp"
+        },
+        "tablet": {
+          "avif": "/brand/illustrations/final/get-started-tablet.avif",
+          "webp": "/brand/illustrations/final/get-started-tablet.webp"
+        },
+        "mobile": {
+          "avif": "/brand/illustrations/final/get-started-mobile.avif",
+          "webp": "/brand/illustrations/final/get-started-mobile.webp"
+        }
+      },
+      "notFound": {
+        "desktop": {
+          "avif": "/brand/illustrations/final/404-desktop.avif",
+          "webp": "/brand/illustrations/final/404-desktop.webp"
+        },
+        "tablet": {
+          "avif": "/brand/illustrations/final/404-tablet.avif",
+          "webp": "/brand/illustrations/final/404-tablet.webp"
+        },
+        "mobile": {
+          "avif": "/brand/illustrations/final/404-mobile.avif",
+          "webp": "/brand/illustrations/final/404-mobile.webp"
+        }
+      }
+    }
   }
 }

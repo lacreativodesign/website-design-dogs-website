@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { ArrowRightIcon } from "@/components/ui/icon";
 import { services } from "@/content/services";
+import { illustrationScenes } from "@/content/illustrations";
 import { pageMetadata } from "@/lib/seo";
 import { absoluteUrl, getSiteUrl } from "@/lib/site-config";
 
@@ -56,9 +57,13 @@ export default function ServicesPage() {
       />
       <section className="services-hero" aria-labelledby="services-page-title">
         <ThemeScene
-          darkSrc="/brand/scenes/services-hero-dark.webp"
-          lightSrc="/brand/scenes/services-hero-light.webp"
-          alt="Website Design Dogs services mascot holding a device in a scenic environment"
+          darkSrc={illustrationScenes.services.desktop.webp}
+          darkAvifSrc={illustrationScenes.services.desktop.avif}
+          tabletDarkSrc={illustrationScenes.services.tablet.webp}
+          tabletDarkAvifSrc={illustrationScenes.services.tablet.avif}
+          mobileDarkSrc={illustrationScenes.services.mobile.webp}
+          mobileDarkAvifSrc={illustrationScenes.services.mobile.avif}
+          alt="Border collie designer presenting website services on a tablet in a moonlit studio"
           width={1600}
           height={1000}
           priority
