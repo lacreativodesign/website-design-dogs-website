@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ThemeScene } from "@/components/theme/theme-scene";
-import { Container } from "@/components/ui/container";
+import { LegalPage, type LegalSection } from "@/components/pages/legal-page";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
@@ -10,10 +8,11 @@ export const metadata: Metadata = pageMetadata({
   path: "/terms-and-conditions",
 });
 
-const updated = "July 25, 2026";
+const updated = "July 28, 2026";
 
-const termsGroups = [
+const termsGroups: LegalSection[] = [
   {
+    id: "services",
     title: "Services",
     intro: "Website Design Dogs provides website-related information and accepts service enquiries subject to written project terms.",
     items: [
@@ -24,6 +23,7 @@ const termsGroups = [
     ],
   },
   {
+    id: "responsibilities",
     title: "User Responsibilities",
     intro: "Visitors and clients are responsible for lawful website use and accurate project information.",
     items: [
@@ -34,6 +34,7 @@ const termsGroups = [
     ],
   },
   {
+    id: "intellectual-property",
     title: "Intellectual Property",
     intro: "Ownership, licensing, and usage rights are controlled by the applicable written project agreement.",
     items: [
@@ -43,6 +44,7 @@ const termsGroups = [
     ],
   },
   {
+    id: "liability",
     title: "Limitation of Liability",
     intro: "The website is informational and does not guarantee business, marketing, technical, or third-party outcomes.",
     items: [
@@ -52,6 +54,7 @@ const termsGroups = [
     ],
   },
   {
+    id: "changes",
     title: "Changes to Terms",
     intro: "These terms may be updated, and campaign or project terms may be controlled by more specific written terms.",
     items: [
@@ -64,67 +67,12 @@ const termsGroups = [
 
 export default function TermsPage() {
   return (
-    <>
-      <section className="visual-page-hero visual-page-hero--legal" aria-labelledby="terms-page-title">
-        <ThemeScene
-          darkSrc="/brand/scenes/terms-hero-dark.webp"
-          lightSrc="/brand/scenes/terms-hero-light.webp"
-          alt="Website Design Dogs terms scenic artwork"
-          width={1600}
-          height={1000}
-          priority
-          sizes="100vw"
-          className="visual-page-hero__scene"
-        />
-        <Container className="visual-page-hero__content">
-          <nav className="visual-breadcrumb" aria-label="Breadcrumb">
-            <Link href="/">Home</Link>
-            <span aria-hidden="true">›</span>
-            <span>Terms of Service</span>
-          </nav>
-          <p className="home-eyebrow">Terms of Service</p>
-          <h1 id="terms-page-title">Terms of Service</h1>
-          <p>Please read these terms carefully before using the website or requesting services.</p>
-        </Container>
-      </section>
-
-      <section className="legal-shell-section" aria-labelledby="terms-panel-title">
-        <Container>
-          <div className="legal-intro-copy">
-            <p className="home-eyebrow">Last updated {updated}</p>
-            <h2 id="terms-panel-title">Terms and Conditions</h2>
-            <p>
-              These general website terms are informational and may be controlled by a signed proposal, order form,
-              statement of work, or written agreement when those terms differ.
-            </p>
-          </div>
-          <div className="legal-panel">
-            {termsGroups.map((group) => (
-              <section key={group.title} className="legal-primary-group">
-                <h2>{group.title}</h2>
-                <p>{group.intro}</p>
-                <details>
-                  <summary>Read details</summary>
-                  <div>
-                    {group.items.map((item) => (
-                      <p key={item}>
-                        {item.includes("/contact") ? (
-                          <>
-                            {item.replace("/contact", "")}
-                            <Link href="/contact">/contact</Link>.
-                          </>
-                        ) : (
-                          item
-                        )}
-                      </p>
-                    ))}
-                  </div>
-                </details>
-              </section>
-            ))}
-          </div>
-        </Container>
-      </section>
-    </>
+    <LegalPage
+      title="Terms of Service"
+      updated={updated}
+      intro="Please read these terms before using the website or requesting services."
+      sections={termsGroups}
+      darkSrc="/brand/scenes/terms-hero-dark.webp"
+    />
   );
 }

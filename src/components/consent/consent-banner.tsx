@@ -11,7 +11,7 @@ export function ConsentBanner({ onAccept, onReject, onSettings }: Props) {
   return <section className="consent-banner" role="region" aria-labelledby="privacy-choices-title">
     <div>
       <h2 id="privacy-choices-title">Privacy choices</h2>
-      <p>We use necessary technologies to keep the site working. With your permission, we also use analytics and advertising technologies to measure performance and improve our marketing.</p>
+      <p>Necessary technologies keep the site working. Optional analytics and advertising run only with your permission.</p>
     </div>
     <div className="consent-banner__actions">
       <button type="button" className="consent-button consent-button--neutral" onClick={onReject}>Reject optional</button>

@@ -23,7 +23,10 @@ export default function NotFound() {
         <p>404</p>
         <h1 id="not-found-title">Page Not Found</h1>
         <span>The page you’re looking for may have moved or no longer exists.</span>
-        <Button href="/">Back to Home</Button>
+        <div className="not-found-page__actions">
+          <Button href="/">Back to Home</Button>
+          <Button href="/services" variant="outline">Explore Services</Button>
+        </div>
       </div>
     </section>
   );

@@ -12,6 +12,12 @@ export function MobileNavigation() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const isActive = (href: string) =>
+    pathname === href ||
+    (href === "/services" && pathname.startsWith("/services/")) ||
+    (href === "/packages" && pathname.startsWith("/packages/"));
 
   const closeAndReturnFocus = () => {
     setOpen(false);
@@ -29,12 +35,33 @@ export function MobileNavigation() {
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        closeAndReturnFocus();
+        setOpen(false);
+        buttonRef.current?.focus();
+        return;
+      }
+
+      if (event.key === "Tab" && panelRef.current) {
+        const focusable = Array.from(
+          panelRef.current.querySelectorAll<HTMLElement>(
+            'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+          ),
+        );
+        const first = focusable[0];
+        const last = focusable.at(-1);
+
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
       }
     };
 
     document.addEventListener("keydown", handleKeyDown);
     document.body.classList.add("nav-open");
+    closeButtonRef.current?.focus();
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
@@ -57,11 +84,29 @@ export function MobileNavigation() {
       </button>
       {open ? (
         <>
-          <button className="mobile-nav__overlay" aria-label="Close main menu" onClick={closeAndReturnFocus} />
-          <aside id="mobile-navigation" className="mobile-nav__panel" aria-label="Mobile main navigation">
+          <button
+            type="button"
+            className="mobile-nav__overlay"
+            aria-label="Close main menu"
+            onClick={closeAndReturnFocus}
+          />
+          <aside
+            ref={panelRef}
+            id="mobile-navigation"
+            className="mobile-nav__panel"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile main navigation"
+          >
             <div className="flex items-center justify-between gap-4">
               <BrandLogo />
-              <button type="button" className="icon-button" aria-label="Close main menu" onClick={closeAndReturnFocus}>
+              <button
+                ref={closeButtonRef}
+                type="button"
+                className="icon-button"
+                aria-label="Close main menu"
+                onClick={closeAndReturnFocus}
+              >
                 <CloseIcon />
               </button>
             </div>
@@ -71,7 +116,7 @@ export function MobileNavigation() {
                   key={item.href}
                   href={item.href}
                   className="mobile-nav__link"
-                  aria-current={pathname === item.href || (item.href === "/services" && pathname.startsWith("/services/")) ? "page" : undefined}
+                  aria-current={isActive(item.href) ? "page" : undefined}
                   onClick={closeWithoutFocusReturn}
                 >
                   {item.label}

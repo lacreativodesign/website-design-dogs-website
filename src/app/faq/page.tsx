@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { FullFaqAccordion } from "@/components/faq/faq-accordion";
+import { PageCta } from "@/components/pages/page-cta";
 import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Container } from "@/components/ui/container";
-import { featuredFaqs } from "@/content/faqs";
+import { faqCategories, featuredFaqs } from "@/content/faqs";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
@@ -42,9 +43,30 @@ export default function FaqPage() {
 
       <section className="faq-page-section" aria-label="Frequently asked questions">
         <Container>
+          <div className="faq-category-grid" aria-label="Question categories">
+            {faqCategories.map((category, index) => (
+              <article key={category.title}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <h2>{category.title}</h2>
+                <p>{category.items.length} practical answers</p>
+              </article>
+            ))}
+          </div>
+          <header className="faq-page-heading">
+            <p className="home-eyebrow">Most asked</p>
+            <h2>Start with the essentials.</h2>
+            <p>These answers explain the project basics without assuming details that still need to be scoped.</p>
+          </header>
           <FullFaqAccordion items={featuredFaqs} />
         </Container>
       </section>
+
+      <PageCta
+        heading="Still deciding what your website needs?"
+        body="Use the guided project brief and we’ll turn your answers into a sensible starting point."
+        cta="Build Your Project Brief"
+        href="/get-started"
+      />
     </>
   );
 }

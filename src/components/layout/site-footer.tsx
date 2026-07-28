@@ -71,7 +71,7 @@ export function SiteFooter({ compact = false }: { compact?: boolean }) {
       className={`site-footer${compact ? " site-footer--compact" : ""}`}
     >
       <div className="mx-auto max-w-[var(--container-width)] px-5 py-8 sm:px-6 lg:px-8 lg:py-10">
-        <div className="grid gap-7 lg:grid-cols-[1.4fr_0.8fr_1fr_0.8fr]">
+        <div className="grid gap-7 lg:grid-cols-[1.25fr_0.72fr_1fr_0.72fr_0.95fr]">
           <div>
             <BrandLogo />
             <p className="mt-4 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary-orange)]">
@@ -89,6 +89,7 @@ export function SiteFooter({ compact = false }: { compact?: boolean }) {
             items={siteConfig.footer.company}
           />
           <FooterList title="Services" items={siteConfig.footer.services} />
+          <FooterList title="Support" items={siteConfig.footer.support} />
           <FooterContact compact={compact} />
         </div>
         <div className="mt-8 flex flex-col gap-4 border-t border-white/12 pt-5">
