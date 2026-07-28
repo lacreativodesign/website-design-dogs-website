@@ -42,7 +42,7 @@ export const siteConfig = {
       { label: "Contact Us", href: "/contact" },
     ],
     services: [
-      { label: "Website Design", href: "/services/custom-website-design" },
+      { label: "Custom Website Design", href: "/services/custom-website-design" },
       { label: "Website Development", href: "/services/website-development" },
       { label: "E-Commerce Solutions", href: "/services/e-commerce-solutions" },
       { label: "SEO & Local Optimization", href: "/services/seo-local-optimization" },
