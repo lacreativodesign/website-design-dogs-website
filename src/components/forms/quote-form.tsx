@@ -907,11 +907,11 @@ export function QuoteForm({
             Back
           </Button>
           {step < 4 ? (
-            <Button type="button" onClick={next}>
+            <Button key="next-step" type="button" onClick={next}>
               Next
             </Button>
           ) : (
-            <Button type="submit" disabled={submitting}>
+            <Button key="submit-brief" type="submit" disabled={submitting}>
               {submitting ? "Sending…" : "Send Quote Request"}
             </Button>
           )}
