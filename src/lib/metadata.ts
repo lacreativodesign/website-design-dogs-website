@@ -38,10 +38,21 @@ export const rootMetadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   applicationName: SITE_NAME,
+  manifest: "/manifest.webmanifest",
+  alternates: {
+    canonical: getSiteUrl(),
+    languages: { "en-US": getSiteUrl() },
+  },
   authors: [{ name: LEGAL_OWNER }],
   creator: LEGAL_OWNER,
   publisher: LEGAL_OWNER,
   category: SITE_CATEGORY,
+  referrer: "strict-origin-when-cross-origin",
+  formatDetection: {
+    address: false,
+    email: false,
+    telephone: false,
+  },
   verification,
   other,
   icons: {

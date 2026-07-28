@@ -148,6 +148,9 @@ export function ContactForm() {
       nextErrors.consent =
         "Confirm consent and Privacy Policy acknowledgement.";
     }
+    if (process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && !turnstile) {
+      nextErrors.turnstile = "Complete the anti-spam verification.";
+    }
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
   }
@@ -190,6 +193,7 @@ export function ContactForm() {
 
     if (result.ok) {
       leadEvent("wdd_lead_success", {
+        eventId: submissionId,
         formType: "contact",
         serviceSlug: formData.service,
         utmCampaign: getAttribution().utmCampaign,
@@ -340,7 +344,17 @@ export function ContactForm() {
       {errors.consent ? (
         <p className="text-sm font-bold text-orange-300">{errors.consent}</p>
       ) : null}
-      <TurnstileWidget onToken={onToken} resetKey={resetKey} />
+      <TurnstileWidget
+        action="contact_lead"
+        cData={submissionId}
+        onToken={onToken}
+        resetKey={resetKey}
+      />
+      {errors.turnstile ? (
+        <p className="text-sm font-bold text-orange-300">
+          {errors.turnstile}
+        </p>
+      ) : null}
       <Button type="submit" size="large" disabled={submitting}>
         {submitting ? "Sending…" : "Send Enquiry"}
       </Button>

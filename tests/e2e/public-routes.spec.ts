@@ -19,8 +19,14 @@ for (const route of [...publicRoutes, ...campaignRoutes]) {
   });
 }
 
-test("/robots.txt and /sitemap.xml render", async ({ page }) => {
-  for (const route of ["/robots.txt", "/sitemap.xml"]) {
+test("machine-readable discovery resources render", async ({ page }) => {
+  for (const route of [
+    "/robots.txt",
+    "/sitemap.xml",
+    "/manifest.webmanifest",
+    "/llms.txt",
+    "/llms-full.txt",
+  ]) {
     const response = await page.goto(route);
     expect(response?.ok()).toBeTruthy();
     expect(await page.textContent("body")).toBeTruthy();

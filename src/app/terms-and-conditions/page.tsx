@@ -73,6 +73,7 @@ export default function TermsPage() {
       intro="Please read these terms before using the website or requesting services."
       sections={termsGroups}
       darkSrc="/brand/scenes/terms-hero-dark.webp"
+      path="/terms-and-conditions"
     />
   );
 }

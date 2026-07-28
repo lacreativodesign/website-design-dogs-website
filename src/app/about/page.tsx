@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageCta } from "@/components/pages/page-cta";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Container } from "@/components/ui/container";
 import {
@@ -21,6 +23,18 @@ export const metadata: Metadata = pageMetadata({
 export default function AboutPage() {
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "/" },
+          { name: "About Us", path: "/about" },
+        ]}
+      />
+      <WebPageJsonLd
+        type="AboutPage"
+        name="About Website Design Dogs"
+        description="Learn how Website Design Dogs combines website strategy, design, development, communication, and practical support for growing businesses."
+        path="/about"
+      />
       <section className="visual-page-hero visual-page-hero--about" aria-labelledby="about-page-title">
         <ThemeScene
           darkSrc="/brand/scenes/about-hero-dark.webp"

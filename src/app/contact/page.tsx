@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ContactForm } from "@/components/forms/contact-form";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Container } from "@/components/ui/container";
 import { siteConfig } from "@/content/site";
@@ -28,6 +30,18 @@ export const metadata: Metadata = pageMetadata({
 export default function ContactPage() {
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Contact Us", path: "/contact" },
+        ]}
+      />
+      <WebPageJsonLd
+        type="ContactPage"
+        name="Contact Website Design Dogs"
+        description="Contact Website Design Dogs to discuss website design, development, redesign, e-commerce, optimization, or ongoing website care."
+        path="/contact"
+      />
       <section className="compact-title-section" aria-labelledby="contact-page-title">
         <ThemeScene
           darkSrc="/brand/scenes/contact-hero-dark.webp"

@@ -314,6 +314,9 @@ export function QuoteForm({
         nextErrors.accomplish = "Share what the new website should accomplish.";
       }
       if (!data.consent) nextErrors.consent = "Confirm consent to be contacted.";
+      if (process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && !turnstileToken) {
+        nextErrors.turnstile = "Complete the anti-spam verification.";
+      }
     }
 
     setErrors(nextErrors);
@@ -375,6 +378,7 @@ export function QuoteForm({
 
     if (response.ok) {
       leadEvent("wdd_lead_success", {
+        eventId: submissionId,
         formType: "quote",
         packageSlug: data.package.preferred,
         utmCampaign: attribution.utmCampaign,
@@ -893,7 +897,15 @@ export function QuoteForm({
             {errors.consent ? (
               <p className="quote-field-error">{errors.consent}</p>
             ) : null}
-            <TurnstileWidget onToken={onToken} resetKey={resetKey} />
+            <TurnstileWidget
+              action="quote_lead"
+              cData={submissionId}
+              onToken={onToken}
+              resetKey={resetKey}
+            />
+            {errors.turnstile ? (
+              <p className="quote-field-error">{errors.turnstile}</p>
+            ) : null}
           </div>
         ) : null}
 

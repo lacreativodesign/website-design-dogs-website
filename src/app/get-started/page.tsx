@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { QuoteForm } from "@/components/forms/quote-form";
 import { PageHero } from "@/components/pages/page-hero";
+import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { industryBySlug } from "@/content/industries";
@@ -43,6 +44,11 @@ export default async function Page({ searchParams }: PageProps) {
 
   return (
     <>
+      <WebPageJsonLd
+        name="Get a Free Website Quote"
+        description="Tell Website Design Dogs about your business, current website, goals, scope, preferred package, budget, and timeline."
+        path="/get-started"
+      />
       <PageHero
         eyebrow="START YOUR PROJECT"
         title="Build your project brief."

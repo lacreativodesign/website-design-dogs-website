@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { PackageFaqAccordion } from "@/components/packages/package-faq-accordion";
 import { PageCta } from "@/components/pages/page-cta";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { JsonLd } from "@/components/seo/json-ld";
+import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -15,11 +18,16 @@ import {
   websitePackages,
 } from "@/content/packages";
 import { pageMetadata } from "@/lib/seo";
-import { absoluteUrl } from "@/lib/site-config";
+import { absoluteUrl, getSiteUrl } from "@/lib/site-config";
 
 type Props = { params: Promise<{ slug: string }> };
 
 export const dynamicParams = false;
+
+const packageFaqItems = packageFaqs.map(([question, answer]) => ({
+  question,
+  answer,
+}));
 
 export function generateStaticParams() {
   return websitePackages.map(({ slug }) => ({ slug }));
@@ -51,32 +59,37 @@ export default async function PackageDetailPage({ params }: Props) {
           { name: websitePackage.name, path: websitePackage.href },
         ]}
       />
+      <WebPageJsonLd
+        name={`${websitePackage.name} Website Package`}
+        description={`${websitePackage.name} website package starting at ${websitePackage.price}. ${websitePackage.description}`}
+        path={websitePackage.href}
+      />
+      <FaqJsonLd items={packageFaqItems} />
       <JsonLd
-        data={[
-          {
-            "@context": "https://schema.org",
+        data={{
+          "@context": "https://schema.org",
+          "@type": "Service",
+          "@id": `${absoluteUrl(websitePackage.href)}#service`,
+          name: `${websitePackage.name} Website Package`,
+          description: websitePackage.description,
+          url: absoluteUrl(websitePackage.href),
+          provider: {
+            "@id": `${getSiteUrl()}/#organization`,
+          },
+          areaServed: {
+            "@type": "Country",
+            name: "United States",
+          },
+          offers: {
             "@type": "Offer",
-            name: `${websitePackage.name} Website Package`,
-            description: websitePackage.description,
             price: websitePackage.priceValue,
             priceCurrency: "USD",
             url: absoluteUrl(websitePackage.href),
             seller: {
-              "@type": "Organization",
-              name: "Website Design Dogs",
-              url: absoluteUrl("/"),
+              "@id": `${getSiteUrl()}/#organization`,
             },
           },
-          {
-            "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: packageFaqs.slice(0, 5).map(([question, answer]) => ({
-              "@type": "Question",
-              name: question,
-              acceptedAnswer: { "@type": "Answer", text: answer },
-            })),
-          },
-        ]}
+        }}
       />
 
       <section className="package-detail-hero" aria-labelledby="package-detail-title">
@@ -192,6 +205,21 @@ export default async function PackageDetailPage({ params }: Props) {
               </Link>
             ))}
           </div>
+        </Container>
+      </section>
+
+      <section
+        className="package-detail-section"
+        aria-labelledby="package-detail-faq-title"
+      >
+        <Container>
+          <header className="package-detail-heading">
+            <p className="home-eyebrow">Package questions</p>
+            <h2 id="package-detail-faq-title">
+              Helpful answers before you choose.
+            </h2>
+          </header>
+          <PackageFaqAccordion />
         </Container>
       </section>
 

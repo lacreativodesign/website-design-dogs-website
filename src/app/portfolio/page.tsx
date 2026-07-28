@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { ContactForm } from "@/components/forms/contact-form";
 import { PortfolioFilter } from "@/components/portfolio/portfolio-filter";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -19,6 +21,8 @@ function PortfolioHeading({ number, eyebrow, title, id }: { number: string; eyeb
 
 export default function PortfolioPage() {
   return <>
+    <BreadcrumbJsonLd items={[{ name: "Home", path: "/" }, { name: "Portfolio", path: "/portfolio" }]} />
+    <WebPageJsonLd type="CollectionPage" name="Website Design Portfolio Concepts" description="Explore Website Design Dogs design concepts for common business categories, created to show layout, hierarchy, and responsive thinking." path="/portfolio" />
     <section className="portfolio-hero" aria-labelledby="portfolio-page-title">
       <ThemeScene darkSrc="/brand/scenes/portfolio-hero-dark.webp" lightSrc="/brand/scenes/portfolio-hero-light.webp" alt="Website Design Dogs mascot beside website design screens" width={1600} height={1000} priority sizes="100vw" className="portfolio-hero__scene" />
       <Container className="portfolio-hero__content"><div className="portfolio-hero__copy"><nav className="visual-breadcrumb" aria-label="Breadcrumb"><Link href="/">Home</Link><span aria-hidden="true">›</span><span>Portfolio</span></nav><p className="home-eyebrow">OUR WORK</p><h1 id="portfolio-page-title">WEBSITE CONCEPTS<br />BUILT FOR<br /><em>REAL BUSINESSES.</em></h1><p>Explore industry-focused website concepts created to show the strategy, clarity, and responsive experience we can build around your business.</p><div className="portfolio-hero__actions"><Button href="/get-started" icon={<ArrowRightIcon />} fullWidthMobile>Start Your Project</Button><Button href="/packages" variant="outline" fullWidthMobile>View Packages</Button></div></div></Container>

@@ -6,6 +6,8 @@ import { FullFaqAccordion } from "@/components/faq/faq-accordion";
 import { PageCta } from "@/components/pages/page-cta";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { FaqJsonLd } from "@/components/seo/faq-json-ld";
+import { ServiceJsonLd } from "@/components/seo/service-json-ld";
+import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -21,7 +23,7 @@ export default async function ServiceDetailPage({ params }: Props) {
   const service = serviceBySlug.get((await params).slug); if (!service) notFound();
   const related = service.relatedSlugs.map((slug) => serviceBySlug.get(slug)).filter((item): item is NonNullable<typeof item> => Boolean(item));
   const quoteHref = `/get-started?service=${encodeURIComponent(service.slug)}`;
-  return <><BreadcrumbJsonLd items={[{ name: "Home", path: "/" }, { name: "Services", path: "/services" }, { name: service.title, path: `/services/${service.slug}` }]} /><FaqJsonLd items={service.faqs} />
+  return <><BreadcrumbJsonLd items={[{ name: "Home", path: "/" }, { name: "Services", path: "/services" }, { name: service.title, path: `/services/${service.slug}` }]} /><WebPageJsonLd name={service.title} description={service.valueProposition} path={`/services/${service.slug}`} /><ServiceJsonLd service={service} /><FaqJsonLd items={service.faqs} />
     <section className="service-detail-hero" aria-labelledby="service-title">
       <ThemeScene darkSrc="/brand/scenes/services-hero-dark.webp" lightSrc="/brand/scenes/services-hero-light.webp" alt="" width={1600} height={1000} priority sizes="100vw" className="service-detail-hero__scene" />
       <Container className="service-detail-hero__layout"><div><nav className="visual-breadcrumb" aria-label="Breadcrumb"><Link href="/">Home</Link><span aria-hidden="true">›</span><Link href="/services">Services</Link><span aria-hidden="true">›</span><span aria-current="page">{service.title}</span></nav><p className="home-eyebrow">{service.eyebrow}</p><h1 id="service-title">{service.title}</h1><p>{service.valueProposition}</p><div className="service-detail-hero__actions"><Button href={quoteHref} icon={<ArrowRightIcon />} testId="service-primary-quote">Get a Free Quote</Button><Button href="/services" variant="outline">Back to All Services</Button></div></div><aside className="service-detail-hero__card" aria-label={`${service.title} priorities`}><Image src={service.icon} alt="" width={56} height={56} /><p>Built around</p><ul><li>Clarity</li><li>Usability</li><li>Maintainability</li></ul></aside></Container>

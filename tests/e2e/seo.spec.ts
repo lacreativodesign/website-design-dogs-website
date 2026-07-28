@@ -30,6 +30,22 @@ test("indexable pages have metadata and sitemap behavior is correct", async ({
   const robotsText = await (await request.get("/robots.txt")).text();
   expect(robotsText).toMatch(/Disallow: \/api\//i);
   expect(robotsText).toMatch(/Sitemap:/i);
+  expect(robotsText).toMatch(/User-agent: OAI-SearchBot[\s\S]*Allow: \//i);
+  expect(robotsText).toMatch(/User-agent: GPTBot[\s\S]*Disallow: \//i);
+
+  const llmsResponse = await request.get("/llms.txt");
+  expect(llmsResponse.ok()).toBeTruthy();
+  expect(llmsResponse.headers()["content-type"]).toMatch(/text\/markdown/i);
+  const llms = await llmsResponse.text();
+  expect(llms).toContain("# Website Design Dogs");
+  expect(llms).toContain("/llms-full.txt");
+  expect(llms).toMatch(/concepts, not client case studies/i);
+
+  const manifestResponse = await request.get("/manifest.webmanifest");
+  expect(manifestResponse.ok()).toBeTruthy();
+  expect(manifestResponse.headers()["content-type"]).toMatch(
+    /application\/manifest\+json/i,
+  );
 });
 
 test("campaigns are noindex and self canonical", async ({ page }) => {
@@ -71,4 +87,24 @@ test("structured data parses, exposes verified contacts, and avoids fake local p
     '"email":"hello@websitedesigndogs.com"',
   );
   expect(structuredData).toContain('"telephone":"+14159002374"');
+  expect(structuredData).toContain('"parentOrganization"');
+  expect(structuredData).toContain('"legalName":"LA CREATIVO GROUP, LLC"');
+});
+
+test("service and package schema matches visible content", async ({ page }) => {
+  await page.goto("/services/custom-website-design");
+  await expect(page.getByRole("heading", { name: "Custom Website Design" })).toBeVisible();
+  const serviceSchema = (
+    await page.locator('script[type="application/ld+json"]').allTextContents()
+  ).join("");
+  expect(serviceSchema).toContain('"@type":"Service"');
+  expect(serviceSchema).toContain('"name":"Custom Website Design"');
+
+  await page.goto("/packages/starter");
+  await expect(page.getByText("Helpful answers before you choose.")).toBeVisible();
+  const packageSchema = (
+    await page.locator('script[type="application/ld+json"]').allTextContents()
+  ).join("");
+  expect(packageSchema).toContain('"price":499');
+  expect(packageSchema).toContain('"@type":"FAQPage"');
 });
