@@ -1,10 +1,68 @@
-export type Package = { name: string; slug: string; price: string; label?: string; description: string; features: string[]; href: string; cta: string };
+export type Package = {
+  name: string;
+  slug: string;
+  price: string;
+  priceValue: number;
+  label?: string;
+  tagline: string;
+  description: string;
+  features: string[];
+  idealFor: string[];
+  scopeNotes: string[];
+  href: string;
+  quoteHref: string;
+  cta: string;
+};
 
 export const websitePackages: Package[] = [
-  { name: "Starter", slug: "starter", price: "$499", description: "A focused website to get your business online with confidence.", features: ["Up to 5 Pages", "Mobile-Responsive Design", "Basic On-Page SEO Setup", "Contact or Quote Form", "1 Revision Round"], href: "/contact?package=starter", cta: "Choose Starter" },
-  { name: "Business", slug: "business", price: "$899", label: "Recommended", description: "A strategic website with more room for services, content, and customer journeys.", features: ["Up to 10 Pages", "Mobile-Responsive Design", "Expanded On-Page SEO Setup", "Performance Optimization", "3 Revision Rounds"], href: "/contact?package=business", cta: "Choose Business" },
-  { name: "Growth", slug: "growth", price: "$1,499", description: "An expanded website for businesses that need e-commerce or a broader content structure.", features: ["Up to 20 Pages", "E-Commerce Functionality", "Mobile-Responsive Design", "SEO & Performance Setup", "5 Revision Rounds"], href: "/contact?package=growth", cta: "Choose Growth" },
+  {
+    name: "Starter",
+    slug: "starter",
+    price: "$499",
+    priceValue: 499,
+    tagline: "A focused first website with the essentials in place.",
+    description: "A focused website to get your business online with confidence.",
+    features: ["Up to 5 Pages", "Mobile-Responsive Design", "Basic On-Page SEO Setup", "Contact or Quote Form", "1 Revision Round"],
+    idealFor: ["New or small service businesses", "A clear brochure-style website", "A focused offer with a simple enquiry path"],
+    scopeNotes: ["Content, domain, and hosting responsibilities are confirmed before work begins.", "E-commerce, complex integrations, and full copywriting require additional scope."],
+    href: "/packages/starter",
+    quoteHref: "/get-started?package=starter",
+    cta: "View Starter",
+  },
+  {
+    name: "Business",
+    slug: "business",
+    price: "$899",
+    priceValue: 899,
+    label: "Recommended",
+    tagline: "More room for services, content, and customer journeys.",
+    description: "A strategic website with more room for services, content, and customer journeys.",
+    features: ["Up to 10 Pages", "Mobile-Responsive Design", "Expanded On-Page SEO Setup", "Performance Optimization", "3 Revision Rounds"],
+    idealFor: ["Established service businesses", "Multiple services or audience paths", "Businesses replacing an outdated website"],
+    scopeNotes: ["The page map and content responsibilities are confirmed during scoping.", "Advanced automation, custom applications, and e-commerce are quoted separately."],
+    href: "/packages/business",
+    quoteHref: "/get-started?package=business",
+    cta: "View Business",
+  },
+  {
+    name: "Growth",
+    slug: "growth",
+    price: "$1,499",
+    priceValue: 1499,
+    tagline: "An expanded build for broader content or online selling.",
+    description: "An expanded website for businesses that need e-commerce or a broader content structure.",
+    features: ["Up to 20 Pages", "E-Commerce Functionality", "Mobile-Responsive Design", "SEO & Performance Setup", "5 Revision Rounds"],
+    idealFor: ["Businesses preparing an online store", "Larger service or content structures", "Teams that need a broader launch foundation"],
+    scopeNotes: ["Product count, payment setup, shipping, tax, and integrations are confirmed before work begins.", "Third-party platform fees, licenses, and merchant approvals are not included automatically."],
+    href: "/packages/growth",
+    quoteHref: "/get-started?package=growth",
+    cta: "View Growth",
+  },
 ];
+
+export const websitePackageBySlug = new Map(
+  websitePackages.map((websitePackage) => [websitePackage.slug, websitePackage]),
+);
 
 export const packageTrustItems = ["One-Time Website Build", "Clear Project Scope", "Mobile-Responsive", "Optional Ongoing Care"] as const;
 export const packageValueItems = ["Custom Design", "Fast Load Times", "SEO Ready", "Secure & Reliable", "Dedicated Support"] as const;

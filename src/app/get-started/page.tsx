@@ -2,10 +2,9 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { QuoteForm } from "@/components/forms/quote-form";
 import { PageHero } from "@/components/pages/page-hero";
-import { Card } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { SectionHeading } from "@/components/ui/section-heading";
+import { industryBySlug } from "@/content/industries";
 import { DEFAULT_SERVICE_SLUG, serviceBySlug } from "@/content/services";
 import { pageMetadata } from "@/lib/seo";
 
@@ -37,6 +36,38 @@ export default async function Page({ searchParams }: PageProps) {
   }
   const requestedPackage = typeof params.package === "string" ? params.package : "";
   const requestedService = typeof params.service === "string" ? params.service : "";
+  const requestedIndustry =
+    typeof params.industry === "string"
+      ? industryBySlug.get(params.industry)?.title ?? ""
+      : "";
 
-  return <><PageHero eyebrow="START YOUR PROJECT" title="Tell us what you’re building." body="The more context you provide, the easier it is to understand your goals, recommend the right starting point, and prepare a clear project scope." darkSrc="/brand/scenes/contact-hero-dark.webp" lightSrc="/brand/scenes/contact-hero-light.webp" alt="Website Design Dogs quote request scene"/><Section alternate><Container className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr]"><div><SectionHeading eyebrow="FREE QUOTE" title="Five focused steps.">Share the essentials so the project scope, timing, and next steps can be reviewed clearly.</SectionHeading></div><Card><QuoteForm requestedPackage={requestedPackage} requestedService={requestedService}/></Card></Container></Section></>;
+  return (
+    <>
+      <PageHero
+        eyebrow="START YOUR PROJECT"
+        title="Build your project brief."
+        body="Five focused steps turn the essentials into a useful starting point—without pretending the scope is final before we review it."
+        darkSrc="/brand/scenes/contact-hero-dark.webp"
+        lightSrc="/brand/scenes/contact-hero-light.webp"
+        alt="Website Design Dogs quote request scene"
+      />
+      <Section alternate className="get-started-section">
+        <Container>
+          <div className="get-started-intro">
+            <p className="home-eyebrow">Free project review</p>
+            <h2>One clear decision at a time.</h2>
+            <p>
+              Add only what you know. Your answers remain visible as you go, and no
+              details are submitted until you explicitly send the brief.
+            </p>
+          </div>
+          <QuoteForm
+            requestedPackage={requestedPackage}
+            requestedService={requestedService}
+            requestedIndustry={requestedIndustry}
+          />
+        </Container>
+      </Section>
+    </>
+  );
 }
