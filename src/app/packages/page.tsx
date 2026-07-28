@@ -4,16 +4,24 @@ import Link from "next/link";
 import { ContactForm } from "@/components/forms/contact-form";
 import { PackageFaqAccordion } from "@/components/packages/package-faq-accordion";
 import { PackageLeadButton, PackagesViewTracker } from "@/components/packages/package-tracking";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { JsonLd } from "@/components/seo/json-ld";
+import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { ArrowRightIcon } from "@/components/ui/icon";
-import { comparisonRows, optionalServices, packageProcess, packageTrustItems, packageValueItems, websitePackages } from "@/content/packages";
+import { comparisonRows, optionalServices, packageFaqs, packageProcess, packageTrustItems, packageValueItems, websitePackages } from "@/content/packages";
 import { pageMetadata } from "@/lib/seo";
-import { absoluteUrl } from "@/lib/site-config";
+import { absoluteUrl, getSiteUrl } from "@/lib/site-config";
 
 export const metadata: Metadata = pageMetadata({ title: "Website Design Packages", description: "Compare Website Design Dogs Starter, Business, and Growth website packages for local and growing businesses.", path: "/packages" });
+
+const packageFaqItems = packageFaqs.map(([question, answer]) => ({
+  question,
+  answer,
+}));
 
 function SectionHeading({ number, eyebrow, title, id }: { number: string; eyebrow: string; title: string; id: string }) {
   return <header className="packages-section-heading"><span aria-hidden="true">{number}</span><div><p className="home-eyebrow">{eyebrow}</p><h2 id={id}>{title}</h2></div></header>;
@@ -21,7 +29,10 @@ function SectionHeading({ number, eyebrow, title, id }: { number: string; eyebro
 
 export default function PackagesPage() {
   return <>
-    <JsonLd data={{ "@context": "https://schema.org", "@type": "OfferCatalog", name: "Website Design Packages", itemListElement: websitePackages.map((pkg) => ({ "@type": "Offer", name: pkg.name, price: pkg.priceValue, priceCurrency: "USD", url: absoluteUrl(pkg.href) })) }} />
+    <BreadcrumbJsonLd items={[{ name: "Home", path: "/" }, { name: "Packages", path: "/packages" }]} />
+    <WebPageJsonLd type="CollectionPage" name="Website Design Packages" description="Compare Website Design Dogs Starter, Business, and Growth website packages for local and growing businesses." path="/packages" />
+    <FaqJsonLd items={packageFaqItems} />
+    <JsonLd data={{ "@context": "https://schema.org", "@type": "OfferCatalog", name: "Website Design Packages", url: absoluteUrl("/packages"), itemListElement: websitePackages.map((pkg) => ({ "@type": "Offer", name: `${pkg.name} Website Package`, price: pkg.priceValue, priceCurrency: "USD", url: absoluteUrl(pkg.href), seller: { "@id": `${getSiteUrl()}/#organization` }, itemOffered: { "@type": "Service", name: `${pkg.name} Website Package`, description: pkg.description } })) }} />
     <PackagesViewTracker />
     <section className="packages-hero" aria-labelledby="packages-page-title">
       <ThemeScene darkSrc="/brand/scenes/packages-hero-dark.webp" lightSrc="/brand/scenes/packages-hero-light.webp" alt="Illustrated Website Design Dogs package screens" width={1600} height={1000} priority sizes="100vw" className="packages-hero__scene" />

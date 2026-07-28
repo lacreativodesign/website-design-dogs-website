@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Container } from "@/components/ui/container";
 import { BRAND_DISCLOSURE } from "@/lib/site-config";
@@ -31,6 +33,7 @@ type LegalPageProps = {
   intro: string;
   sections: LegalSection[];
   darkSrc: string;
+  path: string;
 };
 
 export function LegalPage({
@@ -40,9 +43,21 @@ export function LegalPage({
   intro,
   sections,
   darkSrc,
+  path,
 }: LegalPageProps) {
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "/" },
+          { name: eyebrow, path },
+        ]}
+      />
+      <WebPageJsonLd
+        name={eyebrow}
+        description={intro}
+        path={path}
+      />
       <section
         className="visual-page-hero visual-page-hero--legal"
         aria-labelledby="legal-page-title"

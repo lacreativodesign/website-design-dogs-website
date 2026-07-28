@@ -9,10 +9,63 @@ test("sitemap excludes campaigns and api", () => {
   assert.doesNotMatch(source, /api/);
 });
 
-test("robots disallows api only", () => {
+test("robots keeps public pages crawlable and separates AI search from training", () => {
   const source = fs.readFileSync("src/app/robots.ts", "utf8");
-  assert.match(source, /disallow: "\/api\/"/);
+  assert.match(source, /"OAI-SearchBot"/);
+  assert.match(source, /"Claude-SearchBot"/);
+  assert.match(source, /"PerplexityBot"/);
+  assert.match(source, /"GPTBot"/);
+  assert.match(source, /"ClaudeBot"/);
+  assert.match(source, /"Google-Extended"/);
+  assert.match(source, /disallow: \["\/api\/"\]/);
+  assert.match(source, /disallow: "\/"/);
   assert.doesNotMatch(source, /campaigns/);
+});
+
+test("LLM discovery files are factual, generated, and linked", () => {
+  const source = fs.readFileSync("src/lib/llms.ts", "utf8");
+  const compactRoute = fs.readFileSync(
+    "src/app/llms.txt/route.ts",
+    "utf8",
+  );
+  const fullRoute = fs.readFileSync(
+    "src/app/llms-full.txt/route.ts",
+    "utf8",
+  );
+
+  assert.match(source, /# \$\{SITE_NAME\}/);
+  assert.match(source, /design concepts/);
+  assert.match(source, /not client case studies/);
+  assert.match(source, /\/llms-full\.txt/);
+  assert.match(compactRoute, /text\/markdown/);
+  assert.match(fullRoute, /text\/markdown/);
+  assert.match(compactRoute, /force-static/);
+  assert.match(fullRoute, /force-static/);
+});
+
+test("site entity schema distinguishes the brand from its legal parent", () => {
+  const source = fs.readFileSync(
+    "src/components/seo/site-json-ld.tsx",
+    "utf8",
+  );
+
+  assert.match(source, /parentOrganization/);
+  assert.match(source, /legalName: LEGAL_OWNER/);
+  assert.doesNotMatch(source, /name: SITE_NAME,\s+legalName: LEGAL_OWNER/);
+  assert.match(source, /#organization/);
+  assert.match(source, /#website/);
+});
+
+test("manifest and page metadata expose canonical launch assets", () => {
+  const manifest = fs.readFileSync("src/app/manifest.ts", "utf8");
+  const metadata = fs.readFileSync("src/lib/metadata.ts", "utf8");
+  const pageMetadata = fs.readFileSync("src/lib/seo.ts", "utf8");
+
+  assert.match(manifest, /favicon-192x192\.png/);
+  assert.match(manifest, /favicon-512x512\.png/);
+  assert.match(metadata, /manifest: "\/manifest\.webmanifest"/);
+  assert.match(pageMetadata, /"max-image-preview": "large"/);
+  assert.match(pageMetadata, /languages: \{ "en-US": url \}/);
 });
 
 test("tracking sanitizer drops forbidden fields", () => {
@@ -43,7 +96,24 @@ test('conversion event contract uses safe names, safe fields, and consent gating
   assert.match(source, /readConsent/);
   assert.match(source, /packageSlug/);
   assert.match(source, /serviceSlug/);
+  assert.match(source, /eventId/);
   assert.equal(/fullName|email|phone|businessName|referenceId|turnstileToken/.test(source), false);
+});
+
+test('GTM starts its data layer before loading and remains consent-controlled', () => {
+  const source = fs.readFileSync(
+    'src/components/consent/tracking-loader.tsx',
+    'utf8',
+  );
+
+  assert.match(source, /prefs\.analytics \|\| prefs\.marketing/);
+  assert.match(source, /"gtm\.start": Date\.now\(\)/);
+  assert.match(source, /window\.__wddGtmLoaded = true/);
+  assert.ok(
+    source.indexOf('"gtm.start": Date.now()') <
+      source.indexOf('src={`https://www.googletagmanager.com'),
+    'dataLayer bootstrap should be declared before the GTM script',
+  );
 });
 
 test('package and service query preselection is allowlisted', () => {

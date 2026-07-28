@@ -4,7 +4,7 @@ export const allowedEventFields = new Set([
   "pagePath", "pageType", "formType", "packageSlug", "serviceSlug", "campaignSlug",
   "offerCode", "placement", "projectType", "failureCategory", "consentAnalytics",
   "consentMarketing", "theme", "faqId", "faqPosition", "portfolioCategory", "utmSource",
-  "utmMedium", "utmCampaign",
+  "utmMedium", "utmCampaign", "eventId",
 ]);
 
 export type TrackingEventName =

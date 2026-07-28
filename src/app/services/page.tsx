@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+import { JsonLd } from "@/components/seo/json-ld";
+import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { ArrowRightIcon } from "@/components/ui/icon";
 import { services } from "@/content/services";
 import { pageMetadata } from "@/lib/seo";
+import { absoluteUrl, getSiteUrl } from "@/lib/site-config";
 
 export const metadata: Metadata = pageMetadata({
   title: "Website Design Services",
@@ -18,6 +22,38 @@ export const metadata: Metadata = pageMetadata({
 export default function ServicesPage() {
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Services", path: "/services" },
+        ]}
+      />
+      <WebPageJsonLd
+        type="CollectionPage"
+        name="Website Design Services"
+        description="Professional website design, development, e-commerce, SEO foundations, content support, hosting, security, analytics, and conversion services."
+        path="/services"
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "ItemList",
+          name: "Website Design Dogs services",
+          itemListElement: services.map((service, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            url: absoluteUrl(`/services/${service.slug}`),
+            item: {
+              "@type": "Service",
+              name: service.title,
+              description: service.valueProposition,
+              provider: {
+                "@id": `${getSiteUrl()}/#organization`,
+              },
+            },
+          })),
+        }}
+      />
       <section className="services-hero" aria-labelledby="services-page-title">
         <ThemeScene
           darkSrc="/brand/scenes/services-hero-dark.webp"

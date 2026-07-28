@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { FullFaqAccordion } from "@/components/faq/faq-accordion";
 import { PageCta } from "@/components/pages/page-cta";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { FaqJsonLd } from "@/components/seo/faq-json-ld";
+import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Container } from "@/components/ui/container";
 import { faqCategories, featuredFaqs } from "@/content/faqs";
@@ -17,6 +19,17 @@ export const metadata: Metadata = pageMetadata({
 export default function FaqPage() {
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "/" },
+          { name: "FAQ", path: "/faq" },
+        ]}
+      />
+      <WebPageJsonLd
+        name="Website Design FAQs"
+        description="Answers about Website Design Dogs services, process, scope, support, mobile readiness, hosting, and project launch expectations."
+        path="/faq"
+      />
       <FaqJsonLd items={featuredFaqs} />
       <section className="visual-page-hero visual-page-hero--faq" aria-labelledby="faq-page-title">
         <ThemeScene

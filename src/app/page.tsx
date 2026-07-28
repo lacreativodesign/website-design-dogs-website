@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ContactForm } from "@/components/forms/contact-form";
+import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { ArrowRightIcon } from "@/components/ui/icon";
@@ -19,6 +20,7 @@ function SectionHeading({ number, eyebrow, title, id }: { number: string; eyebro
 }
 
 export default function Home() { return <>
+  <WebPageJsonLd name="Professional Website Design for Growing Businesses" description="Website Design Dogs creates professional, mobile-ready websites for local and growing businesses with clear packages and dependable support." path="/" />
   <section className="home-hero" aria-labelledby="home-hero-title"><Image src={homeHeroAsset} alt="Website Design Dogs mascot at a laptop" fill priority sizes="100vw" className="home-hero__background" /><Container className="home-hero__content"><div className="home-hero__copy"><p className="home-eyebrow">{homeHero.eyebrow}</p><h1 id="home-hero-title" className="home-hero__title">WE DESIGN WEBSITES <span>THAT DELIVER RESULTS.</span></h1><p className="home-hero__body">{homeHero.body}</p><div className="home-hero__actions"><Button href="/get-started" icon={<ArrowRightIcon />} fullWidthMobile>Get a Free Quote</Button><Button href="/portfolio" variant="outline" fullWidthMobile>View Our Work</Button></div><div className="home-price-cue"><strong>WEBSITES FROM <b>$499</b></strong><span>One-time pricing. Clear scope. No surprises.</span></div></div></Container></section>
   <section className="home-trust-strip" aria-label="Website Design Dogs commitments"><Container><div>{homeTrustPoints.map(([title, body], index) => <article key={title}><span aria-hidden="true">{index + 1}</span><div><h2>{title}</h2><p>{body}</p></div></article>)}</div></Container></section>
   <section className="home-section home-process" aria-labelledby="process-title"><Container><SectionHeading number="02" eyebrow="HOW WE BUILD" id="process-title" title={<>A Clear Process.<br />Built With <em>Purpose.</em></>} /><div className="home-process__grid">{homeProcess.map(([number, title, body]) => <article key={number}><span>{number}</span><h3>{title}</h3><p>{body}</p></article>)}</div></Container></section>
