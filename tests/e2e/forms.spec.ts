@@ -104,11 +104,13 @@ test("quote package query renders and privacy link works", async ({ page }) => {
     await page.getByLabel("Branding status").selectOption("Brand materials ready");
     await page.getByRole("button", { name: "Next" }).click();
 
-    const preferred = page.getByLabel("Preferred package");
+    const preferred = packageLabels.has(packageName)
+      ? page.getByLabel(packageLabels.get(packageName)!)
+      : page.getByRole("radio", { checked: true });
     if (packageLabels.has(packageName)) {
-      await expect(preferred).toHaveValue(packageLabels.get(packageName)!);
+      await expect(preferred).toBeChecked();
     } else {
-      await expect(preferred).toHaveValue("");
+      await expect(preferred).toHaveCount(0);
     }
   }
 
@@ -128,7 +130,7 @@ test("quote package query renders and privacy link works", async ({ page }) => {
       await page.getByLabel("Content status").selectOption("Ready");
       await page.getByLabel("Branding status").selectOption("Brand materials ready");
     } else {
-      await page.getByLabel("Preferred package").selectOption("Starter — $499");
+      await page.getByLabel("Starter — $499").check();
       await page.getByLabel("Budget range").selectOption("$500–$999");
       await page.getByLabel("Preferred start timing").selectOption("Within 30 days");
     }
@@ -140,4 +142,12 @@ test("quote package query renders and privacy link works", async ({ page }) => {
     .getByRole("link", { name: /privacy policy/i })
     .click();
   await expect(page).toHaveURL(/privacy-policy/);
+});
+
+test("industry query pre-fills the guided project brief", async ({ page }) => {
+  await page.goto("/get-started?industry=home-services");
+  await expect(page.getByLabel("Industry")).toHaveValue("Home Services");
+
+  await page.goto("/get-started?industry=not-a-real-industry");
+  await expect(page.getByLabel("Industry")).toHaveValue("");
 });

@@ -5,14 +5,15 @@ test("packages show approved pricing, distinct choices, and active navigation", 
   await page.goto("/packages");
   await expect(page.getByRole("link", { name: "Packages" }).first()).toHaveAttribute("aria-current", "page");
 
-  for (const [slug, price, href] of [["starter", "$499", "/contact?package=starter"], ["business", "$899", "/contact?package=business"], ["growth", "$1,499", "/contact?package=growth"]] as const) {
+  for (const [slug, label, price, href] of [["starter", "View Starter", "$499", "/packages/starter"], ["business", "View Business", "$899", "/packages/business"], ["growth", "View Growth", "$1,499", "/packages/growth"]] as const) {
     const card = page.locator(`[data-package="${slug}"]`);
     await expect(card).toContainText(price);
-    await expect(card.getByRole("link", { name: new RegExp(`Choose ${slug}`, "i") })).toHaveAttribute("href", href);
+    await expect(card.getByRole("link", { name: label })).toHaveAttribute("href", href);
+    await expect(card.getByRole("link", { name: new RegExp(`Start with ${slug}`, "i") })).toHaveAttribute("href", `/get-started?package=${slug}`);
   }
 });
 
-test("comparison link, FAQ, package preselection, and form are usable", async ({ page }) => {
+test("comparison link, FAQ, package details, and form path are usable", async ({ page, request }) => {
   await page.goto("/packages");
   await page.getByRole("link", { name: "Compare Packages" }).click();
   const comparison = page.locator("#compare");
@@ -27,11 +28,19 @@ test("comparison link, FAQ, package preselection, and form are usable", async ({
   await expect(faq).toHaveAttribute("aria-expanded", "true");
   await expect(page.locator("#package-faq-0")).toContainText(/project proposal/i);
 
-  await page.goto("/packages?package=business");
-  await page.getByRole("link", { name: "Choose Business" }).click();
-  await expect(page).toHaveURL(/contact\?package=business/);
-  await expect(page.getByRole("textbox", { name: "Project summary *" })).toHaveValue(/Business — \$899/);
-  await expect(page.getByRole("combobox", { name: "Service needed *" })).toHaveValue("New Website");
+  for (const [slug, price] of [["starter", "$499"], ["business", "$899"], ["growth", "$1,499"]] as const) {
+    const response = await request.get(`/packages/${slug}`);
+    expect(response.ok()).toBeTruthy();
+    await page.goto(`/packages/${slug}`);
+    await expect(page.locator("h1")).toHaveCount(1);
+    await expect(page.locator(".package-detail-price")).toContainText(price);
+    await expect(page.getByRole("link", { name: `Start with ${slug[0].toUpperCase()}${slug.slice(1)}` })).toHaveAttribute("href", `/get-started?package=${slug}`);
+  }
+
+  const sitemap = await (await request.get("/sitemap.xml")).text();
+  for (const slug of ["starter", "business", "growth"]) {
+    expect(sitemap).toContain(`/packages/${slug}`);
+  }
 });
 
 test("packages mobile layout has no horizontal page overflow", async ({ page }) => {
