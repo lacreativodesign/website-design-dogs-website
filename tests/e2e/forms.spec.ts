@@ -137,6 +137,13 @@ test("quote package query renders and privacy link works", async ({ page }) => {
     await page.getByRole("button", { name: "Next" }).click();
   }
 
+  await expect(page.getByRole("heading", { name: "Final Details" })).toBeVisible();
+  await expect(
+    page.getByText("Please review the highlighted fields and try again."),
+  ).toHaveCount(0);
+  await expect(page.getByText("Share what is not working today.")).toHaveCount(0);
+  await expect(page.getByText("Confirm consent to be contacted.")).toHaveCount(0);
+
   await page
     .locator("#main-content")
     .getByRole("link", { name: /privacy policy/i })
