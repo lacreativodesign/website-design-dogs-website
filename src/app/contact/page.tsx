@@ -6,6 +6,7 @@ import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Container } from "@/components/ui/container";
 import { siteConfig } from "@/content/site";
+import { illustrationScenes } from "@/content/illustrations";
 import { pageMetadata } from "@/lib/seo";
 
 const contactMethods = [
@@ -44,9 +45,13 @@ export default function ContactPage() {
       />
       <section className="compact-title-section" aria-labelledby="contact-page-title">
         <ThemeScene
-          darkSrc="/brand/scenes/contact-hero-dark.webp"
-          lightSrc="/brand/scenes/contact-hero-light.webp"
-          alt="Website Design Dogs mascot ready to discuss a website project"
+          darkSrc={illustrationScenes.contact.desktop.webp}
+          darkAvifSrc={illustrationScenes.contact.desktop.avif}
+          tabletDarkSrc={illustrationScenes.contact.tablet.webp}
+          tabletDarkAvifSrc={illustrationScenes.contact.tablet.avif}
+          mobileDarkSrc={illustrationScenes.contact.mobile.webp}
+          mobileDarkAvifSrc={illustrationScenes.contact.mobile.avif}
+          alt="Border collie designer ready to discuss a website project at a moonlit studio desk"
           width={1600}
           height={1000}
           priority

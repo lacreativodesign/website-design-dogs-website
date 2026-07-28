@@ -2,15 +2,15 @@ import { expect, test } from "@playwright/test";
 
 test("approved scene artwork and corrected shared navigation render", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator(".home-hero__background")).toHaveAttribute(
+  await expect(page.locator(".home-hero__scene .theme-scene__image")).toHaveAttribute(
     "src",
-    /home-hero-dark/,
+    /home-desktop/,
   );
 
   await page.goto("/services");
   await expect(page.locator(".services-hero .theme-scene__image")).toHaveAttribute(
     "src",
-    /services-hero-dark/,
+    /services-desktop/,
   );
   await expect(page.locator(".theme-scene--placeholder")).toHaveCount(0);
 

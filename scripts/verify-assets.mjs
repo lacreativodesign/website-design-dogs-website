@@ -30,6 +30,15 @@ const requiredFiles = [
 ];
 const sceneNames = ["home", "services", "portfolio", "packages", "about", "contact", "faq", "privacy", "terms", "404"];
 for (const name of sceneNames) for (const theme of ["dark", "light"]) requiredFiles.push(`public/brand/scenes/${name}-hero-${theme}.webp`);
+const finalIllustrationSceneNames = ["home", "services", "portfolio", "about", "contact", "get-started", "404"];
+for (const name of finalIllustrationSceneNames) {
+  for (const breakpoint of ["desktop", "tablet", "mobile"]) {
+    for (const format of ["webp", "avif"]) {
+      requiredFiles.push(`public/brand/illustrations/final/${name}-${breakpoint}.${format}`);
+    }
+  }
+}
+for (const format of ["webp", "avif"]) requiredFiles.push(`public/brand/illustrations/final/mascot-designer.${format}`);
 const requiredDirs = ["public/portfolio/concepts", "public/campaigns/cleaning", "public/campaigns/landscaping", "public/campaigns/home-services", "public/campaigns/roofing"];
 const errors = [];
 function checkFile(relativePath) { const absolutePath = path.join(root, relativePath); if (!existsSync(absolutePath)) { errors.push(`Missing file: ${relativePath}`); return; } if (!statSync(absolutePath).isFile()) { errors.push(`Not a file: ${relativePath}`); return; } if (statSync(absolutePath).size === 0) errors.push(`Zero-byte file: ${relativePath}`); }
@@ -42,6 +51,7 @@ if (existsSync(manifestPath)) {
   const collect = (value) => { if (typeof value === "string" && value.startsWith("/")) manifestPaths.push(value); else if (Array.isArray(value)) value.forEach(collect); else if (value && typeof value === "object") Object.values(value).forEach(collect); };
   collect(manifest.productionAssets);
   collect(manifest.scenePairs);
+  collect(manifest.finalIllustrations);
   for (const manifestPathValue of manifestPaths) {
     const relative = `public${manifestPathValue}`.replace(/\/$/, "");
     const absolute = path.join(root, relative);

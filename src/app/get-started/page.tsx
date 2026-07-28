@@ -6,6 +6,7 @@ import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { industryBySlug } from "@/content/industries";
+import { illustrationScenes } from "@/content/illustrations";
 import { DEFAULT_SERVICE_SLUG, serviceBySlug } from "@/content/services";
 import { pageMetadata } from "@/lib/seo";
 
@@ -53,9 +54,13 @@ export default async function Page({ searchParams }: PageProps) {
         eyebrow="START YOUR PROJECT"
         title="Build your project brief."
         body="Five focused steps turn the essentials into a useful starting point—without pretending the scope is final before we review it."
-        darkSrc="/brand/scenes/contact-hero-dark.webp"
-        lightSrc="/brand/scenes/contact-hero-light.webp"
-        alt="Website Design Dogs quote request scene"
+        darkSrc={illustrationScenes.getStarted.desktop.webp}
+        darkAvifSrc={illustrationScenes.getStarted.desktop.avif}
+        tabletDarkSrc={illustrationScenes.getStarted.tablet.webp}
+        tabletDarkAvifSrc={illustrationScenes.getStarted.tablet.avif}
+        mobileDarkSrc={illustrationScenes.getStarted.mobile.webp}
+        mobileDarkAvifSrc={illustrationScenes.getStarted.mobile.avif}
+        alt="Border collie designer mapping a new website project at a studio planning board"
       />
       <Section alternate className="get-started-section">
         <Container>
