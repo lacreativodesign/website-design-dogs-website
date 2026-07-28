@@ -1,3 +1,125 @@
-import Link from "next/link"; import { Container } from "@/components/ui/container"; import { Section } from "@/components/ui/section"; import { BRAND_DISCLOSURE } from "@/lib/site-config";
-export type LegalSection={id:string;title:string;items:string[]};
-export function LegalPage({title,updated,sections}:{title:string;updated:string;sections:LegalSection[]}){return <Section><Container className="max-w-4xl"><p className="text-sm font-black uppercase tracking-[0.18em] text-[var(--color-primary-orange)]">Last updated {updated}</p><h1 className="mt-3 text-4xl font-black md:text-5xl">{title}</h1><p className="mt-5 text-lg leading-8 text-[var(--color-text-muted)]">{BRAND_DISCLOSURE} These general website terms are informational and may be controlled by a signed proposal, order form, statement of work, or written agreement when those terms differ.</p><nav aria-label="Page sections" className="mt-8 rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5"><h2 className="text-lg font-black">Contents</h2><ol className="mt-3 grid gap-2 sm:grid-cols-2">{sections.map((s)=><li key={s.id}><a className="font-bold underline underline-offset-4" href={`#${s.id}`}>{s.title}</a></li>)}</ol></nav><div className="mt-10 grid gap-8">{sections.map((s)=><section id={s.id} key={s.id} className="scroll-mt-24"><h2 className="text-2xl font-black">{s.title}</h2><div className="mt-3 grid gap-3 text-base leading-8 text-[var(--color-text-muted)]">{s.items.map((item)=><p key={item}>{item.includes("/contact")?<><span>{item.replace("/contact","")}</span><Link className="font-bold underline" href="/contact">/contact</Link>.</>:item}</p>)}</div></section>)}</div></Container></Section>}
+import Link from "next/link";
+import { ThemeScene } from "@/components/theme/theme-scene";
+import { Container } from "@/components/ui/container";
+import { BRAND_DISCLOSURE } from "@/lib/site-config";
+
+export type LegalSection = {
+  id: string;
+  title: string;
+  intro?: string;
+  items: string[];
+};
+
+export function LegalText({ children }: { children: string }) {
+  const marker = "/contact";
+  if (!children.includes(marker)) return children;
+
+  const [before, ...after] = children.split(marker);
+  return (
+    <>
+      {before}
+      <Link href="/contact">contact page</Link>
+      {after.join(marker)}
+    </>
+  );
+}
+
+type LegalPageProps = {
+  title: string;
+  eyebrow?: string;
+  updated: string;
+  intro: string;
+  sections: LegalSection[];
+  darkSrc: string;
+};
+
+export function LegalPage({
+  title,
+  eyebrow = title,
+  updated,
+  intro,
+  sections,
+  darkSrc,
+}: LegalPageProps) {
+  return (
+    <>
+      <section
+        className="visual-page-hero visual-page-hero--legal"
+        aria-labelledby="legal-page-title"
+      >
+        <ThemeScene
+          darkSrc={darkSrc}
+          lightSrc={darkSrc}
+          alt=""
+          width={1600}
+          height={1000}
+          priority
+          sizes="100vw"
+          className="visual-page-hero__scene"
+        />
+        <Container className="visual-page-hero__content">
+          <nav className="visual-breadcrumb" aria-label="Breadcrumb">
+            <Link href="/">Home</Link>
+            <span aria-hidden="true">›</span>
+            <span>{eyebrow}</span>
+          </nav>
+          <p className="home-eyebrow">{eyebrow}</p>
+          <h1 id="legal-page-title">{title}</h1>
+          <p>{intro}</p>
+        </Container>
+      </section>
+
+      <section className="legal-shell-section" aria-labelledby="legal-overview-title">
+        <Container>
+          <div className="legal-intro-copy">
+            <p className="home-eyebrow">Last updated {updated}</p>
+            <h2 id="legal-overview-title">Policy overview</h2>
+            <p>
+              {BRAND_DISCLOSURE} These general website terms may be controlled by a
+              signed proposal, order form, statement of work, or written agreement
+              where those terms differ.
+            </p>
+          </div>
+
+          <nav className="legal-contents" aria-label="Page sections">
+            <h2>On this page</h2>
+            <ol>
+              {sections.map((section, index) => (
+                <li key={section.id}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <a href={`#${section.id}`}>{section.title}</a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+
+          <div className="legal-panel">
+            {sections.map((section, index) => (
+              <section
+                id={section.id}
+                key={section.id}
+                className="legal-primary-group scroll-mt-24"
+              >
+                <span className="legal-primary-group__number" aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <h2>{section.title}</h2>
+                {section.intro ? <p>{section.intro}</p> : null}
+                <details>
+                  <summary>Read details</summary>
+                  <div>
+                    {section.items.map((item) => (
+                      <p key={item}>
+                        <LegalText>{item}</LegalText>
+                      </p>
+                    ))}
+                  </div>
+                </details>
+              </section>
+            ))}
+          </div>
+        </Container>
+      </section>
+    </>
+  );
+}

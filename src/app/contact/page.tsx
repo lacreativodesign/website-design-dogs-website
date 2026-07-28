@@ -29,15 +29,32 @@ export default function ContactPage() {
   return (
     <>
       <section className="compact-title-section" aria-labelledby="contact-page-title">
-        <Container>
-          <nav className="visual-breadcrumb" aria-label="Breadcrumb">
-            <Link href="/">Home</Link>
-            <span aria-hidden="true">›</span>
-            <span>Contact Us</span>
-          </nav>
-          <p className="home-eyebrow">Contact Us</p>
-          <h1 id="contact-page-title">Let’s start a conversation.</h1>
-          <p>Tell us what you need, and we’ll review your project requirements and recommend the appropriate next step.</p>
+        <ThemeScene
+          darkSrc="/brand/scenes/contact-hero-dark.webp"
+          lightSrc="/brand/scenes/contact-hero-light.webp"
+          alt="Website Design Dogs mascot ready to discuss a website project"
+          width={1600}
+          height={1000}
+          priority
+          sizes="100vw"
+          className="contact-hero__scene"
+        />
+        <Container className="contact-hero__content">
+          <div>
+            <nav className="visual-breadcrumb" aria-label="Breadcrumb">
+              <Link href="/">Home</Link>
+              <span aria-hidden="true">›</span>
+              <span>Contact Us</span>
+            </nav>
+            <p className="home-eyebrow">Contact Us</p>
+            <h1 id="contact-page-title">Let’s start a useful conversation.</h1>
+            <p>Share the context. We’ll review the requirements and recommend a practical next step.</p>
+            <ul className="contact-reassurance" aria-label="What to expect">
+              <li>Clear follow-up</li>
+              <li>No pressure</li>
+              <li>Scope before work</li>
+            </ul>
+          </div>
         </Container>
       </section>
 
@@ -80,6 +97,7 @@ export default function ContactPage() {
 
             <div className="contact-form-card">
               <h2 id="contact-form-title">Send Enquiry</h2>
+              <p>Fields marked with an asterisk are required. Add only what you know—we can clarify the rest.</p>
               <ContactForm />
             </div>
           </div>

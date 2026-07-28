@@ -10,6 +10,10 @@ import { MobileNavigation } from "./mobile-navigation";
 export function SiteHeader() {
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const isActive = (href: string) =>
+    pathname === href ||
+    (href === "/services" && pathname.startsWith("/services/")) ||
+    (href === "/packages" && pathname.startsWith("/packages/"));
 
   return (
     <header className={isHome ? "site-header site-header--home" : "site-header"}>
@@ -17,7 +21,12 @@ export function SiteHeader() {
         <BrandLogo priority />
         <nav className="site-header__nav" aria-label="Primary navigation">
           {siteConfig.primaryNav.map((item) => (
-            <Link key={item.href} href={item.href} className="nav-link" aria-current={pathname === item.href || (item.href === "/services" && pathname.startsWith("/services/")) ? "page" : undefined}>
+            <Link
+              key={item.href}
+              href={item.href}
+              className="nav-link"
+              aria-current={isActive(item.href) ? "page" : undefined}
+            >
               {item.label}
             </Link>
           ))}

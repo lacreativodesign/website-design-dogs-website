@@ -31,15 +31,14 @@ export default function ServicesPage() {
         />
         <Container className="services-hero__content">
           <div className="services-hero__copy">
-            <p className="home-eyebrow">Services</p>
-            <h1 id="services-page-title">Services</h1>
             <nav className="visual-breadcrumb" aria-label="Breadcrumb">
-            <Link href="/">Home</Link>
-            <span aria-hidden="true">›</span>
+              <Link href="/">Home</Link>
+              <span aria-hidden="true">›</span>
               <span aria-current="page">Services</span>
             </nav>
-            <h2>Complete website solutions under one roof.</h2>
-            <p>We offer end-to-end website services designed to support your business online.</p>
+            <p className="home-eyebrow">Services</p>
+            <h1 id="services-page-title">Website expertise under one roof.</h1>
+            <p>Choose a focused service or combine the right disciplines into one clearly scoped project.</p>
           </div>
         </Container>
       </section>
@@ -48,9 +47,12 @@ export default function ServicesPage() {
         <Container>
           <h2 id="services-directory-title" className="sr-only">Our services</h2>
           <div className="services-directory-grid">
-            {services.map((service) => (
+            {services.map((service, index) => (
               <article key={service.title} className="services-directory-card">
                 <Image src={service.icon} alt="" width={32} height={32} className="services-directory-card__icon" />
+                <span className="services-directory-card__number" aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
                 <h3>{service.title}</h3>
                 <p>{service.description}</p>
                 <Link href={`/services/${service.slug}`} className="services-directory-card__link" aria-label={`Explore ${service.title}`}>Explore service <span aria-hidden="true">→</span></Link>

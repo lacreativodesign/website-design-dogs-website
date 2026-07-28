@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ThemeScene } from "@/components/theme/theme-scene";
-import { Container } from "@/components/ui/container";
+import { LegalPage, type LegalSection } from "@/components/pages/legal-page";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
@@ -10,10 +8,11 @@ export const metadata: Metadata = pageMetadata({
   path: "/privacy-policy",
 });
 
-const updated = "July 13, 2026";
+const updated = "July 28, 2026";
 
-const policyGroups = [
+const policyGroups: LegalSection[] = [
   {
+    id: "information",
     title: "Information We Collect",
     intro: "We collect information visitors submit directly and limited technical information needed to operate forms and understand enquiries.",
     items: [
@@ -23,6 +22,7 @@ const policyGroups = [
     ],
   },
   {
+    id: "use",
     title: "How We Use Your Information",
     intro: "Submitted information is used to review and respond to enquiries, prepare recommendations, and operate the website responsibly.",
     items: [
@@ -32,6 +32,7 @@ const policyGroups = [
     ],
   },
   {
+    id: "security",
     title: "Data Protection and Security",
     intro: "Security controls help protect submitted information and reduce spam, abuse, and unauthorized use of forms.",
     items: [
@@ -41,6 +42,7 @@ const policyGroups = [
     ],
   },
   {
+    id: "cookies",
     title: "Cookies and Similar Technologies",
     intro: "Cookies, session storage, consent preferences, and optional tags may be used depending on visitor choices and configuration.",
     items: [
@@ -50,6 +52,7 @@ const policyGroups = [
     ],
   },
   {
+    id: "choices",
     title: "Your Choices",
     intro: "Visitors can control optional tracking choices and contact Website Design Dogs about submitted information.",
     items: [
@@ -62,67 +65,13 @@ const policyGroups = [
 
 export default function PrivacyPolicyPage() {
   return (
-    <>
-      <section className="visual-page-hero visual-page-hero--legal" aria-labelledby="privacy-page-title">
-        <ThemeScene
-          darkSrc="/brand/scenes/privacy-hero-dark.webp"
-          lightSrc="/brand/scenes/privacy-hero-light.webp"
-          alt="Website Design Dogs privacy scenic artwork"
-          width={1600}
-          height={1000}
-          priority
-          sizes="100vw"
-          className="visual-page-hero__scene"
-        />
-        <Container className="visual-page-hero__content">
-          <nav className="visual-breadcrumb" aria-label="Breadcrumb">
-            <Link href="/">Home</Link>
-            <span aria-hidden="true">›</span>
-            <span>Privacy Policy</span>
-          </nav>
-          <p className="home-eyebrow">Privacy Policy</p>
-          <h1 id="privacy-page-title">Your privacy matters.</h1>
-          <p>Website Design Dogs respects your privacy and is committed to protecting submitted enquiry information.</p>
-        </Container>
-      </section>
-
-      <section className="legal-shell-section" aria-labelledby="privacy-panel-title">
-        <Container>
-          <div className="legal-intro-copy">
-            <p className="home-eyebrow">Last updated {updated}</p>
-            <h2 id="privacy-panel-title">Privacy Policy</h2>
-            <p>
-              This policy summarizes how Website Design Dogs handles website enquiry information while preserving the
-              factual disclosures needed for secure submissions, consent, attribution, Turnstile, and Bizosto routing.
-            </p>
-          </div>
-          <div className="legal-panel">
-            {policyGroups.map((group) => (
-              <section key={group.title} className="legal-primary-group">
-                <h2>{group.title}</h2>
-                <p>{group.intro}</p>
-                <details>
-                  <summary>Read details</summary>
-                  <div>
-                    {group.items.map((item) => (
-                      <p key={item}>
-                        {item.includes("/contact") ? (
-                          <>
-                            {item.replace("/contact", "")}
-                            <Link href="/contact">/contact</Link>.
-                          </>
-                        ) : (
-                          item
-                        )}
-                      </p>
-                    ))}
-                  </div>
-                </details>
-              </section>
-            ))}
-          </div>
-        </Container>
-      </section>
-    </>
+    <LegalPage
+      title="Your privacy matters."
+      eyebrow="Privacy Policy"
+      updated={updated}
+      intro="How Website Design Dogs collects, uses, protects, and routes website enquiry information."
+      sections={policyGroups}
+      darkSrc="/brand/scenes/privacy-hero-dark.webp"
+    />
   );
 }

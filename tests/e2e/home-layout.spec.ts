@@ -12,6 +12,7 @@ test("Home route provides the approved conversion sequence", async ({ page }) =>
   ).toBeVisible();
   await expect(page.locator(".home-trust-strip article")).toHaveCount(4);
   await expect(page.locator(".home-process__grid article")).toHaveCount(5);
+  await expect(page.locator(".home-industries-grid .home-industry-card")).toHaveCount(8);
   await expect(page.locator(".home-portfolio-grid .portfolio-thumbnail")).toHaveCount(6);
 
   const starter = page.locator('[data-package="starter"]');

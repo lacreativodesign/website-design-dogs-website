@@ -27,7 +27,7 @@ export const homeLeadBenefits = [
 ] as const;
 
 export const homeHeroAsset = "/brand/scenes/home-hero-dark.png";
-export const homeLeadAsset = "/brand/scenes/home-hero-dark.png";
+export const homeLeadAsset = "/brand/mascot/wdd-mascot-transparent.png";
 
 export const homepageFaqs = [
   ["How much does a Website Design Dogs website cost?", "Our main website packages begin at $499. Final pricing depends on page count, content needs, integrations, e-commerce requirements, and project scope."],

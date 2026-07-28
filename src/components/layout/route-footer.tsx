@@ -10,5 +10,5 @@ export function RouteFooter() {
     return null;
   }
 
-  return <SiteFooter compact={pathname === "/services" || pathname.startsWith("/services/")} />;
+  return <SiteFooter />;
 }
