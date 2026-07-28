@@ -93,7 +93,9 @@ test("structured data parses, exposes verified contacts, and avoids fake local p
 
 test("service and package schema matches visible content", async ({ page }) => {
   await page.goto("/services/custom-website-design");
-  await expect(page.getByRole("heading", { name: "Custom Website Design" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Custom Website Design", exact: true }),
+  ).toBeVisible();
   const serviceSchema = (
     await page.locator('script[type="application/ld+json"]').allTextContents()
   ).join("");
