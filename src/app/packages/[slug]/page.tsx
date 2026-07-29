@@ -10,7 +10,7 @@ import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { ArrowRightIcon } from "@/components/ui/icon";
+import { ArrowRightIcon, BrandIcon, type BrandIconName } from "@/components/ui/icon";
 import {
   packageFaqs,
   packageProcess,
@@ -28,6 +28,8 @@ const packageFaqItems = packageFaqs.map(([question, answer]) => ({
   question,
   answer,
 }));
+
+const packageDetailStepIcons: BrandIconName[] = ["search", "clipboard-check", "code-2", "rocket"];
 
 export function generateStaticParams() {
   return websitePackages.map(({ slug }) => ({ slug }));
@@ -162,7 +164,7 @@ export default async function PackageDetailPage({ params }: Props) {
           <ol className="package-detail-process">
             {packageProcess.map(([title, body], index) => (
               <li key={title}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
+                <span className="inner-card-icon"><BrandIcon name={packageDetailStepIcons[index] ?? "clipboard-check"} /></span>
                 <h3>{title}</h3>
                 <p>{body}</p>
               </li>
