@@ -27,6 +27,10 @@ export const illustrationScenes = {
   about: scene("about"),
   contact: scene("contact"),
   faq: scene("faq"),
+  privacy: scene("privacy"),
+  terms: scene("terms"),
+  refund: scene("refund"),
+  cookie: scene("cookie"),
   getStarted: scene("get-started"),
   notFound: scene("404"),
 } as const;
