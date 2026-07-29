@@ -3,6 +3,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Container } from "@/components/ui/container";
+import { BrandIcon } from "@/components/ui/icon";
 import { BRAND_DISCLOSURE } from "@/lib/site-config";
 
 export type LegalSection = {
@@ -109,14 +110,14 @@ export function LegalPage({
           </nav>
 
           <div className="legal-panel">
-            {sections.map((section, index) => (
+            {sections.map((section) => (
               <section
                 id={section.id}
                 key={section.id}
                 className="legal-primary-group scroll-mt-24"
               >
-                <span className="legal-primary-group__number" aria-hidden="true">
-                  {String(index + 1).padStart(2, "0")}
+                <span className="legal-primary-group__number inner-card-icon" aria-hidden="true">
+                  <BrandIcon name="shield-check" />
                 </span>
                 <h2>{section.title}</h2>
                 {section.intro ? <p>{section.intro}</p> : null}

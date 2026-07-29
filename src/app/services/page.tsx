@@ -88,11 +88,10 @@ export default function ServicesPage() {
         <Container>
           <h2 id="services-directory-title" className="sr-only">Our services</h2>
           <div className="services-directory-grid">
-            {services.map((service, index) => (
+            {services.map((service) => (
               <article key={service.title} className="services-directory-card">
-                <Image src={service.icon} alt="" width={32} height={32} className="services-directory-card__icon" />
-                <span className="services-directory-card__number" aria-hidden="true">
-                  {String(index + 1).padStart(2, "0")}
+                <span className="inner-card-icon" aria-hidden="true">
+                  <Image src={service.icon} alt="" width={32} height={32} className="services-directory-card__icon" />
                 </span>
                 <h3>{service.title}</h3>
                 <p>{service.description}</p>

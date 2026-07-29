@@ -7,8 +7,11 @@ import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Container } from "@/components/ui/container";
+import { BrandIcon, type BrandIconName } from "@/components/ui/icon";
 import { faqCategories, featuredFaqs } from "@/content/faqs";
 import { pageMetadata } from "@/lib/seo";
+
+const faqCategoryIcons: BrandIconName[] = ["clipboard-check", "pen-tool", "code-2", "headset"];
 
 export const metadata: Metadata = pageMetadata({
   title: "Website Design FAQs",
@@ -59,7 +62,7 @@ export default function FaqPage() {
           <div className="faq-category-grid" aria-label="Question categories">
             {faqCategories.map((category, index) => (
               <article key={category.title}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
+                <span className="inner-card-icon"><BrandIcon name={faqCategoryIcons[index] ?? "clipboard-check"} /></span>
                 <h2>{category.title}</h2>
                 <p>{category.items.length} practical answers</p>
               </article>
