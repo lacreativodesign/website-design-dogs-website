@@ -9,14 +9,13 @@ import { MobileNavigation } from "./mobile-navigation";
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const isHome = pathname === "/";
   const isActive = (href: string) =>
     pathname === href ||
     (href === "/services" && pathname.startsWith("/services/")) ||
     (href === "/packages" && pathname.startsWith("/packages/"));
 
   return (
-    <header className={isHome ? "site-header site-header--home" : "site-header"}>
+    <header className="site-header">
       <div className="site-header__inner">
         <BrandLogo priority />
         <nav className="site-header__nav" aria-label="Primary navigation">

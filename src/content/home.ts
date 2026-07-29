@@ -18,7 +18,13 @@ export const homeProcess = [
   ["05", "Grow", "Ongoing care to keep your website performing at its best."],
 ] as const;
 
-export const homeValueRail = ["Custom Design", "Fast Load Times", "SEO Ready", "Secure & Reliable", "Dedicated Support"] as const;
+export const homeValueRail = [
+  ["Custom Design", "A visual direction shaped around your business."],
+  ["Fast Load Times", "Lean, responsive pages prepared for real devices."],
+  ["SEO Ready", "A clear technical and on-page search foundation."],
+  ["Secure & Reliable", "Practical launch checks and dependable implementation."],
+  ["Dedicated Support", "A clear route for help before and after launch."],
+] as const;
 
 export const homeLeadBenefits = [
   "Tell us about your goals and we’ll recommend the best way forward.",

@@ -17,8 +17,8 @@ const cta = "#campaign-form";
 
 export function CampaignHeader() {
   return (
-    <header className="sticky top-0 z-40 border-b border-[var(--color-border)] bg-[var(--color-background)]/90 backdrop-blur">
-      <Container className="flex h-20 items-center justify-between gap-4">
+    <header className="campaign-header">
+      <Container className="campaign-header__inner">
         <BrandLogo priority />
         <div className="flex items-center gap-3">
           <Link

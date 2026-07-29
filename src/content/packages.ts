@@ -65,7 +65,13 @@ export const websitePackageBySlug = new Map(
 );
 
 export const packageTrustItems = ["One-Time Website Build", "Clear Project Scope", "Mobile-Responsive", "Optional Ongoing Care"] as const;
-export const packageValueItems = ["Custom Design", "Fast Load Times", "SEO Ready", "Secure & Reliable", "Dedicated Support"] as const;
+export const packageValueItems = [
+  ["Custom Design", "Designed around your brand and customer journey."],
+  ["Fast Load Times", "Built with responsive performance in mind."],
+  ["SEO Ready", "Structured with practical search foundations."],
+  ["Secure & Reliable", "Tested carefully before launch."],
+  ["Dedicated Support", "Clear help when your website needs attention."],
+] as const;
 
 export const comparisonRows = [
   ["Pages", "Up to 5", "Up to 10", "Up to 20"],

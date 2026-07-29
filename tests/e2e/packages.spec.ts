@@ -5,11 +5,11 @@ test("packages show approved pricing, distinct choices, and active navigation", 
   await page.goto("/packages");
   await expect(page.getByRole("link", { name: "Packages" }).first()).toHaveAttribute("aria-current", "page");
 
-  for (const [slug, label, price, href] of [["starter", "View Starter", "$499", "/packages/starter"], ["business", "View Business", "$899", "/packages/business"], ["growth", "View Growth", "$1,499", "/packages/growth"]] as const) {
+  for (const [slug, price] of [["starter", "$499"], ["business", "$899"], ["growth", "$1,499"]] as const) {
     const card = page.locator(`[data-package="${slug}"]`);
     await expect(card).toContainText(price);
-    await expect(card.getByRole("link", { name: label })).toHaveAttribute("href", href);
-    await expect(card.getByRole("link", { name: new RegExp(`Start with ${slug}`, "i") })).toHaveAttribute("href", `/get-started?package=${slug}`);
+    await expect(card.getByRole("link", { name: "Order Now" })).toHaveAttribute("href", `/get-started?package=${slug}`);
+    await expect(card.getByRole("link", { name: "View Details" })).toHaveAttribute("href", `/packages/${slug}`);
   }
 });
 
@@ -47,5 +47,10 @@ test("packages mobile layout has no horizontal page overflow", async ({ page }) 
   await page.setViewportSize({ width: 320, height: 720 });
   await page.goto("/packages");
   await expectNoOverflow(page);
-  await expect(page.locator("[data-package='starter'] .btn")).toHaveCSS("min-height", "44px");
+
+  const packageButtons = page.locator("[data-package='starter'] .btn");
+  await expect(packageButtons).toHaveCount(2);
+  for (const button of await packageButtons.all()) {
+    await expect(button).toHaveCSS("min-height", "44px");
+  }
 });

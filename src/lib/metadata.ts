@@ -57,6 +57,7 @@ export const rootMetadata: Metadata = {
   other,
   icons: {
     icon: [
+      { url: "/brand/favicons/wdd-mark.svg", type: "image/svg+xml" },
       { url: "/brand/favicons/favicon.ico" },
       {
         url: "/brand/favicons/favicon-16x16.png",
