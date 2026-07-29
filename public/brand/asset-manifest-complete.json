@@ -1,6 +1,6 @@
 {
   "package": "Website Design Dogs Complete Web Visual Package",
-  "version": "3.0",
+  "version": "4.0",
   "repo": "lacreativodesign/website-design-dogs-website",
   "productionAssets": {
     "logos": [
@@ -106,6 +106,48 @@
           "webp": "/brand/illustrations/final/services-mobile.webp"
         }
       },
+      "packages": {
+        "desktop": {
+          "avif": "/brand/illustrations/final/packages-desktop.avif",
+          "webp": "/brand/illustrations/final/packages-desktop.webp"
+        },
+        "tablet": {
+          "avif": "/brand/illustrations/final/packages-tablet.avif",
+          "webp": "/brand/illustrations/final/packages-tablet.webp"
+        },
+        "mobile": {
+          "avif": "/brand/illustrations/final/packages-mobile.avif",
+          "webp": "/brand/illustrations/final/packages-mobile.webp"
+        }
+      },
+      "packageDetail": {
+        "desktop": {
+          "avif": "/brand/illustrations/final/package-detail-desktop.avif",
+          "webp": "/brand/illustrations/final/package-detail-desktop.webp"
+        },
+        "tablet": {
+          "avif": "/brand/illustrations/final/package-detail-tablet.avif",
+          "webp": "/brand/illustrations/final/package-detail-tablet.webp"
+        },
+        "mobile": {
+          "avif": "/brand/illustrations/final/package-detail-mobile.avif",
+          "webp": "/brand/illustrations/final/package-detail-mobile.webp"
+        }
+      },
+      "serviceDetail": {
+        "desktop": {
+          "avif": "/brand/illustrations/final/service-detail-desktop.avif",
+          "webp": "/brand/illustrations/final/service-detail-desktop.webp"
+        },
+        "tablet": {
+          "avif": "/brand/illustrations/final/service-detail-tablet.avif",
+          "webp": "/brand/illustrations/final/service-detail-tablet.webp"
+        },
+        "mobile": {
+          "avif": "/brand/illustrations/final/service-detail-mobile.avif",
+          "webp": "/brand/illustrations/final/service-detail-mobile.webp"
+        }
+      },
       "portfolio": {
         "desktop": {
           "avif": "/brand/illustrations/final/portfolio-desktop.avif",
@@ -146,6 +188,20 @@
         "mobile": {
           "avif": "/brand/illustrations/final/contact-mobile.avif",
           "webp": "/brand/illustrations/final/contact-mobile.webp"
+        }
+      },
+      "faq": {
+        "desktop": {
+          "avif": "/brand/illustrations/final/faq-desktop.avif",
+          "webp": "/brand/illustrations/final/faq-desktop.webp"
+        },
+        "tablet": {
+          "avif": "/brand/illustrations/final/faq-tablet.avif",
+          "webp": "/brand/illustrations/final/faq-tablet.webp"
+        },
+        "mobile": {
+          "avif": "/brand/illustrations/final/faq-mobile.avif",
+          "webp": "/brand/illustrations/final/faq-mobile.webp"
         }
       },
       "getStarted": {

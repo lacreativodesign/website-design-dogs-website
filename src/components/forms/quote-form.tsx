@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { mascotDesigner } from "@/content/illustrations";
 import { leadEvent } from "./analytics-events";
 import { getAttribution } from "./attribution";
 import { Field, inputClass } from "./form-field";
@@ -942,13 +943,21 @@ export function QuoteForm({
 
       <aside className="quote-summary" aria-label="Your project summary">
         <div className="quote-summary__guide">
-          <Image
-            src="/brand/mascot/wdd-mascot-transparent.png"
-            width={720}
-            height={1024}
-            alt="Website Design Dogs project guide"
-          />
-          <p>{guideReactions[step]}</p>
+          <div className="quote-summary__guide-art">
+            <picture>
+              <source type="image/avif" srcSet={mascotDesigner.avif} />
+              <Image
+                src={mascotDesigner.webp}
+                width={900}
+                height={900}
+                alt="Website Design Dogs project guide"
+              />
+            </picture>
+          </div>
+          <div className="quote-summary__guide-copy">
+            <span>Project guide</span>
+            <p>{guideReactions[step]}</p>
+          </div>
         </div>
         <div className="quote-summary__card">
           <p className="home-eyebrow">Your brief so far</p>

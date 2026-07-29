@@ -6,6 +6,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Button } from "@/components/ui/button";
+import { HeroBreadcrumb } from "@/components/ui/breadcrumb";
 import { Container } from "@/components/ui/container";
 import { ArrowRightIcon } from "@/components/ui/icon";
 import { services } from "@/content/services";
@@ -72,11 +73,7 @@ export default function ServicesPage() {
         />
         <Container className="services-hero__content">
           <div className="services-hero__copy">
-            <nav className="visual-breadcrumb" aria-label="Breadcrumb">
-              <Link href="/">Home</Link>
-              <span aria-hidden="true">›</span>
-              <span aria-current="page">Services</span>
-            </nav>
+            <HeroBreadcrumb items={[{ label: "Home", href: "/" }, { label: "Services" }]} />
             <p className="home-eyebrow">Services</p>
             <h1 id="services-page-title">Website expertise under one roof.</h1>
             <p>Choose a focused service or combine the right disciplines into one clearly scoped project.</p>

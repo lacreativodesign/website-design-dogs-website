@@ -21,8 +21,12 @@ export const illustrationScenes = {
   home: scene("home"),
   services: scene("services"),
   portfolio: scene("portfolio"),
+  packages: scene("packages"),
+  packageDetail: scene("package-detail"),
+  serviceDetail: scene("service-detail"),
   about: scene("about"),
   contact: scene("contact"),
+  faq: scene("faq"),
   getStarted: scene("get-started"),
   notFound: scene("404"),
 } as const;

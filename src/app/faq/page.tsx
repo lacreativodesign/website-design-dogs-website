@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { FullFaqAccordion } from "@/components/faq/faq-accordion";
 import { PageCta } from "@/components/pages/page-cta";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { FaqJsonLd } from "@/components/seo/faq-json-ld";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
+import { HeroBreadcrumb } from "@/components/ui/breadcrumb";
 import { Container } from "@/components/ui/container";
 import { BrandIcon, type BrandIconName } from "@/components/ui/icon";
 import { faqCategories, featuredFaqs } from "@/content/faqs";
+import { illustrationScenes } from "@/content/illustrations";
 import { pageMetadata } from "@/lib/seo";
 
 const faqCategoryIcons: BrandIconName[] = ["clipboard-check", "pen-tool", "code-2", "headset"];
@@ -36,9 +37,13 @@ export default function FaqPage() {
       <FaqJsonLd items={featuredFaqs} />
       <section className="visual-page-hero visual-page-hero--faq" aria-labelledby="faq-page-title">
         <ThemeScene
-          darkSrc="/brand/scenes/faq-hero-dark.webp"
-          lightSrc="/brand/scenes/faq-hero-light.webp"
-          alt="Website Design Dogs FAQ mascot scene"
+          darkSrc={illustrationScenes.faq.desktop.webp}
+          darkAvifSrc={illustrationScenes.faq.desktop.avif}
+          tabletDarkSrc={illustrationScenes.faq.tablet.webp}
+          tabletDarkAvifSrc={illustrationScenes.faq.tablet.avif}
+          mobileDarkSrc={illustrationScenes.faq.mobile.webp}
+          mobileDarkAvifSrc={illustrationScenes.faq.mobile.avif}
+          alt="Border collie website consultant organizing clear answers to common project questions"
           width={1600}
           height={1000}
           priority
@@ -46,11 +51,7 @@ export default function FaqPage() {
           className="visual-page-hero__scene"
         />
         <Container className="visual-page-hero__content">
-          <nav className="visual-breadcrumb" aria-label="Breadcrumb">
-            <Link href="/">Home</Link>
-            <span aria-hidden="true">›</span>
-            <span>FAQ</span>
-          </nav>
+          <HeroBreadcrumb items={[{ label: "Home", href: "/" }, { label: "FAQ" }]} />
           <p className="home-eyebrow">FAQ</p>
           <h1 id="faq-page-title">Frequently Asked Questions</h1>
           <p>Find answers to common questions about our services, process, scope, and support.</p>
