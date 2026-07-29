@@ -34,7 +34,7 @@ const requiredFiles = [
 ];
 const sceneNames = ["home", "services", "portfolio", "packages", "about", "contact", "faq", "privacy", "terms", "404"];
 for (const name of sceneNames) for (const theme of ["dark", "light"]) requiredFiles.push(`public/brand/scenes/${name}-hero-${theme}.webp`);
-const finalIllustrationSceneNames = ["home", "services", "portfolio", "packages", "package-detail", "service-detail", "about", "contact", "faq", "get-started", "404"];
+const finalIllustrationSceneNames = ["home", "services", "portfolio", "packages", "package-detail", "service-detail", "about", "contact", "faq", "privacy", "terms", "refund", "cookie", "get-started", "404"];
 for (const name of finalIllustrationSceneNames) {
   for (const breakpoint of ["desktop", "tablet", "mobile"]) {
     for (const format of ["webp", "avif"]) {

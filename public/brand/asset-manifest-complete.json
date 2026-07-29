@@ -1,6 +1,6 @@
 {
   "package": "Website Design Dogs Complete Web Visual Package",
-  "version": "4.0",
+  "version": "5.0",
   "repo": "lacreativodesign/website-design-dogs-website",
   "productionAssets": {
     "logos": [
@@ -202,6 +202,62 @@
         "mobile": {
           "avif": "/brand/illustrations/final/faq-mobile.avif",
           "webp": "/brand/illustrations/final/faq-mobile.webp"
+        }
+      },
+      "privacy": {
+        "desktop": {
+          "avif": "/brand/illustrations/final/privacy-desktop.avif",
+          "webp": "/brand/illustrations/final/privacy-desktop.webp"
+        },
+        "tablet": {
+          "avif": "/brand/illustrations/final/privacy-tablet.avif",
+          "webp": "/brand/illustrations/final/privacy-tablet.webp"
+        },
+        "mobile": {
+          "avif": "/brand/illustrations/final/privacy-mobile.avif",
+          "webp": "/brand/illustrations/final/privacy-mobile.webp"
+        }
+      },
+      "terms": {
+        "desktop": {
+          "avif": "/brand/illustrations/final/terms-desktop.avif",
+          "webp": "/brand/illustrations/final/terms-desktop.webp"
+        },
+        "tablet": {
+          "avif": "/brand/illustrations/final/terms-tablet.avif",
+          "webp": "/brand/illustrations/final/terms-tablet.webp"
+        },
+        "mobile": {
+          "avif": "/brand/illustrations/final/terms-mobile.avif",
+          "webp": "/brand/illustrations/final/terms-mobile.webp"
+        }
+      },
+      "refund": {
+        "desktop": {
+          "avif": "/brand/illustrations/final/refund-desktop.avif",
+          "webp": "/brand/illustrations/final/refund-desktop.webp"
+        },
+        "tablet": {
+          "avif": "/brand/illustrations/final/refund-tablet.avif",
+          "webp": "/brand/illustrations/final/refund-tablet.webp"
+        },
+        "mobile": {
+          "avif": "/brand/illustrations/final/refund-mobile.avif",
+          "webp": "/brand/illustrations/final/refund-mobile.webp"
+        }
+      },
+      "cookie": {
+        "desktop": {
+          "avif": "/brand/illustrations/final/cookie-desktop.avif",
+          "webp": "/brand/illustrations/final/cookie-desktop.webp"
+        },
+        "tablet": {
+          "avif": "/brand/illustrations/final/cookie-tablet.avif",
+          "webp": "/brand/illustrations/final/cookie-tablet.webp"
+        },
+        "mobile": {
+          "avif": "/brand/illustrations/final/cookie-mobile.avif",
+          "webp": "/brand/illustrations/final/cookie-mobile.webp"
         }
       },
       "getStarted": {

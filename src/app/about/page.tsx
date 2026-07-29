@@ -57,10 +57,12 @@ export default function AboutPage() {
           className="visual-page-hero__scene"
         />
         <Container className="visual-page-hero__content">
-          <HeroBreadcrumb items={[{ label: "Home", href: "/" }, { label: "About Us" }]} />
-          <p className="home-eyebrow">About Us</p>
-          <h1 id="about-page-title">A dependable digital partner for your next website.</h1>
-          <p>Thoughtful website strategy, design, and development—organized around a clear scope.</p>
+          <div className="visual-page-hero__copy">
+            <HeroBreadcrumb items={[{ label: "Home", href: "/" }, { label: "About Us" }]} />
+            <p className="home-eyebrow">About Us</p>
+            <h1 id="about-page-title">A dependable digital partner for your next website.</h1>
+            <p>Thoughtful website strategy, design, and development—organized around a clear scope.</p>
+          </div>
         </Container>
       </section>
 

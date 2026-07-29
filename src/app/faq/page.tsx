@@ -51,10 +51,12 @@ export default function FaqPage() {
           className="visual-page-hero__scene"
         />
         <Container className="visual-page-hero__content">
-          <HeroBreadcrumb items={[{ label: "Home", href: "/" }, { label: "FAQ" }]} />
-          <p className="home-eyebrow">FAQ</p>
-          <h1 id="faq-page-title">Frequently Asked Questions</h1>
-          <p>Find answers to common questions about our services, process, scope, and support.</p>
+          <div className="visual-page-hero__copy">
+            <HeroBreadcrumb items={[{ label: "Home", href: "/" }, { label: "FAQ" }]} />
+            <p className="home-eyebrow">FAQ</p>
+            <h1 id="faq-page-title">Frequently Asked Questions</h1>
+            <p>Find answers to common questions about our services, process, scope, and support.</p>
+          </div>
         </Container>
       </section>
 
