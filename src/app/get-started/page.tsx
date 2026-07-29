@@ -51,6 +51,7 @@ export default async function Page({ searchParams }: PageProps) {
         path="/get-started"
       />
       <PageHero
+        breadcrumb={[{ label: "Home", href: "/" }, { label: "Get Started" }]}
         eyebrow="START YOUR PROJECT"
         title="Build your project brief."
         body="Five focused steps turn the essentials into a useful starting point—without pretending the scope is final before we review it."

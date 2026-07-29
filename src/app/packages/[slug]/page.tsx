@@ -9,6 +9,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Button } from "@/components/ui/button";
+import { HeroBreadcrumb } from "@/components/ui/breadcrumb";
 import { Container } from "@/components/ui/container";
 import { ArrowRightIcon, BrandIcon, type BrandIconName } from "@/components/ui/icon";
 import {
@@ -17,6 +18,7 @@ import {
   websitePackageBySlug,
   websitePackages,
 } from "@/content/packages";
+import { illustrationScenes } from "@/content/illustrations";
 import { pageMetadata } from "@/lib/seo";
 import { absoluteUrl, getSiteUrl } from "@/lib/site-config";
 
@@ -96,9 +98,13 @@ export default async function PackageDetailPage({ params }: Props) {
 
       <section className="package-detail-hero" aria-labelledby="package-detail-title">
         <ThemeScene
-          darkSrc="/brand/scenes/packages-hero-dark.webp"
-          lightSrc="/brand/scenes/packages-hero-light.webp"
-          alt=""
+          darkSrc={illustrationScenes.packageDetail.desktop.webp}
+          darkAvifSrc={illustrationScenes.packageDetail.desktop.avif}
+          tabletDarkSrc={illustrationScenes.packageDetail.tablet.webp}
+          tabletDarkAvifSrc={illustrationScenes.packageDetail.tablet.avif}
+          mobileDarkSrc={illustrationScenes.packageDetail.mobile.webp}
+          mobileDarkAvifSrc={illustrationScenes.packageDetail.mobile.avif}
+          alt={`Border collie website designer reviewing the ${websitePackage.name} package plan`}
           width={1600}
           height={1000}
           priority
@@ -106,28 +112,30 @@ export default async function PackageDetailPage({ params }: Props) {
           className="package-detail-hero__scene"
         />
         <Container className="package-detail-hero__content">
-          <nav className="visual-breadcrumb" aria-label="Breadcrumb">
-            <Link href="/">Home</Link>
-            <span aria-hidden="true">›</span>
-            <Link href="/packages">Packages</Link>
-            <span aria-hidden="true">›</span>
-            <span aria-current="page">{websitePackage.name}</span>
-          </nav>
-          <p className="home-eyebrow">{websitePackage.name} package</p>
-          <h1 id="package-detail-title">{websitePackage.tagline}</h1>
-          <p>{websitePackage.description}</p>
-          <div className="package-detail-price">
-            <span>Starting at</span>
-            <strong>{websitePackage.price}</strong>
-            <small>one-time website build</small>
-          </div>
-          <div className="package-detail-actions">
-            <Button href={websitePackage.quoteHref} size="large" icon={<ArrowRightIcon />}>
-              Start with {websitePackage.name}
-            </Button>
-            <Button href="/packages#compare" variant="outline" size="large">
-              Compare Packages
-            </Button>
+          <div className="package-detail-hero__copy">
+            <HeroBreadcrumb
+              items={[
+                { label: "Home", href: "/" },
+                { label: "Packages", href: "/packages" },
+                { label: websitePackage.name },
+              ]}
+            />
+            <p className="home-eyebrow">{websitePackage.name} package</p>
+            <h1 id="package-detail-title">{websitePackage.tagline}</h1>
+            <p>{websitePackage.description}</p>
+            <div className="package-detail-price">
+              <span>Starting at</span>
+              <strong>{websitePackage.price}</strong>
+              <small>one-time website build</small>
+            </div>
+            <div className="package-detail-actions">
+              <Button href={websitePackage.quoteHref} size="large" icon={<ArrowRightIcon />}>
+                Order {websitePackage.name}
+              </Button>
+              <Button href="/packages#compare" variant="outline" size="large">
+                Compare Packages
+              </Button>
+            </div>
           </div>
         </Container>
       </section>

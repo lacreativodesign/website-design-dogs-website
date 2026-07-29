@@ -4,8 +4,10 @@ import { ContactForm } from "@/components/forms/contact-form";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
+import { Button } from "@/components/ui/button";
+import { HeroBreadcrumb } from "@/components/ui/breadcrumb";
 import { Container } from "@/components/ui/container";
-import { BrandIcon, type BrandIconName } from "@/components/ui/icon";
+import { ArrowRightIcon, BrandIcon, type BrandIconName } from "@/components/ui/icon";
 import { siteConfig } from "@/content/site";
 import { illustrationScenes } from "@/content/illustrations";
 import { pageMetadata } from "@/lib/seo";
@@ -64,11 +66,7 @@ export default function ContactPage() {
         />
         <Container className="contact-hero__content">
           <div>
-            <nav className="visual-breadcrumb" aria-label="Breadcrumb">
-              <Link href="/">Home</Link>
-              <span aria-hidden="true">›</span>
-              <span>Contact Us</span>
-            </nav>
+            <HeroBreadcrumb items={[{ label: "Home", href: "/" }, { label: "Contact Us" }]} />
             <p className="home-eyebrow">Contact Us</p>
             <h1 id="contact-page-title">Let’s start a useful conversation.</h1>
             <p>Share the context. We’ll review the requirements and recommend a practical next step.</p>
@@ -85,29 +83,34 @@ export default function ContactPage() {
         <Container>
           <div className="contact-layout-grid">
             <aside className="contact-info-card" aria-label="Contact information">
+              <p className="home-eyebrow">Direct contact</p>
               <h2>Tell us about your project.</h2>
-              <div className="contact-info-list">
+              <p className="contact-info-card__intro">
+                Choose the channel that works for you. Every enquiry is reviewed with the same
+                scope-first approach.
+              </p>
+              <div className="contact-method-grid">
                 {contactMethods.map((method, index) => (
-                  <div key={method.label} className="contact-info-row">
+                  <a
+                    key={method.label}
+                    className="contact-method-card"
+                    href={method.href}
+                    {...(method.label === "WhatsApp Business"
+                      ? { target: "_blank", rel: "noopener noreferrer" }
+                      : {})}
+                  >
                     <span className="inner-card-icon"><BrandIcon name={contactIcons[index] ?? "headset"} /></span>
                     <div>
                       <strong>{method.label}</strong>
-                      <br />
-                      <a
-                        href={method.href}
-                        {...(method.label === "WhatsApp Business"
-                          ? { target: "_blank", rel: "noopener noreferrer" }
-                          : {})}
-                      >
-                        {method.value}
-                      </a>
+                      <span>{method.value}</span>
                     </div>
-                  </div>
+                    <b aria-hidden="true">↗</b>
+                  </a>
                 ))}
-                <div className="contact-info-row">
-                  <span className="inner-card-icon"><BrandIcon name="shield-check" /></span>
-                  <span>{siteConfig.legalDisclosure}</span>
-                </div>
+              </div>
+              <div className="contact-disclosure">
+                <BrandIcon name="shield-check" />
+                <p>{siteConfig.legalDisclosure}</p>
               </div>
               <nav className="contact-quick-links" aria-label="Quick links">
                 {quickLinks.map((link) => (
@@ -126,24 +129,22 @@ export default function ContactPage() {
           </div>
 
           <div className="coverage-panel" aria-labelledby="coverage-panel-title">
-            <ThemeScene
-              darkSrc="/brand/backgrounds/grid-dark.webp"
-              lightSrc="/brand/backgrounds/grid-light.webp"
-              alt=""
-              width={1600}
-              height={800}
-              sizes="100vw"
-              className="coverage-panel__background"
-            />
             <div className="coverage-panel__content coverage-panel__content--steps">
-              <div>
+              <header>
                 <p className="home-eyebrow">PROJECT START</p>
                 <h2 id="coverage-panel-title">A clear path from enquiry to project.</h2>
                 <p>Project availability and scope are confirmed after enquiry review.</p>
-              </div>
+                <Button href="/get-started" icon={<ArrowRightIcon />}>
+                  Build Your Project Brief
+                </Button>
+              </header>
               <ol className="coverage-panel__steps">
                 {['Submit your requirements', 'Receive the recommended scope', 'Review the quote', 'Begin the project'].map((step, index) => (
-                  <li key={step}><span className="inner-card-icon"><BrandIcon name={projectStepIcons[index] ?? "clipboard-check"} /></span>{step}</li>
+                  <li key={step}>
+                    <span className="inner-card-icon"><BrandIcon name={projectStepIcons[index] ?? "clipboard-check"} /></span>
+                    <strong>{step}</strong>
+                    <small>{["Share what you know", "We match scope to need", "Confirm deliverables and terms", "Begin with a visible plan"][index]}</small>
+                  </li>
                 ))}
               </ol>
             </div>

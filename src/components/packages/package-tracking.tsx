@@ -16,6 +16,6 @@ export function PackagesViewTracker() {
   return null;
 }
 
-export function PackageLeadButton({ href, children, slug, featured }: Props) {
-  return <Button href={href} variant={featured ? "primary" : "outline"} className="pricing-card__button" onClick={() => trackEvent("wdd_select_package", { pagePath: "/packages", packageSlug: slug })}>{children}</Button>;
+export function PackageLeadButton({ href, children, slug }: Props) {
+  return <Button href={href} variant="primary" className="pricing-card__button" onClick={() => trackEvent("wdd_select_package", { pagePath: "/packages", packageSlug: slug })}>{children}</Button>;
 }

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
+import { HeroBreadcrumb } from "@/components/ui/breadcrumb";
 import { Container } from "@/components/ui/container";
 import { BrandIcon } from "@/components/ui/icon";
 import { BRAND_DISCLOSURE } from "@/lib/site-config";
@@ -74,11 +75,7 @@ export function LegalPage({
           className="visual-page-hero__scene"
         />
         <Container className="visual-page-hero__content">
-          <nav className="visual-breadcrumb" aria-label="Breadcrumb">
-            <Link href="/">Home</Link>
-            <span aria-hidden="true">›</span>
-            <span>{eyebrow}</span>
-          </nav>
+          <HeroBreadcrumb items={[{ label: "Home", href: "/" }, { label: eyebrow }]} />
           <p className="home-eyebrow">{eyebrow}</p>
           <h1 id="legal-page-title">{title}</h1>
           <p>{intro}</p>
