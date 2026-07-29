@@ -58,13 +58,16 @@ test("shared CTA, footer, consent, legal, and campaign surfaces stay responsive"
     "/privacy-policy",
     "/get-started",
     "/campaigns/cleaning",
-    "/not-a-real-page",
   ]) {
     await page.goto(route);
     await expectNoOverflow(page);
     await expect(page.locator("header").first()).toBeVisible();
     await expect(page.locator("footer").first()).toBeVisible();
   }
+
+  await page.goto("/not-a-real-page");
+  await expect(page.locator(".not-found-page")).toBeVisible();
+  await expectNoOverflow(page);
 
   await page.goto("/privacy-policy");
   const legalGroups = page.locator(".legal-primary-group");
