@@ -1,9 +1,12 @@
 {
   "package": "Website Design Dogs Complete Web Visual Package",
-  "version": "2.0",
+  "version": "3.0",
   "repo": "lacreativodesign/website-design-dogs-website",
   "productionAssets": {
     "logos": [
+      "/brand/logos/wdd-logo-dark.svg",
+      "/brand/logos/wdd-logo-light.svg",
+      "/brand/logos/wdd-logo-mark.svg",
       "/brand/logos/wdd-primary-full-color.svg",
       "/brand/logos/wdd-primary-full-color.png",
       "/brand/logos/wdd-primary-white-bg.png"
@@ -16,7 +19,8 @@
     "og": "/brand/og/",
     "portfolioConcepts": "/portfolio/concepts/",
     "campaignHeroes": "/campaigns/",
-    "finalIllustrations": "/brand/illustrations/final/"
+    "finalIllustrations": "/brand/illustrations/final/",
+    "brandMarkFavicon": "/brand/favicons/wdd-mark.svg"
   },
   "scenePairs": {
     "home-hero": {

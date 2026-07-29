@@ -5,6 +5,10 @@ const root = process.cwd();
 const requiredFiles = [
   "public/brand/asset-manifest-complete.json",
   "public/brand/logos/wdd-primary-full-color.svg",
+  "public/brand/logos/wdd-logo-dark.svg",
+  "public/brand/logos/wdd-logo-light.svg",
+  "public/brand/logos/wdd-logo-mark.svg",
+  "public/brand/favicons/wdd-mark.svg",
   "public/brand/logos/wdd-primary-full-color.png",
   "public/brand/logos/wdd-primary-white-bg.png",
   "public/brand/mascot/wdd-mascot-transparent.png",
