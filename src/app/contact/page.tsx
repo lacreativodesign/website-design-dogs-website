@@ -5,6 +5,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Container } from "@/components/ui/container";
+import { BrandIcon, type BrandIconName } from "@/components/ui/icon";
 import { siteConfig } from "@/content/site";
 import { illustrationScenes } from "@/content/illustrations";
 import { pageMetadata } from "@/lib/seo";
@@ -14,6 +15,9 @@ const contactMethods = [
   siteConfig.contact.phone,
   siteConfig.contact.whatsapp,
 ] as const;
+
+const contactIcons: BrandIconName[] = ["headset", "smartphone", "heart-handshake"];
+const projectStepIcons: BrandIconName[] = ["search", "clipboard-check", "pen-tool", "rocket"];
 
 const quickLinks = [
   { label: "Services", href: "/services" },
@@ -83,9 +87,9 @@ export default function ContactPage() {
             <aside className="contact-info-card" aria-label="Contact information">
               <h2>Tell us about your project.</h2>
               <div className="contact-info-list">
-                {contactMethods.map((method) => (
+                {contactMethods.map((method, index) => (
                   <div key={method.label} className="contact-info-row">
-                    <span aria-hidden="true">•</span>
+                    <span className="inner-card-icon"><BrandIcon name={contactIcons[index] ?? "headset"} /></span>
                     <div>
                       <strong>{method.label}</strong>
                       <br />
@@ -101,8 +105,8 @@ export default function ContactPage() {
                   </div>
                 ))}
                 <div className="contact-info-row">
-                  <span aria-hidden="true">•</span>
-                  {siteConfig.legalDisclosure}
+                  <span className="inner-card-icon"><BrandIcon name="shield-check" /></span>
+                  <span>{siteConfig.legalDisclosure}</span>
                 </div>
               </div>
               <nav className="contact-quick-links" aria-label="Quick links">
@@ -139,7 +143,7 @@ export default function ContactPage() {
               </div>
               <ol className="coverage-panel__steps">
                 {['Submit your requirements', 'Receive the recommended scope', 'Review the quote', 'Begin the project'].map((step, index) => (
-                  <li key={step}><span>{index + 1}</span>{step}</li>
+                  <li key={step}><span className="inner-card-icon"><BrandIcon name={projectStepIcons[index] ?? "clipboard-check"} /></span>{step}</li>
                 ))}
               </ol>
             </div>
