@@ -20,9 +20,10 @@ test("About and FAQ heroes keep full-width containers with left-aligned copy", a
 
       expect(containerBox).not.toBeNull();
       expect(copyBox).not.toBeNull();
+      expect(containerBox!.width).toBeGreaterThan(viewport.width * 0.75);
       expect(copyBox!.x).toBeGreaterThanOrEqual(containerBox!.x);
-      // Container padding is the intentional responsive page gutter.
-      expect(copyBox!.x - containerBox!.x).toBeLessThanOrEqual(24);
+      // The responsive Container gutter reaches 48px at tablet/desktop widths.
+      expect(copyBox!.x - containerBox!.x).toBeLessThanOrEqual(64);
       await expect(copy).toHaveCSS("text-align", "left");
       await expectNoOverflow(page);
     }
