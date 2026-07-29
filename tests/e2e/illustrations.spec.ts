@@ -29,7 +29,7 @@ const scenes = [
   {
     name: "get started",
     route: "/get-started",
-    selector: ".page-hero__scene",
+    selector: ".guided-hero__scene",
     slug: "get-started",
   },
   {

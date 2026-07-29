@@ -34,7 +34,11 @@ test("comparison link, FAQ, package details, and form path are usable", async ({
     await page.goto(`/packages/${slug}`);
     await expect(page.locator("h1")).toHaveCount(1);
     await expect(page.locator(".package-detail-price")).toContainText(price);
-    await expect(page.getByRole("link", { name: `Start with ${slug[0].toUpperCase()}${slug.slice(1)}` })).toHaveAttribute("href", `/get-started?package=${slug}`);
+    await expect(
+      page.getByRole("link", {
+        name: `Order ${slug[0].toUpperCase()}${slug.slice(1)}`,
+      }),
+    ).toHaveAttribute("href", `/get-started?package=${slug}`);
   }
 
   const sitemap = await (await request.get("/sitemap.xml")).text();
