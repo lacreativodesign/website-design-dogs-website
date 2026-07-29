@@ -5,6 +5,7 @@ import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Container } from "@/components/ui/container";
+import { BrandIcon, type BrandIconName } from "@/components/ui/icon";
 import {
   aboutChecklist,
   aboutExperience,
@@ -13,6 +14,9 @@ import {
 } from "@/content/about";
 import { illustrationScenes } from "@/content/illustrations";
 import { pageMetadata } from "@/lib/seo";
+
+const aboutProcessIcons: BrandIconName[] = ["search", "pen-tool", "code-2", "rocket"];
+const aboutPrincipleIcons: BrandIconName[] = ["clipboard-check", "heart-handshake", "shield-check", "trending-up"];
 
 export const metadata: Metadata = pageMetadata({
   title: "About Website Design Dogs",
@@ -107,9 +111,9 @@ export default function AboutPage() {
             <h2>A process that keeps the next step visible.</h2>
           </header>
           <ol className="about-process-grid" aria-label="Website Design Dogs process">
-            {aboutProcessTiles.map((tile) => (
+            {aboutProcessTiles.map((tile, index) => (
               <li key={tile.number} className="about-process-tile">
-                <strong>{tile.number}</strong>
+                <strong className="inner-card-icon"><BrandIcon name={aboutProcessIcons[index] ?? "clipboard-check"} /></strong>
                 <h3>{tile.title}</h3>
                 <p>{tile.body}</p>
               </li>
@@ -127,7 +131,7 @@ export default function AboutPage() {
           <div className="about-principles-grid">
             {aboutPrinciples.map((principle, index) => (
               <article key={principle.title}>
-                <span>{String(index + 1).padStart(2, "0")}</span>
+                <span className="inner-card-icon"><BrandIcon name={aboutPrincipleIcons[index] ?? "shield-check"} /></span>
                 <h3>{principle.title}</h3>
                 <p>{principle.body}</p>
               </article>
