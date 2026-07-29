@@ -66,7 +66,7 @@ test("shared CTA, footer, consent, legal, and campaign surfaces stay responsive"
 
   await page.goto("/campaigns/cleaning");
   await expect(page.locator(".campaign-header")).toBeVisible();
-  await expect(page.locator(".campaign-footer")).toBeVisible();
+  await expect(page.locator("footer.border-t")).toBeVisible();
   await expectNoOverflow(page);
 
   await page.goto("/not-a-real-page");
