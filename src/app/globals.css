@@ -3752,6 +3752,24 @@ body { overflow-wrap: anywhere; }
   text-transform: uppercase;
   text-wrap: balance;
 }
+/* Keep the approved homepage type contract stronger than legacy page-family rules. */
+:is(
+  .services-hero__copy,
+  .portfolio-hero__copy,
+  .packages-hero__copy,
+  .visual-page-hero__copy,
+  .contact-hero__content > div,
+  .guided-hero__copy,
+  .service-detail-hero__copy,
+  .package-detail-hero__copy
+) h1 {
+  font-family: Impact, "Arial Narrow", Inter, sans-serif;
+  font-size: clamp(3.1rem, 5.45vw, 5.15rem);
+  font-weight: 950;
+  letter-spacing: -.03em;
+  line-height: .9;
+  text-transform: uppercase;
+}
 :is(
   .services-hero__copy,
   .portfolio-hero__copy,
