@@ -120,4 +120,3 @@ export const platformPrinciples = [
   ["Total cost visibility", "Subscriptions, apps, themes, plugins, processors, hosting, and maintenance belong in the decision."],
   ["Migration reality", "Content, catalog, customer, order, URL, and integration migration must be assessed before promises are made."],
 ] as const;
-
