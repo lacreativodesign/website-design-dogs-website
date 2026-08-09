@@ -1,0 +1,139 @@
+{
+  "version": "1.0",
+  "mascotIdentity": {
+    "character": "Black-and-white border collie with a centered white facial blaze and semi-floppy ears",
+    "wardrobe": "Vivid electric-orange pullover hoodie with visible torso and sleeves",
+    "eyewear": "Black or very dark navy sunglasses frames with dark lenses",
+    "palette": [
+      "midnight navy",
+      "black",
+      "white",
+      "electric orange"
+    ],
+    "prohibited": [
+      "orange sunglasses frames",
+      "bare torso",
+      "collar-only wardrobe",
+      "upright fox-like ears",
+      "platform trademarks",
+      "embedded text",
+      "watermarks"
+    ]
+  },
+  "visualReferences": [
+    "/brand/illustrations/final/home-desktop.webp",
+    "/brand/illustrations/final/services-desktop.webp",
+    "/brand/illustrations/final/service-detail-desktop.webp"
+  ],
+  "delivery": {
+    "width": 960,
+    "height": 640,
+    "maximumBytesPerAsset": 100000,
+    "formats": [
+      "webp",
+      "avif"
+    ]
+  },
+  "assets": {
+    "analytics-reporting": {
+      "webp": {
+        "path": "/brand/illustrations/services/analytics-reporting.webp",
+        "sha256": "9d3bdf95b9f689c983b848712714973baa46b5671067b96b6b396710a1be879c"
+      },
+      "avif": {
+        "path": "/brand/illustrations/services/analytics-reporting.avif",
+        "sha256": "5162caa40ff15caf08cf196fc5c51f84be1e98ac4da7e2250fd36f093c901d12"
+      }
+    },
+    "content-copywriting": {
+      "webp": {
+        "path": "/brand/illustrations/services/content-copywriting.webp",
+        "sha256": "afbf98382888591fef11946d85ba3b6c8fbf154ee050d4586c55332cf79c2d7e"
+      },
+      "avif": {
+        "path": "/brand/illustrations/services/content-copywriting.avif",
+        "sha256": "e76e60b48c516a814c907726a015c36a3ef9a3bb27b6df6f7ddb614879bcb489"
+      }
+    },
+    "conversion-optimization": {
+      "webp": {
+        "path": "/brand/illustrations/services/conversion-optimization.webp",
+        "sha256": "ef60a78cb4709ca5f19c67919e4f758bb03a7ad5f0464ff90de40a5a565ccea6"
+      },
+      "avif": {
+        "path": "/brand/illustrations/services/conversion-optimization.avif",
+        "sha256": "179dfd8d28b7c67ed2dbc5d9bd3c9fe98ca4dba22d2cb5f9b25a8805228898cf"
+      }
+    },
+    "custom-website-design": {
+      "webp": {
+        "path": "/brand/illustrations/services/custom-website-design.webp",
+        "sha256": "64a83c204ff673469eb12eaaf352f34e569fa6bcced39a490592b2954884250e"
+      },
+      "avif": {
+        "path": "/brand/illustrations/services/custom-website-design.avif",
+        "sha256": "b291851ffe12cec723632c2f6099fb978c9eae16d9d4855c4e5422d4c5d13718"
+      }
+    },
+    "e-commerce-solutions": {
+      "webp": {
+        "path": "/brand/illustrations/services/e-commerce-solutions.webp",
+        "sha256": "69e9fdb68693e2be665327080e6fd53237edd432492073a9937195ac67df593b"
+      },
+      "avif": {
+        "path": "/brand/illustrations/services/e-commerce-solutions.avif",
+        "sha256": "6b0f3779102e98f82aec2081e1a9f76ad96f87f45dbc626dd4afcd5aec25d0db"
+      }
+    },
+    "hosting-security": {
+      "webp": {
+        "path": "/brand/illustrations/services/hosting-security.webp",
+        "sha256": "3bad2d3f381cde04d53be1a01109159916d17d5747e003b582c7957aa84f86f8"
+      },
+      "avif": {
+        "path": "/brand/illustrations/services/hosting-security.avif",
+        "sha256": "f92fbfb94e583f7898594d66c4dd810e3d81a5622ef97f618c5ce9dcd2f8d783"
+      }
+    },
+    "mobile-app-development": {
+      "webp": {
+        "path": "/brand/illustrations/services/mobile-app-development.webp",
+        "sha256": "09961dd28f6a5b412d4f35597c65892ff612fb05166a40916c3e771d37fed363"
+      },
+      "avif": {
+        "path": "/brand/illustrations/services/mobile-app-development.avif",
+        "sha256": "4273f4807928cc76138e892747d348308c219f28bf89495675455c285bd6ab6d"
+      }
+    },
+    "seo-local-optimization": {
+      "webp": {
+        "path": "/brand/illustrations/services/seo-local-optimization.webp",
+        "sha256": "bf0827907872b524b099af7477ef8f228f19fb8f58b702640be7bbd2bc499361"
+      },
+      "avif": {
+        "path": "/brand/illustrations/services/seo-local-optimization.avif",
+        "sha256": "579cb2223d59aa0a532209ff955e1234546be1b721ba5482ee99ff3f61682c2f"
+      }
+    },
+    "social-media-marketing": {
+      "webp": {
+        "path": "/brand/illustrations/services/social-media-marketing.webp",
+        "sha256": "2616f8d219b66cd72b3f8c2df5356ac4427ab7eace792169ade4d2c6ac31f586"
+      },
+      "avif": {
+        "path": "/brand/illustrations/services/social-media-marketing.avif",
+        "sha256": "3cb02785727665bbf2a7b397cf5538c6590854b4d58ccd851b405db5a265cba3"
+      }
+    },
+    "website-development": {
+      "webp": {
+        "path": "/brand/illustrations/services/website-development.webp",
+        "sha256": "26224d2c72f19862495c28b6f29ef9eac5fc0563cab5d2577676e89c09abe496"
+      },
+      "avif": {
+        "path": "/brand/illustrations/services/website-development.avif",
+        "sha256": "650562d7ae90f459bb0a29436fc24f4b85cd184f389bbc81bc68e58e924ef291"
+      }
+    }
+  }
+}

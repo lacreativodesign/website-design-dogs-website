@@ -1,4 +1,5 @@
 import { existsSync, readdirSync, statSync, readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import path from "node:path";
 
 const root = process.cwd();
@@ -12,6 +13,7 @@ const requiredFiles = [
   "public/brand/logos/wdd-primary-full-color.png",
   "public/brand/logos/wdd-primary-white-bg.png",
   "public/brand/mascot/wdd-mascot-transparent.png",
+  "public/brand/illustrations/services/brand-contract.json",
   "public/brand/backgrounds/mountains-dark.webp",
   "public/brand/backgrounds/mountains-light.webp",
   "public/brand/backgrounds/waves-dark.webp",
@@ -64,6 +66,33 @@ if (existsSync(manifestPath)) {
     else if (statSync(absolute).isDirectory()) {
       const entries = readdirSync(absolute).filter((entry) => !entry.startsWith("."));
       if (entries.length === 0) errors.push(`Manifest directory empty: ${manifestPathValue}`);
+    }
+  }
+}
+const serviceContractPath = path.join(root, "public/brand/illustrations/services/brand-contract.json");
+if (existsSync(serviceContractPath)) {
+  const contract = JSON.parse(readFileSync(serviceContractPath, "utf8"));
+  const assets = Object.entries(contract.assets ?? {});
+  if (assets.length !== 10) errors.push(`Service illustration contract must contain 10 assets; found ${assets.length}`);
+  if (!/orange.*hoodie/i.test(contract.mascotIdentity?.wardrobe ?? "")) errors.push("Service illustration contract must require the orange hoodie");
+  if (!/black|dark navy/i.test(contract.mascotIdentity?.eyewear ?? "")) errors.push("Service illustration contract must require black or dark navy eyewear frames");
+  for (const [slug, formats] of assets) {
+    for (const format of contract.delivery?.formats ?? []) {
+      const asset = formats?.[format];
+      if (!asset?.path || !asset?.sha256) {
+        errors.push(`Service illustration contract incomplete: ${slug}.${format}`);
+        continue;
+      }
+      const relativePath = `public${asset.path}`;
+      const absolutePath = path.join(root, relativePath);
+      checkFile(relativePath);
+      if (!existsSync(absolutePath)) continue;
+      const bytes = readFileSync(absolutePath);
+      const actualHash = createHash("sha256").update(bytes).digest("hex");
+      if (actualHash !== asset.sha256) errors.push(`Service illustration checksum mismatch: ${relativePath}`);
+      if (bytes.length > contract.delivery.maximumBytesPerAsset) errors.push(`Service illustration exceeds ${contract.delivery.maximumBytesPerAsset} bytes: ${relativePath}`);
+      if (format === "webp" && (bytes.toString("ascii", 0, 4) !== "RIFF" || bytes.toString("ascii", 8, 12) !== "WEBP")) errors.push(`Invalid WebP asset: ${relativePath}`);
+      if (format === "avif" && !bytes.subarray(0, 32).toString("ascii").includes("ftypavif")) errors.push(`Invalid AVIF asset: ${relativePath}`);
     }
   }
 }
