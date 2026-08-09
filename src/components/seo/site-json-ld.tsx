@@ -33,6 +33,14 @@ export function SiteJsonLd() {
             slogan: SITE_SLOGAN,
             email: siteConfig.contact.email.value,
             telephone: siteConfig.contact.phone.e164,
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: "Austin",
+              addressRegion: "TX",
+              postalCode: "78731",
+              addressCountry: "US",
+            },
+            sameAs: [siteConfig.social.facebook.href],
             parentOrganization: {
               "@type": "Organization",
               name: LEGAL_OWNER,
@@ -50,6 +58,8 @@ export function SiteJsonLd() {
               "Website content",
               "Conversion optimization",
               "Website analytics",
+              "Mobile app development",
+              "Social media marketing",
             ],
             contactPoint: {
               "@type": "ContactPoint",

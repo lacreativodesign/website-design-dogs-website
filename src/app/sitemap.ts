@@ -1,13 +1,14 @@
 import type { MetadataRoute } from "next";
-import { websitePackages } from "@/content/packages";
+import { allPackages } from "@/content/packages";
 import { services } from "@/content/services";
 import { absoluteUrl } from "@/lib/site-config";
 
-const lastModified = "2026-07-28";
+const lastModified = "2026-08-09";
 
 const routes = [
   ["/", "weekly", 1],
   ["/services", "monthly", 0.8],
+  ["/platforms", "monthly", 0.7],
   ["/portfolio", "monthly", 0.7],
   ["/packages", "monthly", 0.8],
   ["/about", "monthly", 0.6],
@@ -34,7 +35,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "monthly" as const,
       priority: 0.7,
     })),
-    ...websitePackages.map(({ href }) => ({
+    ...allPackages.map(({ href }) => ({
       url: absoluteUrl(href),
       lastModified,
       changeFrequency: "monthly" as const,

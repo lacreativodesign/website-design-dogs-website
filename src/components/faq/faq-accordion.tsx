@@ -9,7 +9,7 @@ type FullFaqAccordionProps = {
 
 export function FullFaqAccordion({ items }: FullFaqAccordionProps) {
   const flatItems = items ?? faqCategories.flatMap((category) => category.items);
-  const [open, setOpen] = useState(flatItems[0]?.question ?? "");
+  const [open, setOpen] = useState("");
 
   return (
     <div className="faq-accordion-list">

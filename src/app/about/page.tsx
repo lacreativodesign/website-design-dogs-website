@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { PageCta } from "@/components/pages/page-cta";
+import { ProofStrip, TopLevelHero, type ProofItem } from "@/components/pages/top-level-hero";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
-import { HeroBreadcrumb } from "@/components/ui/breadcrumb";
 import { Container } from "@/components/ui/container";
 import { BrandIcon, type BrandIconName } from "@/components/ui/icon";
 import {
@@ -18,6 +18,12 @@ import { pageMetadata } from "@/lib/seo";
 const aboutProcessIcons: BrandIconName[] = ["search", "pen-tool", "code-2", "rocket"];
 const aboutPrincipleIcons: BrandIconName[] = ["clipboard-check", "heart-handshake", "shield-check", "trending-up"];
 const aboutExperienceIcons: BrandIconName[] = ["headset", "heart-handshake", "clipboard-check", "gauge"];
+const aboutProof: ProofItem[] = [
+  { title: "Business before decoration", body: "Customer needs and business goals shape the design direction.", icon: "search-check" },
+  { title: "One visible process", body: "Decisions, responsibilities, and review points stay understandable.", icon: "clipboard-check" },
+  { title: "Built for real devices", body: "Responsive behavior is considered from structure through launch.", icon: "smartphone" },
+  { title: "Ownership made clear", body: "Accounts, deliverables, and handoff responsibilities are documented.", icon: "shield-check" },
+];
 
 export const metadata: Metadata = pageMetadata({
   title: "About Website Design Dogs",
@@ -41,30 +47,18 @@ export default function AboutPage() {
         description="Learn how Website Design Dogs combines website strategy, design, development, communication, and practical support for growing businesses."
         path="/about"
       />
-      <section className="visual-page-hero visual-page-hero--about" aria-labelledby="about-page-title">
-        <ThemeScene
-          darkSrc={illustrationScenes.about.desktop.webp}
-          darkAvifSrc={illustrationScenes.about.desktop.avif}
-          tabletDarkSrc={illustrationScenes.about.tablet.webp}
-          tabletDarkAvifSrc={illustrationScenes.about.tablet.avif}
-          mobileDarkSrc={illustrationScenes.about.mobile.webp}
-          mobileDarkAvifSrc={illustrationScenes.about.mobile.avif}
-          alt="Website Design Dogs team planning a project around a campfire beneath the mountains"
-          width={1600}
-          height={1000}
-          priority
-          sizes="100vw"
-          className="visual-page-hero__scene"
-        />
-        <Container className="visual-page-hero__content">
-          <div className="visual-page-hero__copy">
-            <HeroBreadcrumb items={[{ label: "Home", href: "/" }, { label: "About Us" }]} />
-            <p className="home-eyebrow">About Us</p>
-            <h1 id="about-page-title">A dependable digital partner for your next website.</h1>
-            <p>Thoughtful website strategy, design, and development—organized around a clear scope.</p>
-          </div>
-        </Container>
-      </section>
+      <TopLevelHero
+        id="about-page-title"
+        eyebrow="About Website Design Dogs"
+        title={<>A dependable partner for your <em>next digital move.</em></>}
+        body="Thoughtful strategy, design, development, and growth support—organized around a clear scope and practical ownership."
+        breadcrumb={[{ label: "Home", href: "/" }, { label: "About Us" }]}
+        scene={illustrationScenes.about}
+        alt="Website Design Dogs team planning a project around a campfire beneath the mountains"
+        primaryCta={{ label: "Start Your Project", href: "/get-started" }}
+        secondaryCta={{ label: "Explore Services", href: "/services" }}
+      />
+      <ProofStrip label="Website Design Dogs working principles" items={aboutProof} />
 
       <section className="about-story-section" aria-labelledby="about-story-title">
         <Container>

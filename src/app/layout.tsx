@@ -7,6 +7,7 @@ import { RouteFooter } from "@/components/layout/route-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteJsonLd } from "@/components/seo/site-json-ld";
 import { rootMetadata } from "@/lib/metadata";
+import { bodyFont, headingFont } from "@/lib/fonts";
 
 export const metadata: Metadata = rootMetadata;
 export const viewport: Viewport = {
@@ -26,7 +27,7 @@ export default function RootLayout({
           }
         </Script>
       </head>
-      <body>
+      <body className={`${bodyFont.variable} ${headingFont.variable}`}>
         <ConsentProvider>
           <PageViewTracker />
           <SiteJsonLd />

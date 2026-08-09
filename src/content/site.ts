@@ -4,9 +4,13 @@ export const siteConfig = {
   description: "Professional website design and digital growth solutions for local and growing businesses.",
   legalOwner: "LA CREATIVO GROUP, LLC",
   legalDisclosure: "Website Design Dogs is a service brand of LA CREATIVO GROUP, LLC.",
-  logo: "/brand/logos/wdd-logo-dark.svg",
+  logo: "/brand/logos/wdd-logo-mark.svg",
   mascot: "/brand/mascot/wdd-mascot-transparent.png",
   contact: {
+    address: {
+      label: "Location",
+      value: "Austin, TX 78731 USA",
+    },
     email: {
       label: "Email",
       value: "hello@websitedesigndogs.com",
@@ -24,10 +28,17 @@ export const siteConfig = {
       href: "https://wa.me/14159002374?text=Hi%20Website%20Design%20Dogs%2C%20I%27d%20like%20to%20discuss%20a%20website%20project.",
     },
   },
+  social: {
+    facebook: {
+      label: "Facebook",
+      href: "https://www.facebook.com/WebsiteDesignDogs",
+    },
+  },
   primaryCta: { label: "Get a Free Quote", href: "/get-started" },
   primaryNav: [
     { label: "Home", href: "/" },
     { label: "Services", href: "/services" },
+    { label: "Platforms", href: "/platforms" },
     { label: "Portfolio", href: "/portfolio" },
     { label: "Packages", href: "/packages" },
     { label: "About Us", href: "/about" },
@@ -47,11 +58,13 @@ export const siteConfig = {
       { label: "E-Commerce Solutions", href: "/services/e-commerce-solutions" },
       { label: "SEO & Local Optimization", href: "/services/seo-local-optimization" },
       { label: "Website Care", href: "/services/hosting-security" },
+      { label: "Mobile App Development", href: "/services/mobile-app-development" },
+      { label: "Social Media Marketing", href: "/services/social-media-marketing" },
     ],
     support: [
       { label: "Packages", href: "/packages" },
+      { label: "Platforms", href: "/platforms" },
       { label: "FAQ", href: "/faq" },
-      { label: "Get a Free Quote", href: "/get-started" },
     ],
     legal: [
       { label: "Privacy Policy", href: "/privacy-policy" },

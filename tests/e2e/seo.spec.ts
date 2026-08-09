@@ -72,14 +72,16 @@ test("structured data parses, exposes verified contacts, and avoids fake local p
     .locator('script[type="application/ld+json"]')
     .allTextContents();
   const serializedBlocks: string[] = [];
+  const graph: Array<Record<string, unknown>> = [];
 
   for (const block of blocks) {
-    const data = JSON.parse(block);
+    const data = JSON.parse(block) as Record<string, unknown>;
     const serialized = JSON.stringify(data);
     serializedBlocks.push(serialized);
-    expect(serialized).not.toMatch(
-      /LocalBusiness|aggregateRating|review|sameAs|address/i,
-    );
+    expect(serialized).not.toMatch(/"@type":"LocalBusiness"|"aggregateRating"|"review"/i);
+    const nodes = data["@graph"];
+    if (Array.isArray(nodes)) graph.push(...(nodes as Array<Record<string, unknown>>));
+    else graph.push(data);
   }
 
   const structuredData = serializedBlocks.join("");
@@ -89,6 +91,19 @@ test("structured data parses, exposes verified contacts, and avoids fake local p
   expect(structuredData).toContain('"telephone":"+14159002374"');
   expect(structuredData).toContain('"parentOrganization"');
   expect(structuredData).toContain('"legalName":"LA CREATIVO GROUP, LLC"');
+
+  const organization = graph.find((node) => node["@type"] === "Organization");
+  expect(organization).toBeDefined();
+  expect(organization?.sameAs).toEqual([
+    "https://www.facebook.com/WebsiteDesignDogs",
+  ]);
+  expect(organization?.address).toEqual({
+    "@type": "PostalAddress",
+    addressLocality: "Austin",
+    addressRegion: "TX",
+    postalCode: "78731",
+    addressCountry: "US",
+  });
 });
 
 test("service and package schema matches visible content", async ({ page }) => {

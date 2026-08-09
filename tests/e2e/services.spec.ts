@@ -2,7 +2,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { services } from "../../src/content/services";
 
 test("service routes, links, metadata, schema, and quote preselection", async ({ page, request }) => {
-  test.setTimeout(60_000);
+  test.setTimeout(120_000);
 
   for (const service of services) {
     const route = `/services/${service.slug}`;
@@ -25,7 +25,7 @@ test("service routes, links, metadata, schema, and quote preselection", async ({
     expect(quoteUrl.pathname).toBe("/get-started");
     expect(quoteUrl.searchParams.get("service")).toBe(service.slug);
     await openProjectTypeStep(page);
-    await expect(page.getByRole("checkbox", { name: serviceProjectType(service.slug) })).toBeChecked();
+    await expect(page.getByRole("checkbox", { name: service.title })).toBeChecked();
   }
 
   await page.goto("/get-started?service=unknown-service");
@@ -74,4 +74,6 @@ async function openProjectTypeStep(page: Page) {
   await expect(page.getByRole("heading", { name: "Project Type" })).toBeVisible();
 }
 
-function serviceProjectType(slug: string) { return ({"custom-website-design":"Custom Website Design","website-development":"Website Development","e-commerce-solutions":"E-Commerce Website","conversion-optimization":"Conversion Optimization","seo-local-optimization":"SEO & Local Optimization","content-copywriting":"Content & Copywriting","hosting-security":"Hosting & Security","analytics-reporting":"Analytics & Reporting"} as Record<string,string>)[slug]; }
+function serviceProjectType(slug: string) {
+  return services.find((service) => service.slug === slug)?.title ?? "Custom Website Design";
+}

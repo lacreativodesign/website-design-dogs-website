@@ -53,6 +53,17 @@ function FooterContact({ compact }: { compact: boolean }) {
             {siteConfig.contact.whatsapp.label}
           </a>
         </li>
+        <li>{siteConfig.contact.address.value}</li>
+        <li>
+          <a
+            className="footer-link"
+            href={siteConfig.social.facebook.href}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {siteConfig.social.facebook.label}
+          </a>
+        </li>
         <li>
           <Link className="footer-link" href="/get-started">
             Get a Free Quote
@@ -71,7 +82,7 @@ export function SiteFooter({ compact = false }: { compact?: boolean }) {
       className={`site-footer${compact ? " site-footer--compact" : ""}`}
     >
       <div className="mx-auto max-w-[var(--container-width)] px-5 py-8 sm:px-6 lg:px-8 lg:py-10">
-        <div className="grid gap-7 lg:grid-cols-[1.25fr_0.72fr_1fr_0.72fr_0.95fr]">
+        <div className="grid gap-7 lg:grid-cols-[1.2fr_0.72fr_1fr_0.72fr_1.05fr]">
           <div>
             <BrandLogo />
             <p className="mt-4 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary-orange)]">

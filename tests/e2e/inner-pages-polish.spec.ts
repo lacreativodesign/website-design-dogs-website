@@ -3,24 +3,18 @@ import { expectNoOverflow } from "./helpers";
 
 const responsiveWidths = [320, 768, 1440] as const;
 
-test("homepage directory CTAs keep labels and arrows on one horizontal line", async ({ page }) => {
+test("homepage directory CTAs keep their labels on one horizontal line", async ({ page }) => {
   for (const width of responsiveWidths) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
 
-    for (const name of [/view full portfolio/i, /view all packages/i]) {
+    for (const name of [/browse the portfolio/i, /view all six website packages/i]) {
       const cta = page.getByRole("link", { name });
       await expect(cta).toBeVisible();
       await expect(cta.locator(".btn__label")).toHaveCSS("white-space", "nowrap");
 
       const buttonBox = await cta.boundingBox();
-      const arrowBox = await cta.locator("svg").boundingBox();
       expect(buttonBox).not.toBeNull();
-      expect(arrowBox).not.toBeNull();
-      expect(Math.abs(
-        (arrowBox!.y + arrowBox!.height / 2) -
-        (buttonBox!.y + buttonBox!.height / 2),
-      )).toBeLessThan(4);
       expect(buttonBox!.height).toBeLessThanOrEqual(54);
     }
 
@@ -30,14 +24,18 @@ test("homepage directory CTAs keep labels and arrows on one horizontal line", as
 
 test("inner-page families use the polished icon card system", async ({ page }) => {
   const checks = [
-    ["/services", ".services-directory-card", ".services-directory-card .inner-card-icon"],
-    ["/services/custom-website-design", ".service-detail-steps li", ".service-detail-steps .inner-card-icon"],
+    ["/services/custom-website-design", ".service-process__grid li", ".service-process__grid .inner-card-icon"],
     ["/portfolio", ".portfolio-strategy article", ".portfolio-strategy .inner-card-icon"],
     ["/packages/starter", ".package-detail-process li", ".package-detail-process .inner-card-icon"],
     ["/about", ".about-process-tile", ".about-process-tile .inner-card-icon"],
     ["/contact", ".coverage-panel__steps li", ".coverage-panel__steps .inner-card-icon"],
     ["/faq", ".faq-category-grid article", ".faq-category-grid .inner-card-icon"],
   ] as const;
+
+  await page.goto("/services");
+  await expect(page.locator(".service-showcase-card")).toHaveCount(10);
+  await expect(page.locator(".service-showcase-card__media source[type='image/avif']")).toHaveCount(10);
+  await expectNoOverflow(page);
 
   for (const [route, cardsSelector, iconsSelector] of checks) {
     await page.goto(route);

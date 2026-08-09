@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ContactForm } from "@/components/forms/contact-form";
+import { ProofStrip, TopLevelHero, type ProofItem } from "@/components/pages/top-level-hero";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
-import { ThemeScene } from "@/components/theme/theme-scene";
 import { Button } from "@/components/ui/button";
-import { HeroBreadcrumb } from "@/components/ui/breadcrumb";
 import { Container } from "@/components/ui/container";
 import { ArrowRightIcon, BrandIcon, type BrandIconName } from "@/components/ui/icon";
 import { siteConfig } from "@/content/site";
@@ -20,6 +19,12 @@ const contactMethods = [
 
 const contactIcons: BrandIconName[] = ["headset", "smartphone", "heart-handshake"];
 const projectStepIcons: BrandIconName[] = ["search", "clipboard-check", "pen-tool", "rocket"];
+const contactProof: ProofItem[] = [
+  { title: "Share only what you know", body: "A useful first enquiry does not need a finished specification.", icon: "clipboard-check" },
+  { title: "Scope-first review", body: "We assess fit and requirements before confirming deliverables or terms.", icon: "search-check" },
+  { title: "No-pressure guidance", body: "The next step should fit the project—not the other way around.", icon: "heart-handshake" },
+  { title: "Your context stays attached", body: "Campaign and package preferences are preserved through the enquiry path.", icon: "shield-check" },
+];
 
 const quickLinks = [
   { label: "Services", href: "/services" },
@@ -49,35 +54,18 @@ export default function ContactPage() {
         description="Contact Website Design Dogs to discuss website design, development, redesign, e-commerce, optimization, or ongoing website care."
         path="/contact"
       />
-      <section className="compact-title-section" aria-labelledby="contact-page-title">
-        <ThemeScene
-          darkSrc={illustrationScenes.contact.desktop.webp}
-          darkAvifSrc={illustrationScenes.contact.desktop.avif}
-          tabletDarkSrc={illustrationScenes.contact.tablet.webp}
-          tabletDarkAvifSrc={illustrationScenes.contact.tablet.avif}
-          mobileDarkSrc={illustrationScenes.contact.mobile.webp}
-          mobileDarkAvifSrc={illustrationScenes.contact.mobile.avif}
-          alt="Border collie designer ready to discuss a website project at a moonlit studio desk"
-          width={1600}
-          height={1000}
-          priority
-          sizes="100vw"
-          className="contact-hero__scene"
-        />
-        <Container className="contact-hero__content">
-          <div>
-            <HeroBreadcrumb items={[{ label: "Home", href: "/" }, { label: "Contact Us" }]} />
-            <p className="home-eyebrow">Contact Us</p>
-            <h1 id="contact-page-title">Let’s start a useful conversation.</h1>
-            <p>Share the context. We’ll review the requirements and recommend a practical next step.</p>
-            <ul className="contact-reassurance" aria-label="What to expect">
-              <li>Clear follow-up</li>
-              <li>No pressure</li>
-              <li>Scope before work</li>
-            </ul>
-          </div>
-        </Container>
-      </section>
+      <TopLevelHero
+        id="contact-page-title"
+        eyebrow="Contact Website Design Dogs"
+        title={<>Let’s start a <em>useful conversation.</em></>}
+        body="Share the context. We’ll review the requirements and recommend a practical next step without pretending the scope is final."
+        breadcrumb={[{ label: "Home", href: "/" }, { label: "Contact Us" }]}
+        scene={illustrationScenes.contact}
+        alt="Border collie designer ready to discuss a digital project at a moonlit studio desk"
+        primaryCta={{ label: "Build Your Project Brief", href: "/get-started" }}
+        secondaryCta={{ label: "Email Us", href: siteConfig.contact.email.href }}
+      />
+      <ProofStrip label="What to expect when you contact Website Design Dogs" items={contactProof} />
 
       <section className="contact-panel-section" aria-labelledby="contact-form-title">
         <Container>

@@ -1,9 +1,10 @@
 import { featuredFaqs } from "@/content/faqs";
 import { industries } from "@/content/industries";
 import {
+  allPackages,
   packageProcess,
-  websitePackages,
 } from "@/content/packages";
+import { platforms } from "@/content/platforms";
 import { services } from "@/content/services";
 import { siteConfig } from "@/content/site";
 import {
@@ -35,7 +36,12 @@ export function createLlmsTxt() {
     link(
       "Packages",
       "/packages",
-      "Compare the Starter, Business, and Growth website package starting points.",
+      "Compare 21 starting packages across websites, commerce, SEO, social media, website care, and mobile apps.",
+    ),
+    link(
+      "Platforms",
+      "/platforms",
+      "Compare website, CMS, commerce, and custom platform options by fit, ownership, cost, and operational requirements.",
     ),
     link(
       "Portfolio",
@@ -70,11 +76,11 @@ export function createLlmsTxt() {
     "",
     "## Packages",
     "",
-    ...websitePackages.map((websitePackage) =>
+    ...allPackages.map((websitePackage) =>
       link(
         `${websitePackage.name} — ${websitePackage.price}`,
         websitePackage.href,
-        `${websitePackage.tagline} The listed amount is a starting one-time project fee.`,
+        `${websitePackage.tagline} The listed amount is a starting price billed ${websitePackage.priceSuffix}.`,
       ),
     ),
     "",
@@ -150,10 +156,10 @@ export function createLlmsFullTxt() {
       ...service.forWho.map((item) => `- ${item}`),
       "",
     ]),
-    "## Website packages",
+    "## Service packages",
     "",
-    ...websitePackages.flatMap((websitePackage) => [
-      `### ${websitePackage.name} — starting at ${websitePackage.price}`,
+    ...allPackages.flatMap((websitePackage) => [
+      `### ${websitePackage.name} — ${websitePackage.price} ${websitePackage.priceSuffix}`,
       "",
       websitePackage.description,
       "",
@@ -175,6 +181,17 @@ export function createLlmsFullTxt() {
     "",
     "These industry selections help organize a project brief. They do not represent separate location pages, guaranteed specialization, or a list of completed clients.",
     "",
+    "## Platform decision guide",
+    "",
+    ...platforms.flatMap((platform) => [
+      `### ${platform.name}`,
+      "",
+      platform.bestFor,
+      `- Category: ${platform.category}`,
+      `- Strengths: ${platform.strengths.join("; ")}`,
+      `- Planning consideration: ${platform.considerations.join("; ")}`,
+      "",
+    ]),
     "## Typical package-to-launch process",
     "",
     ...packageProcess.map(

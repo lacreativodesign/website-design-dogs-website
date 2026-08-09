@@ -118,7 +118,8 @@ test('GTM starts its data layer before loading and remains consent-controlled', 
 
 test('package and service query preselection is allowlisted', () => {
   const form = fs.readFileSync('src/components/forms/contact-form.tsx', 'utf8');
-  assert.match(form, /starter:\s*"Starter — \$499"/);
+  assert.match(form, /packageBySlug\.get\(packageSlug\)/);
+  assert.match(form, /serviceBySlug\.get\(requestedService\)/);
   assert.match(form, /SERVICES\.includes/);
   assert.match(form, /new URLSearchParams\(search\)/);
   assert.match(form, /useSyncExternalStore/);

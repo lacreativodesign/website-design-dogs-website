@@ -1,6 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { illustrationScenes } from "@/content/illustrations";
+import { pageMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = pageMetadata({
+  title: "Page Not Found",
+  description: "The requested Website Design Dogs page could not be found.",
+  path: "/404",
+  noindex: true,
+});
 
 export default function NotFound() {
   return (
@@ -27,8 +35,10 @@ export default function NotFound() {
         <div className="not-found-page__actions">
           <Button href="/">Back to Home</Button>
           <Button href="/services" variant="outline">Explore Services</Button>
+          <Button href="/get-started" variant="outline">Start a Project</Button>
         </div>
       </div>
     </section>
   );
 }
+import type { Metadata } from "next";
