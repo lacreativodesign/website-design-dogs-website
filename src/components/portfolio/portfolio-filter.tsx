@@ -71,28 +71,37 @@ export function PortfolioFilter() {
 
   return (
     <div className="portfolio-filter">
-      <div className="portfolio-browse-switch" aria-label="Choose how to browse portfolio concepts">
-        <span>Browse by</span>
-        <button type="button" aria-pressed={mode === "industry"} onClick={() => chooseMode("industry")}>
-          Industry
-        </button>
-        <button type="button" aria-pressed={mode === "type"} onClick={() => chooseMode("type")}>
-          Website Type
-        </button>
-      </div>
-
-      <div className="portfolio-filter__tabs" aria-label={mode === "industry" ? "Filter concepts by industry" : "Filter concepts by website type"}>
-        {filters.map((filter) => (
-          <button
-            key={filter}
-            type="button"
-            aria-pressed={active === filter}
-            className={cn("portfolio-filter__tab", active === filter && "portfolio-filter__tab--active")}
-            onClick={() => chooseFilter(filter)}
-          >
-            {filter}
+      <div className="portfolio-filter-studio">
+        <div className="portfolio-filter-studio__header">
+          <div>
+            <span className="portfolio-filter-studio__kicker">Browse the concept studio</span>
+            <strong>Choose your viewing lens.</strong>
+          </div>
+          <span className="portfolio-filter-studio__count">{concepts.length} concepts</span>
+        </div>
+        <div className="portfolio-browse-switch" aria-label="Choose how to browse portfolio concepts">
+          <span>Browse by</span>
+          <button type="button" aria-pressed={mode === "industry"} onClick={() => chooseMode("industry")}>
+            Industry
           </button>
-        ))}
+          <button type="button" aria-pressed={mode === "type"} onClick={() => chooseMode("type")}>
+            Website Type
+          </button>
+        </div>
+
+        <div className="portfolio-filter__tabs" aria-label={mode === "industry" ? "Filter concepts by industry" : "Filter concepts by website type"}>
+          {filters.map((filter) => (
+            <button
+              key={filter}
+              type="button"
+              aria-pressed={active === filter}
+              className={cn("portfolio-filter__tab", active === filter && "portfolio-filter__tab--active")}
+              onClick={() => chooseFilter(filter)}
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
       </div>
 
       <p className="sr-only" aria-live="polite">

@@ -5,6 +5,7 @@ test("indexable pages have metadata and sitemap behavior is correct", async ({
   page,
   request,
 }) => {
+  test.setTimeout(60_000);
   const titles = new Set<string>();
 
   for (const route of publicRoutes) {

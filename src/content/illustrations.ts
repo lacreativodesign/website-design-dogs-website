@@ -20,6 +20,7 @@ function scene(slug: string) {
 export const illustrationScenes = {
   home: scene("home"),
   services: scene("services"),
+  platforms: scene("platforms"),
   portfolio: scene("portfolio"),
   packages: scene("packages"),
   packageDetail: scene("package-detail"),

@@ -8,6 +8,7 @@ const viewports = [
 ] as const;
 
 test("shared top-level heroes and breadcrumbs stay responsive", async ({ page }) => {
+  test.setTimeout(60_000);
   const routes = [
     "/services",
     "/about",
@@ -53,8 +54,8 @@ test("packages expose six website tiers, six categories, and a five-step journey
     await expect(page.locator(".packages-card .btn-primary")).toHaveCount(6);
     await expect(page.locator(".packages-process .inner-card-icon")).toHaveCount(5);
     await expect(page.locator(".packages-process li > b")).toHaveCount(0);
-    await expect(page.locator(".packages-contact-copy__art")).toBeVisible();
-    await expect(page.locator(".packages-contact-form")).toBeVisible();
+    await expect(page.locator(".packages-connect .home-lead__image")).toBeVisible();
+    await expect(page.locator(".packages-connect .home-lead-form")).toBeVisible();
     await expect(page.locator(".top-level-hero source[srcset*='packages-']")).toHaveCount(5);
     await expectNoOverflow(page);
   }

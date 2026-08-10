@@ -14,6 +14,10 @@ export function SiteJsonLd() {
   const site = getSiteUrl();
   const organizationId = `${site}/#organization`;
   const websiteId = `${site}/#website`;
+  const socialProfiles = [
+    siteConfig.social.facebook.href,
+    siteConfig.social.instagram.href,
+  ].filter((href): href is string => Boolean(href));
 
   return (
     <JsonLd
@@ -40,7 +44,7 @@ export function SiteJsonLd() {
               postalCode: "78731",
               addressCountry: "US",
             },
-            sameAs: [siteConfig.social.facebook.href],
+            sameAs: socialProfiles,
             parentOrganization: {
               "@type": "Organization",
               name: LEGAL_OWNER,

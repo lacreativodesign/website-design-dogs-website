@@ -46,7 +46,7 @@ test("home conversion system uses stable numerals, service icons, and complete a
     const item = packageCategories[0]!.packages.find((pkg) => pkg.slug === slug)!;
     const card = page.locator(`[data-package="${slug}"]`);
     await expect(
-      card.getByRole("link", { name: `Start with ${item.name}` }),
+      card.getByRole("link", { name: "Order Now" }),
     ).toHaveAttribute("href", item.quoteHref);
     await expect(card.getByRole("link", { name: "View Details" })).toHaveAttribute(
       "href",
@@ -55,7 +55,7 @@ test("home conversion system uses stable numerals, service icons, and complete a
   }
 
   await expect(
-    page.getByRole("link", { name: /view all six website packages/i }),
+    page.getByRole("link", { name: /view all packages/i }),
   ).toHaveAttribute("href", "/packages#package-options");
   await expectNoOverflow(page);
 });
@@ -68,7 +68,7 @@ test("package directory exposes actions and detail paths for every category", as
     for (const item of category.packages) {
       const card = page.locator(`[data-package="${item.slug}"]`);
       await expect(
-        card.getByRole("link", { name: `Start with ${item.name}` }),
+        card.getByRole("link", { name: "Order Now" }),
       ).toHaveAttribute("href", item.quoteHref);
       await expect(card.getByRole("link", { name: "View Details" })).toHaveAttribute(
         "href",
@@ -78,6 +78,6 @@ test("package directory exposes actions and detail paths for every category", as
   }
 
   await expect(page.locator(".packages-value-rail .value-benefit-tile")).toHaveCount(5);
-  await expect(page.locator(".final-section-heading").first()).toBeVisible();
+  await expect(page.locator(".packages-directory .home-section__heading--numbered")).toBeVisible();
   await expectNoOverflow(page);
 });

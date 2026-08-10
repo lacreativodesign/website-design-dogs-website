@@ -8,7 +8,7 @@ test("homepage directory CTAs keep their labels on one horizontal line", async (
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
 
-    for (const name of [/browse the portfolio/i, /view all six website packages/i]) {
+    for (const name of [/browse the portfolio/i, /view all packages/i]) {
       const cta = page.getByRole("link", { name });
       await expect(cta).toBeVisible();
       await expect(cta.locator(".btn__label")).toHaveCSS("white-space", "nowrap");

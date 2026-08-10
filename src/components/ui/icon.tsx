@@ -20,7 +20,10 @@ type BrandIconName =
   | "gauge"
   | "search-check"
   | "shield-check"
-  | "headset";
+  | "headset"
+  | "globe-2"
+  | "blocks"
+  | "shopping-cart";
 
 export type { BrandIconName };
 
@@ -100,6 +103,15 @@ export function BrandIcon({ name, className, size = 24 }: BrandIconProps) {
     case "headset":
       paths = <><path d="M4 14a8 8 0 0 1 16 0"/><path d="M18 19c0 1.7-1.3 3-3 3h-3"/><path d="M4 14h3v6H5a2 2 0 0 1-2-2v-2a2 2 0 0 1 1-2ZM20 14h-3v6h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-1-2Z"/></>;
       break;
+    case "globe-2":
+      paths = <><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20"/></>;
+      break;
+    case "blocks":
+      paths = <><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/><path d="M14 17.5h7M17.5 14v7"/></>;
+      break;
+    case "shopping-cart":
+      paths = <><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2H4l2.66 12.39a2 2 0 0 0 2 1.61h7.72a2 2 0 0 0 2-1.61L20 6H5.12"/></>;
+      break;
   }
 
   return (
@@ -124,3 +136,30 @@ export function BrandIcon({ name, className, size = 24 }: BrandIconProps) {
 export function ArrowRightIcon() { return <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>; }
 export function MenuIcon() { return <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>; }
 export function CloseIcon() { return <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg>; }
+
+export function SocialIcon({ name }: { name: "facebook" | "instagram" }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width="20"
+      height="20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      focusable="false"
+    >
+      {name === "facebook" ? (
+        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3Z" />
+      ) : (
+        <>
+          <rect width="18" height="18" x="3" y="3" rx="5" />
+          <circle cx="12" cy="12" r="4" />
+          <circle cx="17.5" cy="6.5" r=".6" fill="currentColor" stroke="none" />
+        </>
+      )}
+    </svg>
+  );
+}

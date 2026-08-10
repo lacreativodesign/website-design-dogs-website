@@ -8,6 +8,7 @@ import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { ArrowRightIcon } from "@/components/ui/icon";
+import { NumberedSectionHeading } from "@/components/ui/numbered-section-heading";
 import { illustrationScenes } from "@/content/illustrations";
 import { platforms } from "@/content/platforms";
 import { services } from "@/content/services";
@@ -64,11 +65,13 @@ export default function ServicesPage() {
 
       <section className="services-directory final-section" aria-labelledby="services-directory-title">
         <Container>
-          <header className="final-section-heading">
-            <p className="home-eyebrow">Explore services</p>
-            <h2 id="services-directory-title">Choose the capability your business needs next.</h2>
-            <p>Every service page explains the problem it addresses, typical inclusions, outcomes, package starting points, and scope boundaries.</p>
-          </header>
+          <NumberedSectionHeading
+            number="01"
+            eyebrow="Explore services"
+            id="services-directory-title"
+            title="Choose the capability your business needs next."
+            description="Every service page explains the problem it addresses, typical inclusions, outcomes, package starting points, and scope boundaries."
+          />
           <div className="services-showcase-grid">
             {services.map((service) => (
               <article key={service.slug} className="service-showcase-card">
@@ -94,9 +97,13 @@ export default function ServicesPage() {
       <section className="platform-teaser final-section final-section--alt" aria-labelledby="services-platform-title">
         <Container>
           <div className="platform-teaser__copy">
-            <p className="home-eyebrow">Platform-fit, not platform-first</p>
-            <h2 id="services-platform-title">The technology follows the business.</h2>
-            <p>We assess editing needs, ownership, integrations, commerce, content, and growth requirements before recommending a platform.</p>
+            <NumberedSectionHeading
+              number="02"
+              eyebrow="Platform-fit, not platform-first"
+              id="services-platform-title"
+              title="The technology follows the business."
+              description="We assess editing needs, ownership, integrations, commerce, content, and growth requirements before recommending a platform."
+            />
             <Button href="/platforms" variant="outline">Explore Platforms <ArrowRightIcon /></Button>
           </div>
           <div className="platform-name-grid" aria-label="Selected supported platforms">
@@ -105,9 +112,10 @@ export default function ServicesPage() {
         </Container>
       </section>
 
-      <section className="compact-cta-strip" aria-labelledby="services-cta-title">
-        <Container className="compact-cta-strip__inner">
+      <section className="compact-cta-strip decision-cta" aria-labelledby="services-cta-title">
+        <Container className="compact-cta-strip__inner decision-cta__panel">
           <div>
+            <p className="home-eyebrow">A clear next step</p>
             <h2 id="services-cta-title">Not sure where the project fits?</h2>
             <p>Share the business context and we’ll recommend a practical starting point.</p>
           </div>
@@ -117,4 +125,3 @@ export default function ServicesPage() {
     </>
   );
 }
-

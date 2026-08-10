@@ -1,9 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Link from "next/link";
 import { PackageLeadButton } from "@/components/packages/package-tracking";
 import { Button } from "@/components/ui/button";
+import { ArrowRightIcon } from "@/components/ui/icon";
 import {
   packageCategories,
   type PackageCategorySlug,
@@ -14,22 +14,32 @@ export function PackageExplorer({
   compact = false,
   initialCategory = "website-design",
   showTabs = true,
+  activeCategory,
+  onCategoryChange,
 }: {
   compact?: boolean;
   initialCategory?: PackageCategorySlug;
   showTabs?: boolean;
+  activeCategory?: PackageCategorySlug;
+  onCategoryChange?: (category: PackageCategorySlug) => void;
 }) {
-  const [activeSlug, setActiveSlug] = useState<PackageCategorySlug>(initialCategory);
-  const activeCategory =
+  const [internalSlug, setInternalSlug] = useState<PackageCategorySlug>(initialCategory);
+  const activeSlug = activeCategory ?? internalSlug;
+  const selectedCategory =
     packageCategories.find((category) => category.slug === activeSlug) ??
     packageCategories[0]!;
 
   const visiblePackages = useMemo(() => {
-    if (!compact || activeCategory.slug !== "website-design") return activeCategory.packages;
-    return activeCategory.featuredSlugs
-      .map((slug) => activeCategory.packages.find((item) => item.slug === slug))
+    if (!compact || selectedCategory.slug !== "website-design") return selectedCategory.packages;
+    return selectedCategory.featuredSlugs
+      .map((slug) => selectedCategory.packages.find((item) => item.slug === slug))
       .filter((item): item is NonNullable<typeof item> => Boolean(item));
-  }, [activeCategory, compact]);
+  }, [selectedCategory, compact]);
+
+  function chooseCategory(category: PackageCategorySlug) {
+    setInternalSlug(category);
+    onCategoryChange?.(category);
+  }
 
   return (
     <div className={cn("package-explorer", compact && "package-explorer--compact")}>
@@ -38,9 +48,9 @@ export function PackageExplorer({
           <button
             key={category.slug}
             type="button"
-            aria-pressed={activeCategory.slug === category.slug}
-            className={activeCategory.slug === category.slug ? "package-tab package-tab--active" : "package-tab"}
-            onClick={() => setActiveSlug(category.slug)}
+            aria-pressed={selectedCategory.slug === category.slug}
+            className={selectedCategory.slug === category.slug ? "package-tab package-tab--active" : "package-tab"}
+            onClick={() => chooseCategory(category.slug)}
           >
             {category.shortTitle}
           </button>
@@ -49,16 +59,13 @@ export function PackageExplorer({
 
       <div className="package-explorer__intro" aria-live="polite">
         <div>
-          <p className="home-eyebrow">{activeCategory.shortTitle}</p>
-          <h3>{activeCategory.title}</h3>
-          <p>{activeCategory.description}</p>
+          <p className="home-eyebrow">{selectedCategory.shortTitle}</p>
+          <h3>{selectedCategory.title}</h3>
+          <p>{selectedCategory.description}</p>
         </div>
-        <Link href={`/services/${activeCategory.serviceSlug}`}>
-          Explore service <span aria-hidden="true">→</span>
-        </Link>
       </div>
 
-      <div className="packages-card-grid" data-category={activeCategory.slug}>
+      <div className="packages-card-grid" data-category={selectedCategory.slug}>
         {visiblePackages.map((item) => (
           <article
             key={item.slug}
@@ -79,7 +86,7 @@ export function PackageExplorer({
             </ul>
             <div className="packages-card__actions">
               <PackageLeadButton href={item.quoteHref} slug={item.slug} featured={Boolean(item.label)}>
-                Start with {item.name}
+                Order Now
               </PackageLeadButton>
               <Button href={item.href} variant="outline">
                 View Details
@@ -89,10 +96,10 @@ export function PackageExplorer({
         ))}
       </div>
 
-      {compact && activeCategory.slug === "website-design" ? (
+      {compact ? (
         <div className="package-explorer__footer">
           <Button href="/packages#package-options" variant="outline">
-            View all six website packages
+            View All Packages <ArrowRightIcon />
           </Button>
         </div>
       ) : null}

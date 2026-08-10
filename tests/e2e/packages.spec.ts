@@ -29,7 +29,7 @@ test("all 21 approved packages are reachable from the six category tabs", async 
       const card = grid.locator(`[data-package="${item.slug}"]`);
       await expect(card).toContainText(item.price);
       await expect(
-        card.getByRole("link", { name: `Start with ${item.name}` }),
+        card.getByRole("link", { name: "Order Now" }),
       ).toHaveAttribute("href", item.quoteHref);
       await expect(card.getByRole("link", { name: "View Details" })).toHaveAttribute(
         "href",

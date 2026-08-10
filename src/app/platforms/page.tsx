@@ -5,7 +5,8 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { ArrowRightIcon } from "@/components/ui/icon";
+import { ArrowRightIcon, BrandIcon, type BrandIconName } from "@/components/ui/icon";
+import { NumberedSectionHeading } from "@/components/ui/numbered-section-heading";
 import { illustrationScenes } from "@/content/illustrations";
 import { platformPrinciples, platforms } from "@/content/platforms";
 import { pageMetadata } from "@/lib/seo";
@@ -13,7 +14,7 @@ import { absoluteUrl } from "@/lib/site-config";
 
 export const metadata: Metadata = pageMetadata({
   title: "Website & E-Commerce Platforms",
-  description: "Compare WordPress, Wix Studio, Webflow, Squarespace, Shopify, WooCommerce, BigCommerce, Next.js, and custom commerce options by business fit.",
+  description: "Compare website, CMS, commerce, and custom platforms—including WordPress, GoDaddy, Duda, Framer, HubSpot, Shopify, and Next.js—by business fit.",
   path: "/platforms",
 });
 
@@ -25,6 +26,11 @@ const proofItems: ProofItem[] = [
 ];
 
 const categories = ["Website & CMS", "E-Commerce", "Custom"] as const;
+const categoryIcons: Record<(typeof categories)[number], BrandIconName> = {
+  "Website & CMS": "globe-2",
+  "E-Commerce": "shopping-cart",
+  Custom: "blocks",
+};
 
 export default function PlatformsPage() {
   return (
@@ -50,7 +56,7 @@ export default function PlatformsPage() {
         title={<>Choose technology around the <em>business.</em></>}
         body="Editing, ownership, content, commerce, integrations, operating cost, and growth requirements should drive the platform—not familiarity alone."
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Platforms" }]}
-        scene={illustrationScenes.services}
+        scene={illustrationScenes.platforms}
         alt="Border collie digital strategist comparing website, commerce, and custom technology options"
         primaryCta={{ label: "Get a Platform Recommendation", href: "/get-started" }}
         secondaryCta={{ label: "Explore Services", href: "/services" }}
@@ -60,17 +66,19 @@ export default function PlatformsPage() {
       {categories.map((category, categoryIndex) => (
         <section key={category} className={`platform-directory final-section${categoryIndex % 2 ? " final-section--alt" : ""}`} aria-labelledby={`platform-category-${categoryIndex}`}>
           <Container>
-            <header className="final-section-heading">
-              <p className="home-eyebrow">{category}</p>
-              <h2 id={`platform-category-${categoryIndex}`}>
-                {category === "Website & CMS" ? "Managed and flexible website foundations." : category === "E-Commerce" ? "Store platforms for different operating realities." : "Custom technology when the requirements justify it."}
-              </h2>
-            </header>
+            <NumberedSectionHeading
+              number={`0${categoryIndex + 1}`}
+              eyebrow={category}
+              id={`platform-category-${categoryIndex}`}
+              title={category === "Website & CMS" ? "Managed and flexible website foundations." : category === "E-Commerce" ? "Store platforms for different operating realities." : "Custom technology when the requirements justify it."}
+            />
             <div className="platform-card-grid">
               {platforms.filter((platform) => platform.category === category).map((platform) => (
                 <article key={platform.slug} id={platform.slug}>
-                  <p className="home-eyebrow">{platform.category}</p>
-                  <h3>{platform.name}</h3>
+                  <div className="platform-card__header">
+                    <span className="inner-card-icon"><BrandIcon name={categoryIcons[category]} /></span>
+                    <div><p className="home-eyebrow">{platform.category}</p><h3>{platform.name}</h3></div>
+                  </div>
                   <p>{platform.bestFor}</p>
                   <div>
                     <h4>Strengths</h4>
@@ -87,12 +95,16 @@ export default function PlatformsPage() {
         </section>
       ))}
 
-      <section className="platform-decision-cta final-section" aria-labelledby="platform-decision-title">
-        <Container>
+      <section className="platform-decision-cta final-section decision-cta" aria-labelledby="platform-decision-title">
+        <Container className="platform-decision-cta__panel decision-cta__panel">
           <div>
-            <p className="home-eyebrow">No forced platform</p>
-            <h2 id="platform-decision-title">Bring the requirements. We’ll help evaluate the tradeoffs.</h2>
-            <p>Website Design Dogs does not claim platform partnerships or force every project into the same system. Final recommendations follow a requirements review.</p>
+            <NumberedSectionHeading
+              number="04"
+              eyebrow="No forced platform"
+              id="platform-decision-title"
+              title="Bring the requirements. We’ll help evaluate the tradeoffs."
+              description="Website Design Dogs does not claim platform partnerships or force every project into the same system. Final recommendations follow a requirements review."
+            />
           </div>
           <Button href="/get-started" icon={<ArrowRightIcon />}>Build Your Project Brief</Button>
         </Container>

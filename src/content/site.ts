@@ -33,6 +33,10 @@ export const siteConfig = {
       label: "Facebook",
       href: "https://www.facebook.com/WebsiteDesignDogs",
     },
+    instagram: {
+      label: "Instagram",
+      href: process.env.NEXT_PUBLIC_INSTAGRAM_URL?.trim() || null,
+    },
   },
   primaryCta: { label: "Get a Free Quote", href: "/get-started" },
   primaryNav: [
@@ -60,11 +64,6 @@ export const siteConfig = {
       { label: "Website Care", href: "/services/hosting-security" },
       { label: "Mobile App Development", href: "/services/mobile-app-development" },
       { label: "Social Media Marketing", href: "/services/social-media-marketing" },
-    ],
-    support: [
-      { label: "Packages", href: "/packages" },
-      { label: "Platforms", href: "/platforms" },
-      { label: "FAQ", href: "/faq" },
     ],
     legal: [
       { label: "Privacy Policy", href: "/privacy-policy" },

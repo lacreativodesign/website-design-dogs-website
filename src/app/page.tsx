@@ -9,7 +9,8 @@ import { ThemeScene } from "@/components/theme/theme-scene";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { ArrowRightIcon, BrandIcon, type BrandIconName } from "@/components/ui/icon";
-import { homeHero, homeLeadAsset, homeLeadBenefits, homeProcess, homeTrustPoints } from "@/content/home";
+import { NumberedSectionHeading } from "@/components/ui/numbered-section-heading";
+import { homeHero, homeLeadAsset, homeLeadBenefits, homeProcess, homeTrustPoints, homeValueRail } from "@/content/home";
 import { illustrationScenes } from "@/content/illustrations";
 import { industries } from "@/content/industries";
 import { platforms } from "@/content/platforms";
@@ -25,6 +26,7 @@ export const metadata: Metadata = pageMetadata({
 
 const trustIcons: BrandIconName[] = ["smartphone", "clipboard-check", "mouse-pointer-click", "heart-handshake"];
 const processIcons: BrandIconName[] = ["search", "pen-tool", "code-2", "rocket", "trending-up"];
+const valueIcons: BrandIconName[] = ["brush", "gauge", "search-check", "shield-check", "headset"];
 const industryIcons: Record<string, BrandIconName> = {
   "home-services": "house",
   "professional-services": "briefcase-business",
@@ -35,15 +37,6 @@ const industryIcons: Record<string, BrandIconName> = {
   "creative-businesses": "palette",
   "local-organizations": "map-pin-house",
 };
-
-function SectionHeading({ number, eyebrow, title, id }: { number: string; eyebrow: string; title: React.ReactNode; id: string }) {
-  return (
-    <div className="home-section__heading home-section__heading--numbered">
-      <span aria-hidden="true">{number}</span>
-      <div><p className="home-eyebrow">{eyebrow}</p><h2 id={id}>{title}</h2></div>
-    </div>
-  );
-}
 
 export default function Home() {
   return (
@@ -87,7 +80,7 @@ export default function Home() {
 
       <section className="home-section home-services-final" aria-labelledby="home-services-title">
         <Container>
-          <SectionHeading number="01" eyebrow="Connected capabilities" id="home-services-title" title={<>Start With the Service<br />That Solves the <em>Next Problem.</em></>} />
+          <NumberedSectionHeading number="01" eyebrow="Connected capabilities" id="home-services-title" title={<>Start With the Service<br />That Solves the <em>Next Problem.</em></>} />
           <div className="home-services-final__grid">
             {services.map((service) => (
               <Link key={service.slug} href={`/services/${service.slug}`} className="home-service-final-card">
@@ -104,10 +97,10 @@ export default function Home() {
 
       <section className="home-section home-process" aria-labelledby="process-title">
         <Container>
-          <SectionHeading number="02" eyebrow="How we work" id="process-title" title={<>A Clear Process.<br />Built With <em>Purpose.</em></>} />
+          <NumberedSectionHeading number="02" eyebrow="How we work" id="process-title" title={<>A Clear Process.<br />Built With <em>Purpose.</em></>} />
           <div className="home-process__grid">
             {homeProcess.map(([, title, body], index) => (
-              <article key={title}><BrandIcon name={processIcons[index] ?? "search"} className="wdd-card-icon" /><p>0{index + 1}</p><h3>{title}</h3><span>{body}</span></article>
+              <article key={title}><BrandIcon name={processIcons[index] ?? "search"} className="wdd-card-icon" /><p className="home-process__number">0{index + 1}</p><h3>{title}</h3><p className="home-process__body">{body}</p></article>
             ))}
           </div>
         </Container>
@@ -115,14 +108,22 @@ export default function Home() {
 
       <section className="home-section home-packages" aria-labelledby="home-packages-title">
         <Container>
-          <SectionHeading number="03" eyebrow="Transparent packages" id="home-packages-title" title={<>Choose the Right <em>Foundation.</em></>} />
+          <NumberedSectionHeading number="03" eyebrow="Transparent packages" id="home-packages-title" title={<>Choose the Right <em>Foundation.</em></>} />
           <PackageExplorer compact />
+          <div className="home-value-rail" aria-label="Included website value">
+            {homeValueRail.map(([title, body], index) => (
+              <article key={title} className="value-benefit-tile">
+                <BrandIcon name={valueIcons[index] ?? "brush"} />
+                <div><h3>{title}</h3><p>{body}</p></div>
+              </article>
+            ))}
+          </div>
         </Container>
       </section>
 
       <section className="home-section home-work" aria-labelledby="home-portfolio-title">
         <Container>
-          <SectionHeading number="04" eyebrow="Design concepts" id="home-portfolio-title" title={<>See the Standard<br />Before You <em>Commit.</em></>} />
+          <NumberedSectionHeading number="04" eyebrow="Design concepts" id="home-portfolio-title" title={<>See the Standard<br />Before You <em>Commit.</em></>} />
           <p className="home-section-intro">Browse clearly labelled design concepts by industry or website type. They demonstrate layout direction—not completed client work.</p>
           <PortfolioGallery concepts={portfolioConcepts.slice(0, 6)} className="home-portfolio-grid" />
           <div className="home-section__cta"><Button href="/portfolio" variant="outline">Browse the Portfolio <ArrowRightIcon /></Button></div>
@@ -131,7 +132,7 @@ export default function Home() {
 
       <section className="home-section home-platforms" aria-labelledby="home-platforms-title">
         <Container>
-          <SectionHeading number="05" eyebrow="Platform fit" id="home-platforms-title" title={<>Choose Technology<br />Around the <em>Requirements.</em></>} />
+          <NumberedSectionHeading number="05" eyebrow="Platform fit" id="home-platforms-title" title={<>Choose Technology<br />Around the <em>Requirements.</em></>} />
           <div className="home-platforms__layout">
             <div>
               <p>We assess ownership, editing, content, integrations, commerce, growth, and total operating cost before recommending a platform.</p>
@@ -144,7 +145,7 @@ export default function Home() {
 
       <section className="home-section home-industries home-industries--compact" aria-labelledby="home-industries-title">
         <Container>
-          <SectionHeading number="06" eyebrow="Business context" id="home-industries-title" title={<>Different Audiences.<br />One Clear <em>Next Step.</em></>} />
+          <NumberedSectionHeading number="06" eyebrow="Business context" id="home-industries-title" title={<>Different Audiences.<br />One Clear <em>Next Step.</em></>} />
           <p className="home-industries__intro">Industry context helps us shape customer questions, proof, content, and calls to action without forcing every business into the same template.</p>
           <div className="home-industries-grid">
             {industries.map((industry) => (
@@ -163,7 +164,7 @@ export default function Home() {
         <Container>
           <div className="home-lead-grid">
             <div className="home-lead-copy">
-              <SectionHeading number="07" eyebrow="Start your project" id="home-lead-title" title={<>Let’s Build Around<br /><em>Your Business.</em></>} />
+              <NumberedSectionHeading number="07" eyebrow="Start your project" id="home-lead-title" title={<>Let’s Build Around<br /><em>Your Business.</em></>} />
               <ul>{homeLeadBenefits.map((benefit) => <li key={benefit}>{benefit}</li>)}</ul>
               <Image src={homeLeadAsset} alt="Website Design Dogs mascot ready to plan a digital project" width={960} height={960} sizes="(max-width: 1023px) 100vw, 42vw" className="home-lead__image" />
             </div>
@@ -174,4 +175,3 @@ export default function Home() {
     </>
   );
 }
-
