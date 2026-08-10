@@ -107,7 +107,11 @@ export default function ServicesPage() {
             <Button href="/platforms" variant="outline">Explore Platforms <ArrowRightIcon /></Button>
           </div>
           <div className="platform-name-grid" aria-label="Selected supported platforms">
-            {platforms.slice(0, 6).map((platform) => <span key={platform.slug}>{platform.name}</span>)}
+            {platforms.slice(0, 6).map((platform) => (
+              <Link key={platform.slug} href={`/platforms#${platform.slug}`}>
+                {platform.name}
+              </Link>
+            ))}
           </div>
         </Container>
       </section>

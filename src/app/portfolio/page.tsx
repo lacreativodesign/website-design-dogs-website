@@ -41,7 +41,7 @@ export default function PortfolioPage() {
     />
     <ProofStrip label="Portfolio concept context" items={portfolioProof} />
 
-    <section className="home-section portfolio-directory" aria-labelledby="portfolio-directory-title"><Container><NumberedSectionHeading number="02" eyebrow="DESIGN CONCEPTS" id="portfolio-directory-title" title={<>See the Standard<br />Before You Commit.</>} description="Explore layout direction, structure, and user flow across different industries before we build your custom website." /><PortfolioFilter /></Container></section>
+    <section className="home-section portfolio-directory" aria-labelledby="portfolio-directory-title"><Container><PortfolioFilter heading={<NumberedSectionHeading number="02" eyebrow="DESIGN CONCEPTS" id="portfolio-directory-title" title={<>See the Standard<br />Before You Commit.</>} description="Explore layout direction, structure, and user flow across different industries before we build your custom website." />} /></Container></section>
 
     <section className="home-section portfolio-strategy" aria-labelledby="portfolio-strategy-title"><Container><NumberedSectionHeading number="03" eyebrow="THE STANDARD" id="portfolio-strategy-title" title={<>Strategy You Can See.</>} /><div>{portfolioStrategy.map(([title, body], index) => <article key={title}><span className="inner-card-icon"><BrandIcon name={portfolioStrategyIcons[index] ?? "search-check"} /></span><h3>{title}</h3><p>{body}</p></article>)}</div></Container></section>
 

@@ -59,8 +59,19 @@ test("the supplied GTM container remains blocked until optional consent", async 
 test("services and platforms use polished artwork, unique scenes, icons, and numbered sections", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/services");
-  await expect(page.locator(".service-showcase-card__media img").first()).toHaveCSS("object-fit", "contain");
+  const firstServiceCard = page.locator(".service-showcase-card").first();
+  const firstServiceMedia = firstServiceCard.locator(".service-showcase-card__media");
+  await expect(firstServiceMedia.locator("img")).toHaveCSS("object-fit", "contain");
+  const serviceCardBox = await firstServiceCard.boundingBox();
+  const serviceMediaBox = await firstServiceMedia.boundingBox();
+  expect(serviceMediaBox?.width ?? 0).toBeGreaterThan((serviceCardBox?.width ?? 0) * .9);
+  expect((serviceMediaBox?.width ?? 0) / (serviceMediaBox?.height ?? 1)).toBeCloseTo(1.5, 1);
   await expect(page.locator(".decision-cta__panel")).toBeVisible();
+  expect((await page.locator(".compact-cta-strip .decision-cta__panel").boundingBox())?.height ?? 0).toBeGreaterThan(190);
+  const platformLink = page.locator(".platform-name-grid a").first();
+  await expect(platformLink).toHaveAttribute("href", /\/platforms#/);
+  await platformLink.hover();
+  expect(await platformLink.evaluate((element) => getComputedStyle(element).transform)).not.toBe("none");
   await expect(page.locator(".top-level-hero__scene .theme-scene__image")).toHaveCSS("object-position", "50% 0%");
 
   await page.goto("/platforms");
@@ -86,14 +97,33 @@ test("package comparison follows the selected category and social packages are v
   await expect(page.locator(".packages-value-rail .value-benefit-tile")).toHaveCount(5);
 });
 
-test("portfolio filter is integrated and the contact disclosure stays on one line at desktop", async ({ page }) => {
+test("portfolio controls align with the heading and duplicate contact blocks stay removed", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/portfolio");
   await expect(page.locator(".portfolio-filter-studio")).toBeVisible();
+  await expect(page.locator(".portfolio-filter-studio__count")).toHaveCount(0);
+  await expect(page.getByText("Browse the concept studio", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Find a direction that fits.", { exact: true })).toHaveCount(0);
+  await expect(page.locator(".portfolio-browse-switch").getByRole("button")).toHaveCount(2);
+  const headingBox = await page.locator(".portfolio-filter-studio__header .home-section__heading").boundingBox();
+  const switchBox = await page.locator(".portfolio-browse-control").boundingBox();
+  expect(switchBox?.y ?? 0).toBeLessThan((headingBox?.y ?? 0) + (headingBox?.height ?? 0));
+  await expect(page.locator(".portfolio-filter-studio .portfolio-filter__tabs")).toHaveCSS("justify-content", "center");
+  await expect(page.locator(".portfolio-filter-studio")).toHaveCSS("border-top-width", "0px");
+  await expect(page.locator(".portfolio-filter-studio")).toHaveCSS("border-bottom-width", "0px");
+  await page.getByRole("button", { name: "Website Type", exact: true }).click();
+  await expect(page.locator('[data-browse-mode="type"]')).toBeVisible();
+  await expect(page.locator(".portfolio-filter__tab--active")).toHaveCSS("background-color", "rgb(255, 106, 0)");
   await expect(page.locator(".portfolio-directory .numbered-section-description")).toContainText("Explore layout direction");
   await expect(page.locator(".portfolio-process article")).toHaveCount(3);
 
   await page.goto("/contact");
-  await expect(page.locator(".contact-disclosure p")).toHaveCSS("white-space", "nowrap");
-  await expect(page.locator(".contact-disclosure p")).toHaveText("Website Design Dogs is a service brand of LA CREATIVO GROUP, LLC.");
+  await expect(page.locator(".contact-disclosure")).toHaveCount(0);
+  await expect(page.locator(".contact-quick-links")).toHaveCount(0);
+  await expect(page.locator(".contact-method-card")).toHaveCount(3);
+  await expect(page.locator(".site-footer")).toContainText("Website Design Dogs is a service brand of LA CREATIVO GROUP, LLC.");
+
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.goto("/contact");
+  await expectNoOverflow(page);
 });

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useSyncExternalStore } from "react";
+import { useMemo, useSyncExternalStore, type ReactNode } from "react";
 import {
   portfolioConcepts,
   portfolioIndustryFilters,
@@ -21,7 +21,7 @@ function isValidFilter(mode: BrowseMode, value: string) {
   return (filtersFor(mode) as readonly string[]).includes(value);
 }
 
-export function PortfolioFilter() {
+export function PortfolioFilter({ heading }: { heading: ReactNode }) {
   const search = useSyncExternalStore(
     (onChange) => {
       window.addEventListener("popstate", onChange);
@@ -73,20 +73,18 @@ export function PortfolioFilter() {
     <div className="portfolio-filter">
       <div className="portfolio-filter-studio">
         <div className="portfolio-filter-studio__header">
-          <div>
-            <span className="portfolio-filter-studio__kicker">Browse the concept studio</span>
-            <strong>Choose your viewing lens.</strong>
+          {heading}
+          <div className="portfolio-browse-control">
+            <span>Browse by</span>
+            <div className="portfolio-browse-switch" role="group" aria-label="Choose how to browse portfolio concepts">
+              <button type="button" aria-pressed={mode === "industry"} onClick={() => chooseMode("industry")}>
+                Industry
+              </button>
+              <button type="button" aria-pressed={mode === "type"} onClick={() => chooseMode("type")}>
+                Website Type
+              </button>
+            </div>
           </div>
-          <span className="portfolio-filter-studio__count">{concepts.length} concepts</span>
-        </div>
-        <div className="portfolio-browse-switch" aria-label="Choose how to browse portfolio concepts">
-          <span>Browse by</span>
-          <button type="button" aria-pressed={mode === "industry"} onClick={() => chooseMode("industry")}>
-            Industry
-          </button>
-          <button type="button" aria-pressed={mode === "type"} onClick={() => chooseMode("type")}>
-            Website Type
-          </button>
         </div>
 
         <div className="portfolio-filter__tabs" aria-label={mode === "industry" ? "Filter concepts by industry" : "Filter concepts by website type"}>
