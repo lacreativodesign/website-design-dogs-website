@@ -138,7 +138,13 @@ export default function Home() {
               <p>We assess ownership, editing, content, integrations, commerce, growth, and total operating cost before recommending a platform.</p>
               <Button href="/platforms" variant="outline">Explore Platform Options <ArrowRightIcon /></Button>
             </div>
-            <div className="platform-name-grid">{platforms.map((platform) => <span key={platform.slug}>{platform.name}</span>)}</div>
+            <div className="platform-name-grid">
+              {platforms.map((platform) => (
+                <Link key={platform.slug} href={`/platforms#${platform.slug}`}>
+                  {platform.name}
+                </Link>
+              ))}
+            </div>
           </div>
         </Container>
       </section>
