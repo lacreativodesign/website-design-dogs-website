@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { ContactForm } from "@/components/forms/contact-form";
 import { ProofStrip, TopLevelHero, type ProofItem } from "@/components/pages/top-level-hero";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
@@ -25,13 +24,6 @@ const contactProof: ProofItem[] = [
   { title: "No-pressure guidance", body: "The next step should fit the project—not the other way around.", icon: "heart-handshake" },
   { title: "Your context stays attached", body: "Campaign and package preferences are preserved through the enquiry path.", icon: "shield-check" },
 ];
-
-const quickLinks = [
-  { label: "Services", href: "/services" },
-  { label: "Portfolio", href: "/portfolio" },
-  { label: "Packages", href: "/packages" },
-  { label: "FAQ", href: "/faq" },
-] as const;
 
 export const metadata: Metadata = pageMetadata({
   title: "Contact Website Design Dogs",
@@ -96,17 +88,6 @@ export default function ContactPage() {
                   </a>
                 ))}
               </div>
-              <div className="contact-disclosure">
-                <BrandIcon name="shield-check" />
-                <p>{siteConfig.legalDisclosure}</p>
-              </div>
-              <nav className="contact-quick-links" aria-label="Quick links">
-                {quickLinks.map((link) => (
-                  <Link key={link.href} href={link.href}>
-                    {link.label}
-                  </Link>
-                ))}
-              </nav>
             </aside>
 
             <div className="contact-form-card">
