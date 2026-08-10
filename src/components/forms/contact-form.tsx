@@ -8,6 +8,8 @@ import {
   useSyncExternalStore,
 } from "react";
 import { Button } from "@/components/ui/button";
+import { packageBySlug } from "@/content/packages";
+import { serviceBySlug } from "@/content/services";
 import { SERVICES } from "@/lib/leads/constants";
 import { leadEvent } from "./analytics-events";
 import { getAttribution } from "./attribution";
@@ -28,13 +30,6 @@ const empty: ContactRequestPayload = {
   summary: "",
   consent: false,
   source: "contact",
-};
-
-const packageLabels: Record<string, string> = {
-  starter: "Starter — $499",
-  business: "Business — $899",
-  growth: "Growth — $1,499",
-  custom: "Custom Project",
 };
 
 const uuid = () => crypto.randomUUID();
@@ -64,12 +59,18 @@ function getServerSearch() {
 function getPreferences(search: string) {
   const params = new URLSearchParams(search);
   const packageSlug = params.get("package") || "";
-  const packageLabel = packageLabels[packageSlug];
+  const selectedPackage = packageBySlug.get(packageSlug);
+  const packageLabel = selectedPackage
+    ? `${selectedPackage.name} — ${selectedPackage.price} ${selectedPackage.priceSuffix}`
+    : packageSlug === "custom"
+      ? "Custom Project"
+      : undefined;
   const requestedService = params.get("service");
-  const service = SERVICES.includes(
-    requestedService as (typeof SERVICES)[number],
-  )
-    ? requestedService!
+  const resolvedService = requestedService
+    ? serviceBySlug.get(requestedService)?.title ?? requestedService
+    : "";
+  const service = SERVICES.includes(resolvedService)
+    ? resolvedService
     : packageLabel
       ? "New Website"
       : "";
@@ -157,6 +158,7 @@ export function ContactForm() {
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
     if (submitting) {
       return;
     }
@@ -165,6 +167,10 @@ export function ContactForm() {
     setReference("");
     if (!validate()) {
       setStatus("Please review the highlighted fields and try again.");
+      requestAnimationFrame(() => {
+        const firstInvalid = form.querySelector<HTMLElement>("[aria-invalid='true']");
+        firstInvalid?.focus();
+      });
       return;
     }
 
@@ -180,7 +186,7 @@ export function ContactForm() {
       submissionId,
       formStartedAt,
       turnstileToken: turnstile,
-      verificationCode: new FormData(event.currentTarget)
+      verificationCode: new FormData(form)
         .get("company-url")
         ?.toString(),
       attribution: getAttribution(),
@@ -291,6 +297,17 @@ export function ContactForm() {
           />
         </Field>
       </div>
+      <Field id="website" label="Current website" error={errors.website} hint="Optional. Include https:// if you have one.">
+        <input
+          id="website"
+          type="url"
+          autoComplete="url"
+          className={inputClass}
+          value={formData.website}
+          onChange={(event) => set("website", event.target.value)}
+          placeholder="https://example.com"
+        />
+      </Field>
       <Field
         id="service"
         label="Service needed"
@@ -330,6 +347,8 @@ export function ContactForm() {
           type="checkbox"
           className="mt-1 h-5 w-5"
           checked={formData.consent}
+          aria-invalid={errors.consent ? true : undefined}
+          aria-describedby={errors.consent ? "contact-consent-error" : undefined}
           onChange={(event) => set("consent", event.target.checked)}
         />
         <span>
@@ -342,7 +361,7 @@ export function ContactForm() {
         </span>
       </label>
       {errors.consent ? (
-        <p className="text-sm font-bold text-orange-300">{errors.consent}</p>
+        <p id="contact-consent-error" className="text-sm font-bold text-orange-300">{errors.consent}</p>
       ) : null}
       <TurnstileWidget
         action="contact_lead"

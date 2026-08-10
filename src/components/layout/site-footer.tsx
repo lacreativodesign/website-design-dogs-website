@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CookieSettingsButton } from "@/components/consent/cookie-settings-button";
 import { siteConfig } from "@/content/site";
+import { SocialIcon } from "@/components/ui/icon";
 import { BrandLogo } from "./brand-logo";
 
 function FooterList({
@@ -43,22 +44,41 @@ function FooterContact({ compact }: { compact: boolean }) {
             {siteConfig.contact.phone.value}
           </a>
         </li>
-        <li>
+        <li>{siteConfig.contact.address.value}</li>
+      </ul>
+    </div>
+  );
+}
+
+function FooterSocials() {
+  const socialLinks = [siteConfig.social.facebook, siteConfig.social.instagram] as const;
+
+  return (
+    <div className="footer-socials" aria-label="Website Design Dogs social profiles">
+      {socialLinks.map((social) =>
+        social.href ? (
           <a
-            className="footer-link"
-            href={siteConfig.contact.whatsapp.href}
+            key={social.label}
+            href={social.href}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label={social.label}
+            title={social.label}
           >
-            {siteConfig.contact.whatsapp.label}
+            <SocialIcon name={social.label.toLowerCase() as "facebook" | "instagram"} />
           </a>
-        </li>
-        <li>
-          <Link className="footer-link" href="/get-started">
-            Get a Free Quote
-          </Link>
-        </li>
-      </ul>
+        ) : (
+          <span
+            key={social.label}
+            className="footer-socials__pending"
+            aria-label={`${social.label} profile link pending`}
+            aria-disabled="true"
+            title={`${social.label} profile link pending`}
+          >
+            <SocialIcon name="instagram" />
+          </span>
+        ),
+      )}
     </div>
   );
 }
@@ -71,7 +91,7 @@ export function SiteFooter({ compact = false }: { compact?: boolean }) {
       className={`site-footer${compact ? " site-footer--compact" : ""}`}
     >
       <div className="mx-auto max-w-[var(--container-width)] px-5 py-8 sm:px-6 lg:px-8 lg:py-10">
-        <div className="grid gap-7 lg:grid-cols-[1.25fr_0.72fr_1fr_0.72fr_0.95fr]">
+        <div className="footer-grid grid gap-7 lg:grid-cols-[1.25fr_0.75fr_1.1fr_1fr]">
           <div>
             <BrandLogo />
             <p className="mt-4 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-primary-orange)]">
@@ -83,13 +103,13 @@ export function SiteFooter({ compact = false }: { compact?: boolean }) {
             <p className="mt-4 max-w-sm text-sm leading-6 text-white/68">
               {siteConfig.legalDisclosure}
             </p>
+            <FooterSocials />
           </div>
           <FooterList
             title={compact ? "Quick Links" : "Company"}
             items={siteConfig.footer.company}
           />
           <FooterList title="Services" items={siteConfig.footer.services} />
-          <FooterList title="Support" items={siteConfig.footer.support} />
           <FooterContact compact={compact} />
         </div>
         <div className="mt-8 flex flex-col gap-4 border-t border-white/12 pt-5">

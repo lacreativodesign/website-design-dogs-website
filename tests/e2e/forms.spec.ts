@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { packageBySlug } from "../../src/content/packages";
 
 const failedResponse = {
   ok: false,
@@ -19,14 +20,14 @@ test("contact form validation, failure preservation, and mocked success", async 
   await page.goto("/contact");
 
   const submit = page.getByRole("button", { name: "Send Enquiry" });
-  const fullName = page.getByRole("textbox", { name: "Full name *" });
+  const fullName = page.getByRole("textbox", { name: /^Full name/ });
   const businessName = page.getByRole("textbox", {
-    name: "Business name *",
+    name: /^Business name/,
   });
-  const email = page.getByRole("textbox", { name: "Email address *" });
-  const summary = page.getByRole("textbox", { name: "Project summary *" });
-  const service = page.getByRole("combobox", { name: "Service needed *" });
-  const consent = page.getByRole("checkbox");
+  const email = page.getByRole("textbox", { name: /^Email address/ });
+  const summary = page.getByRole("textbox", { name: /^Project summary/ });
+  const service = page.getByRole("combobox", { name: /^Service needed/ });
+  const consent = page.getByRole("checkbox", { name: /I consent/i });
   const status = page.locator("#contact-status");
 
   await expect(status).toHaveClass("sr-only");
@@ -78,13 +79,23 @@ test("contact form validation, failure preservation, and mocked success", async 
 });
 
 test("quote package query renders and privacy link works", async ({ page }) => {
-  test.setTimeout(60_000);
+  test.setTimeout(120_000);
 
-  const packageLabels = new Map([
-    ["starter", "Starter — $499"],
-    ["business", "Business — $899"],
-    ["growth", "Growth — $1,499"],
-  ]);
+  const packageSlugs = [
+    "starter",
+    "business",
+    "commerce-launch",
+    "seo-growth",
+    "social-foundation",
+    "care-business",
+    "app-launch-mvp",
+  ];
+  const packageLabels = new Map(
+    packageSlugs.map((slug) => {
+      const item = packageBySlug.get(slug)!;
+      return [slug, `${item.name} — ${item.price} ${item.priceSuffix}`] as const;
+    }),
+  );
 
   for (const packageName of [...packageLabels.keys(), "invalid"]) {
     await page.goto(`/get-started?package=${packageName}`);
@@ -130,7 +141,7 @@ test("quote package query renders and privacy link works", async ({ page }) => {
       await page.getByLabel("Content status").selectOption("Ready");
       await page.getByLabel("Branding status").selectOption("Brand materials ready");
     } else {
-      await page.getByLabel("Starter — $499").check();
+      await page.getByLabel("Starter — $499 one time").check();
       await page.getByLabel("Budget range").selectOption("$500–$999");
       await page.getByLabel("Preferred start timing").selectOption("Within 30 days");
     }

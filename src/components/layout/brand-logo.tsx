@@ -8,12 +8,16 @@ export function BrandLogo({ className, priority = false }: { className?: string;
     <Link href="/" className={cn("brand-logo", className)} aria-label={`${siteConfig.name} home`}>
       <Image
         src={siteConfig.logo}
-        alt={`${siteConfig.name} logo`}
-        width={720}
-        height={176}
+        alt=""
+        width={58}
+        height={64}
         priority={priority}
-        className="brand-logo__image"
+        className="brand-logo__mark"
       />
+      <span className="brand-logo__wordmark" aria-hidden="true">
+        <span>Website Design</span>
+        <strong>Dogs</strong>
+      </span>
     </Link>
   );
 }

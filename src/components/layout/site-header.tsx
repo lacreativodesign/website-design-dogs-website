@@ -12,6 +12,7 @@ export function SiteHeader() {
   const isActive = (href: string) =>
     pathname === href ||
     (href === "/services" && pathname.startsWith("/services/")) ||
+    (href === "/platforms" && pathname.startsWith("/platforms/")) ||
     (href === "/packages" && pathname.startsWith("/packages/"));
 
   return (

@@ -8,7 +8,7 @@ test("approved scene artwork and corrected shared navigation render", async ({ p
   );
 
   await page.goto("/services");
-  await expect(page.locator(".services-hero .theme-scene__image")).toHaveAttribute(
+  await expect(page.locator(".top-level-hero .theme-scene__image")).toHaveAttribute(
     "src",
     /services-desktop/,
   );
@@ -27,7 +27,7 @@ test("approved scene artwork and corrected shared navigation render", async ({ p
 
 test("contact and consent controls avoid setup-facing or obstructive copy", async ({ page }) => {
   await page.goto("/contact");
-  await expect(page.locator(".contact-hero__scene .theme-scene__image")).toBeVisible();
+  await expect(page.locator(".top-level-hero__scene .theme-scene__image")).toBeVisible();
   await expect(
     page.getByText(/anti-spam verification is not configured/i),
   ).toHaveCount(0);

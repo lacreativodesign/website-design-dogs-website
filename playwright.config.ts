@@ -7,6 +7,7 @@ const useExternalServer = process.env.PLAYWRIGHT_EXTERNAL_SERVER === 'true';
 export default defineConfig({
   testDir: './tests/e2e',
   timeout: 30_000,
+  workers: 2,
   expect: { timeout: 5_000 },
   fullyParallel: true,
   retries: isCI ? 1 : 0,
@@ -21,7 +22,7 @@ export default defineConfig({
   webServer: useExternalServer
     ? undefined
     : {
-        command: 'npm run start',
+        command: 'npm run start -- --hostname 127.0.0.1',
         url: baseURL,
         reuseExistingServer: !isCI,
         timeout: 120_000,

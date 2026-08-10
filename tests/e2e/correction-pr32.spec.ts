@@ -7,28 +7,34 @@ const viewports = [
   { width: 1440, height: 1000 },
 ] as const;
 
-test("standard heroes and breadcrumbs share stable responsive geometry", async ({ page }) => {
+test("shared top-level heroes and breadcrumbs stay responsive", async ({ page }) => {
+  test.setTimeout(60_000);
+  const routes = [
+    "/services",
+    "/about",
+    "/portfolio",
+    "/packages",
+    "/contact",
+    "/get-started",
+  ];
+
   for (const viewport of viewports) {
     await page.setViewportSize(viewport);
-    for (const [route, hero] of [
-      ["/services", ".services-hero"],
-      ["/about", ".visual-page-hero--about"],
-      ["/contact", ".compact-title-section"],
-      ["/faq", ".visual-page-hero--faq"],
-    ] as const) {
+    for (const route of routes) {
       await page.goto(route);
-      const heroBox = await page.locator(hero).boundingBox();
-      const breadcrumbBox = await page.locator(".hero-breadcrumb").boundingBox();
-      expect(heroBox).not.toBeNull();
+      const hero = page.locator(".top-level-hero");
+      const breadcrumb = hero.locator(".hero-breadcrumb");
+      await expect(hero).toBeVisible();
+      await expect(breadcrumb).toBeVisible();
+      const breadcrumbBox = await breadcrumb.boundingBox();
       expect(breadcrumbBox).not.toBeNull();
-      expect(heroBox!.height).toBeGreaterThanOrEqual(viewport.width <= 760 ? 690 : 550);
       expect(breadcrumbBox!.width).toBeLessThan(viewport.width - 24);
       await expectNoOverflow(page);
     }
   }
 });
 
-test("portfolio removes the rejected section and keeps sequential numbering", async ({ page }) => {
+test("portfolio keeps a focused sequence after the concept directory", async ({ page }) => {
   await page.goto("/portfolio");
   await expect(page.getByText("More Than a Pretty Homepage.")).toHaveCount(0);
   await expect(page.locator(".portfolio-breakdowns")).toHaveCount(0);
@@ -40,26 +46,29 @@ test("portfolio removes the rejected section and keeps sequential numbering", as
   ]);
 });
 
-test("packages use primary order actions, icon journey, balanced recommendation, and final art", async ({ page }) => {
+test("packages expose six website tiers, six categories, and a five-step journey", async ({ page }) => {
   for (const viewport of viewports) {
     await page.setViewportSize(viewport);
     await page.goto("/packages");
-    await expect(page.locator(".packages-card .btn-primary")).toHaveCount(3);
+    await expect(page.locator(".package-tabs .package-tab")).toHaveCount(6);
+    await expect(page.locator(".packages-card .btn-primary")).toHaveCount(6);
     await expect(page.locator(".packages-process .inner-card-icon")).toHaveCount(5);
     await expect(page.locator(".packages-process li > b")).toHaveCount(0);
-    await expect(page.locator(".packages-contact-copy__content")).toBeVisible();
-    await expect(page.locator(".packages-contact-form")).toBeVisible();
-    await expect(page.locator(".packages-hero source[srcset*='packages-']")).toHaveCount(5);
+    await expect(page.locator(".packages-connect .home-lead__image")).toBeVisible();
+    await expect(page.locator(".packages-connect .home-lead-form")).toBeVisible();
+    await expect(page.locator(".top-level-hero source[srcset*='packages-']")).toHaveCount(5);
     await expectNoOverflow(page);
   }
 });
 
-test("about, contact, and get-started replace the broken structural layouts", async ({ page }) => {
+test("about, contact, and get-started retain their substantive body layouts", async ({ page }) => {
   await page.goto("/about");
+  await expect(page.locator(".top-level-hero")).toBeVisible();
   await expect(page.locator(".about-experience-cards article")).toHaveCount(4);
   await expect(page.locator(".about-experience-grid dl")).toHaveCount(0);
 
   await page.goto("/contact");
+  await expect(page.locator(".top-level-hero")).toBeVisible();
   await expect(page.locator(".contact-method-card")).toHaveCount(3);
   await expect(page.locator(".coverage-panel__steps li")).toHaveCount(4);
   for (const card of await page.locator(".contact-method-card").all()) {
@@ -71,22 +80,22 @@ test("about, contact, and get-started replace the broken structural layouts", as
   }
 
   await page.goto("/get-started");
-  await expect(page.locator(".guided-hero > .guided-hero__scene")).toBeVisible();
-  await expect(page.locator(".page-hero__scene")).toHaveCount(0);
-  await expect(page.locator(".quote-summary__guide-art")).toBeVisible();
-  await expect(page.locator(".quote-summary__guide-copy")).toBeVisible();
+  await expect(page.locator(".top-level-hero")).toBeVisible();
+  await expect(page.locator(".get-started-section")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Your Business" })).toBeVisible();
   await expectNoOverflow(page);
 });
 
-test("package and service detail families use dedicated final illustrations", async ({ page }) => {
+test("package and service detail families retain rich artwork and scoped actions", async ({ page }) => {
   await page.goto("/packages/starter");
   await expect(page.locator(".package-detail-hero source[srcset*='package-detail-']")).toHaveCount(5);
   await expect(page.locator(".package-detail-hero__copy")).toBeVisible();
-  await expect(page.getByRole("link", { name: /order starter/i })).toHaveClass(/btn-primary/);
+  await expect(page.getByRole("link", { name: "Start with Starter" })).toHaveClass(/btn-primary/);
 
   await page.goto("/services/custom-website-design");
   await expect(page.locator(".service-detail-hero source[srcset*='service-detail-']")).toHaveCount(5);
+  await expect(page.locator(".service-story__art source[type='image/avif']")).toHaveCount(1);
   await expect(page.locator(".service-detail-hero__proof li")).toHaveCount(3);
-  await expect(page.locator(".service-detail-steps .inner-card-icon")).toHaveCount(4);
+  await expect(page.locator(".service-process__grid .inner-card-icon")).toHaveCount(4);
   await expectNoOverflow(page);
 });

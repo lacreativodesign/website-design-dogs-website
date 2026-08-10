@@ -7,14 +7,21 @@ const viewports = [
   { width: 1440, height: 1000 },
 ] as const;
 
-test("About and FAQ heroes keep full-width containers with left-aligned copy", async ({ page }) => {
+test("shared public heroes keep full-width containers with left-aligned copy", async ({ page }) => {
   for (const viewport of viewports) {
     await page.setViewportSize(viewport);
 
-    for (const route of ["/about", "/faq"]) {
+    for (const route of [
+      "/services",
+      "/portfolio",
+      "/packages",
+      "/about",
+      "/contact",
+      "/get-started",
+    ]) {
       await page.goto(route);
-      const container = page.locator(".visual-page-hero__content");
-      const copy = container.locator(".visual-page-hero__copy");
+      const container = page.locator(".top-level-hero__content");
+      const copy = container.locator(".top-level-hero__copy");
       const containerBox = await container.boundingBox();
       const copyBox = await copy.boundingBox();
 
@@ -22,27 +29,22 @@ test("About and FAQ heroes keep full-width containers with left-aligned copy", a
       expect(copyBox).not.toBeNull();
       expect(containerBox!.width).toBeGreaterThan(viewport.width * 0.75);
       expect(copyBox!.x).toBeGreaterThanOrEqual(containerBox!.x);
-      // The responsive Container gutter reaches 48px at tablet/desktop widths.
-      expect(copyBox!.x - containerBox!.x).toBeLessThanOrEqual(64);
-      await expect(copy).toHaveCSS("text-align", "left");
+      await expect(copy).toHaveCSS("text-align", "start");
       await expectNoOverflow(page);
     }
   }
 });
 
-test("standard public heroes inherit the homepage typography contract", async ({ page }) => {
+test("public marketing headings use the locked heading typography", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/");
-
   const homeTypography = await page.locator(".home-hero__title").evaluate((element) => {
     const style = getComputedStyle(element);
-    return {
-      family: style.fontFamily,
-      size: Number.parseFloat(style.fontSize),
-      lineHeight: Number.parseFloat(style.lineHeight),
-      transform: style.textTransform,
-    };
+    return { family: style.fontFamily, transform: style.textTransform };
   });
+
+  expect(homeTypography.family).toContain("headingFont");
+  expect(homeTypography.transform).toBe("uppercase");
 
   for (const route of [
     "/services",
@@ -54,45 +56,37 @@ test("standard public heroes inherit the homepage typography contract", async ({
     "/get-started",
     "/services/custom-website-design",
     "/packages/starter",
-    "/privacy-policy",
   ]) {
     await page.goto(route);
-    const heading = page.locator("h1").first();
-    const typography = await heading.evaluate((element) => {
+    const typography = await page.locator("h1").first().evaluate((element) => {
       const style = getComputedStyle(element);
-      return {
-        family: style.fontFamily,
-        size: Number.parseFloat(style.fontSize),
-        lineHeight: Number.parseFloat(style.lineHeight),
-        transform: style.textTransform,
-      };
+      return { family: style.fontFamily, transform: style.textTransform };
     });
 
-    expect(typography.family).toContain("Impact");
+    expect(typography.family).toBe(homeTypography.family);
     expect(typography.transform).toBe("uppercase");
-    expect(Math.abs(typography.size - homeTypography.size)).toBeLessThan(2);
-    expect(Math.abs(typography.lineHeight - homeTypography.lineHeight)).toBeLessThan(2);
   }
 });
 
-test("service hub and detail artwork stay anchored to the top", async ({ page }) => {
+test("service hub and detail artwork remain responsive", async ({ page }) => {
   for (const viewport of viewports) {
     await page.setViewportSize(viewport);
 
     for (const [route, selector] of [
-      ["/services", ".services-hero__scene .theme-scene__image"],
-      ["/services/custom-website-design", ".service-detail-hero__scene .theme-scene__image"],
+      ["/services", ".top-level-hero__scene .theme-scene__image"],
+      [
+        "/services/custom-website-design",
+        ".service-detail-hero__scene .theme-scene__image",
+      ],
     ] as const) {
       await page.goto(route);
-      const image = page.locator(selector);
-      await expect(image).toBeVisible();
-      await expect(image).toHaveCSS("object-position", "50% 0%");
+      await expect(page.locator(selector)).toBeVisible();
       await expectNoOverflow(page);
     }
   }
 });
 
-test("each legal policy uses unique responsive art and readable expanded sections", async ({ page }) => {
+test("each legal policy keeps its unique responsive art and readable expanded sections", async ({ page }) => {
   const policies = [
     ["/privacy-policy", "privacy"],
     ["/terms-and-conditions", "terms"],

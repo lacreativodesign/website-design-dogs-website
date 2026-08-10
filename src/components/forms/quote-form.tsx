@@ -5,6 +5,14 @@ import Link from "next/link";
 import { useCallback, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { mascotDesigner } from "@/content/illustrations";
+import {
+  allPackages,
+  packageBySlug,
+  packageCategoryBySlug,
+  type PackageCategorySlug,
+} from "@/content/packages";
+import { platformPreferenceOptions } from "@/content/platforms";
+import { services } from "@/content/services";
 import { leadEvent } from "./analytics-events";
 import { getAttribution } from "./attribution";
 import { Field, inputClass } from "./form-field";
@@ -14,30 +22,25 @@ import { TurnstileWidget } from "./turnstile-widget";
 const projectTypes = [
   "New Website",
   "Website Redesign",
-  "E-Commerce Website",
+  "E-Commerce Solutions",
   "Campaign Landing Page",
   "Website Care",
   "SEO & Local Optimization",
+  "Social Media Marketing",
+  "Mobile App Development",
   "AI or Workflow Integration",
   "Custom Website Design",
   "Website Development",
   "Conversion Optimization",
   "Content & Copywriting",
-  "Hosting & Security",
+  "Website Care, Hosting & Security",
   "Analytics & Reporting",
   "Not Sure Yet",
 ] as const;
 
-const serviceProjectTypes: Record<string, string> = {
-  "custom-website-design": "Custom Website Design",
-  "website-development": "Website Development",
-  "e-commerce-solutions": "E-Commerce Website",
-  "conversion-optimization": "Conversion Optimization",
-  "seo-local-optimization": "SEO & Local Optimization",
-  "content-copywriting": "Content & Copywriting",
-  "hosting-security": "Hosting & Security",
-  "analytics-reporting": "Analytics & Reporting",
-};
+const serviceProjectTypes: Record<string, string> = Object.fromEntries(
+  services.map((service) => [service.slug, service.title]),
+);
 
 const features = [
   "Contact or quote form",
@@ -54,28 +57,17 @@ const features = [
   "Not sure yet",
 ] as const;
 
-const packageOptions = [
-  {
-    value: "Starter — $499",
-    slug: "starter",
-    title: "Starter",
-    price: "$499",
-    detail: "A focused website of up to 5 pages.",
-  },
-  {
-    value: "Business — $899",
-    slug: "business",
-    title: "Business",
-    price: "$899",
-    detail: "More room for services and customer journeys.",
-  },
-  {
-    value: "Growth — $1,499",
-    slug: "growth",
-    title: "Growth",
-    price: "$1,499",
-    detail: "A broader build with e-commerce capability.",
-  },
+type PackageOption = { value: string; slug: string; title: string; price: string; detail: string };
+
+const catalogPackageOptions: PackageOption[] = allPackages.map((item) => ({
+  value: `${item.name} — ${item.price} ${item.priceSuffix}`,
+  slug: item.slug,
+  title: item.name,
+  price: item.price,
+  detail: item.tagline,
+}));
+
+const flexiblePackageOptions: PackageOption[] = [
   {
     value: "Custom Scope",
     slug: "custom",
@@ -90,14 +82,18 @@ const packageOptions = [
     price: "We’ll help",
     detail: "Share the details and we’ll recommend a starting point.",
   },
-] as const;
+];
 
 const budgets = [
   "Under $500",
   "$500–$999",
   "$1,000–$1,499",
-  "$1,500–$2,999",
-  "$3,000+",
+  "$1,500–$2,499",
+  "$2,500–$4,999",
+  "$5,000–$12,499",
+  "$12,500–$24,999",
+  "$25,000+",
+  "Monthly service budget",
   "Not Sure Yet",
 ] as const;
 
@@ -126,7 +122,26 @@ const guideReactions = [
 ] as const;
 
 function initialPackage(requestedPackage: string) {
-  return packageOptions.find(({ slug }) => slug === requestedPackage)?.value ?? "";
+  return catalogPackageOptions.find(({ slug }) => slug === requestedPackage)?.value ?? "";
+}
+
+function categoryForProject(data: QuoteRequestPayload, requestedPackage: string): PackageCategorySlug {
+  const selectedPackage = packageBySlug.get(requestedPackage);
+  if (selectedPackage) return selectedPackage.categorySlug;
+  if (data.project.types.includes("Mobile App Development")) return "mobile-apps";
+  if (data.project.types.includes("Social Media Marketing")) return "social-media";
+  if (data.project.types.includes("SEO & Local Optimization")) return "seo-local";
+  if (data.project.types.includes("Website Care") || data.project.types.includes("Website Care, Hosting & Security")) return "website-care";
+  if (data.project.types.includes("E-Commerce Solutions")) return "e-commerce";
+  return "website-design";
+}
+
+function packageOptionsFor(data: QuoteRequestPayload, requestedPackage: string) {
+  const category = packageCategoryBySlug.get(categoryForProject(data, requestedPackage));
+  const scopedOptions = (category?.packages ?? []).map((item) =>
+    catalogPackageOptions.find(({ slug }) => slug === item.slug),
+  ).filter((item): item is PackageOption => Boolean(item));
+  return [...scopedOptions, ...flexiblePackageOptions];
 }
 
 function empty(
@@ -161,14 +176,15 @@ function toggleValue(values: string[], value: string) {
     : [...values, value];
 }
 
-function recommendationFor(data: QuoteRequestPayload) {
+function recommendationFor(data: QuoteRequestPayload, options: PackageOption[]) {
+  const scoped = options.filter(({ slug }) => slug !== "custom" && slug !== "not-sure");
   const needsCommerce =
-    data.project.types.includes("E-Commerce Website") ||
+    data.project.types.includes("E-Commerce Solutions") ||
     data.project.features.includes("E-commerce") ||
     data.project.features.includes("Payment integration");
 
   if (needsCommerce || data.project.pages === "More than 15 pages") {
-    return packageOptions[2];
+    return scoped[Math.min(2, scoped.length - 1)]!;
   }
 
   if (
@@ -176,10 +192,10 @@ function recommendationFor(data: QuoteRequestPayload) {
     data.project.pages === "11–15 pages" ||
     data.project.types.length > 1
   ) {
-    return packageOptions[1];
+    return scoped[Math.min(2, scoped.length - 1)]!;
   }
 
-  return packageOptions[0];
+  return scoped[0]!;
 }
 
 function ChoiceGrid({
@@ -195,8 +211,9 @@ function ChoiceGrid({
   onChange: (values: string[]) => void;
   error?: string;
 }) {
+  const errorId = `choice-${legend.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-error`;
   return (
-    <fieldset className="quote-choice-fieldset">
+    <fieldset className="quote-choice-fieldset" aria-invalid={error ? true : undefined} aria-describedby={error ? errorId : undefined}>
       <legend className="sr-only">{legend}</legend>
       <div className="quote-choice-grid">
         {values.map((value) => {
@@ -221,7 +238,7 @@ function ChoiceGrid({
           );
         })}
       </div>
-      {error ? <p className="quote-field-error">{error}</p> : null}
+      {error ? <p id={errorId} className="quote-field-error">{error}</p> : null}
     </fieldset>
   );
 }
@@ -256,7 +273,8 @@ export function QuoteForm({
   const startedRef = useRef(false);
   const stageHeadingRef = useRef<HTMLHeadingElement>(null);
   const statusRef = useRef<HTMLParagraphElement>(null);
-  const recommendation = recommendationFor(data);
+  const packageOptions = packageOptionsFor(data, requestedPackage);
+  const recommendation = recommendationFor(data, packageOptions);
   const onToken = useCallback((token: string) => setTurnstileToken(token), []);
 
   function markStarted() {
@@ -302,7 +320,9 @@ export function QuoteForm({
     }
 
     if (targetStep === 3) {
-      if (!data.package.preferred) nextErrors.preferred = "Choose a preferred package.";
+      if (!data.package.preferred || !packageOptions.some(({ value }) => value === data.package.preferred)) {
+        nextErrors.preferred = "Choose a package shown for this project type.";
+      }
       if (!data.package.budget) nextErrors.budget = "Choose a budget range.";
       if (!data.package.timing) nextErrors.timing = "Choose preferred timing.";
     }
@@ -328,9 +348,25 @@ export function QuoteForm({
     requestAnimationFrame(() => stageHeadingRef.current?.focus());
   }
 
+  function focusFirstError() {
+    requestAnimationFrame(() => {
+      const firstInvalid = document.querySelector<HTMLElement>(
+        ".quote-builder [aria-invalid='true']",
+      );
+      if (firstInvalid instanceof HTMLFieldSetElement) {
+        firstInvalid.querySelector<HTMLElement>("input, select, textarea")?.focus();
+      } else {
+        firstInvalid?.focus();
+      }
+    });
+  }
+
   function next() {
     markStarted();
-    if (!validate()) return;
+    if (!validate()) {
+      focusFirstError();
+      return;
+    }
     const nextStep = Math.min(4, step + 1);
     setStep(nextStep);
     setStatus(`Step ${nextStep + 1} of 5: ${stageDetails[nextStep][0]}`);
@@ -352,6 +388,7 @@ export function QuoteForm({
     setReference("");
     if (!validate(4)) {
       setStatus("Please review the highlighted fields and try again.");
+      focusFirstError();
       return;
     }
 
@@ -686,11 +723,10 @@ export function QuoteForm({
                 </select>
               </Field>
             </div>
-            <Field id="platform" label="Existing platform">
-              <input
+            <Field id="platform" label="Existing or preferred platform" hint="Choose Help me choose if platform selection is part of the project.">
+              <select
                 id="platform"
                 className={inputClass}
-                placeholder="Optional"
                 value={data.project.existingPlatform}
                 onChange={(event) =>
                   setData((current) => ({
@@ -701,7 +737,10 @@ export function QuoteForm({
                     },
                   }))
                 }
-              />
+              >
+                <option value="">Select (optional)</option>
+                {platformPreferenceOptions.map((platform) => <option key={platform}>{platform}</option>)}
+              </select>
             </Field>
           </div>
         ) : null}
@@ -737,7 +776,7 @@ export function QuoteForm({
               </small>
             </div>
 
-            <fieldset className="quote-package-fieldset">
+            <fieldset className="quote-package-fieldset" aria-invalid={errors.preferred ? true : undefined} aria-describedby={errors.preferred ? "preferred-package-error" : undefined}>
               <legend>Preferred package *</legend>
               <div className="quote-package-options">
                 {packageOptions.map((option) => (
@@ -771,7 +810,7 @@ export function QuoteForm({
                 ))}
               </div>
               {errors.preferred ? (
-                <p className="quote-field-error">{errors.preferred}</p>
+                <p id="preferred-package-error" className="quote-field-error">{errors.preferred}</p>
               ) : null}
             </fieldset>
 
@@ -882,6 +921,8 @@ export function QuoteForm({
               <input
                 type="checkbox"
                 checked={data.consent}
+                aria-invalid={errors.consent ? true : undefined}
+                aria-describedby={errors.consent ? "quote-consent-error" : undefined}
                 onChange={(event) =>
                   setData((current) => ({
                     ...current,
@@ -896,7 +937,7 @@ export function QuoteForm({
               </span>
             </label>
             {errors.consent ? (
-              <p className="quote-field-error">{errors.consent}</p>
+              <p id="quote-consent-error" className="quote-field-error">{errors.consent}</p>
             ) : null}
             <TurnstileWidget
               action="quote_lead"

@@ -1,10 +1,10 @@
 # Website Design Dogs
 
-Official marketing website foundation for Website Design Dogs, a service brand of LA CREATIVO GROUP, LLC.
+Official services-first marketing website for Website Design Dogs, a service brand of LA CREATIVO GROUP, LLC.
 
 ## Purpose
 
-This repository replaces the former temporary static HTML launch page with a production-ready Next.js App Router foundation for `websitedesigndogs.com`. The current homepage is intentionally temporary and will be replaced in later implementation phases.
+This repository contains the production Next.js website for `www.websitedesigndogs.com`, including the service catalog, package catalog, portfolio concepts, guided project brief, campaign pages, consent controls, and server-side lead delivery.
 
 ## Stack
 
@@ -33,6 +33,13 @@ npm run build
 npm run start
 npm run lint
 npm run typecheck
+npm run assets:verify
+npm run content:test
+npm run leads:test
+npm run launch:test
+npm run test:e2e
+npm run build:audit
+npm run env:check -- --production
 ```
 
 ## Directory structure
@@ -50,17 +57,21 @@ public/og      Approved Open Graph assets
 scripts        Maintenance and automation scripts
 ```
 
-Empty asset directories are retained with `.gitkeep` files until approved assets are supplied.
-
 ## Environment variables
 
 Copy `.env.example` to `.env.local` for local development. Placeholder names only are committed.
 
 ```bash
-NEXT_PUBLIC_SITE_URL=
+NEXT_PUBLIC_SITE_URL=https://www.websitedesigndogs.com
+LEAD_SUBMISSION_ENABLED=
 BIZOSTO_API_URL=
 BIZOSTO_TENANT_ID=
 BIZOSTO_API_KEY=
+TURNSTILE_REQUIRED=
+TURNSTILE_SECRET_KEY=
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=
+NEXT_PUBLIC_ENABLE_GTM=
+NEXT_PUBLIC_GTM_ID=
 ```
 
 `BIZOSTO_API_KEY` is server-only and must never use a `NEXT_PUBLIC_` prefix. Secrets must never be committed.
@@ -73,17 +84,21 @@ Vercel will recognize this repository as a root-level Next.js project through `p
 npm run build
 ```
 
-Baseline security headers are configured in `next.config.ts`. A final Content Security Policy is intentionally deferred until approved analytics, Meta integrations, and asset domains are known.
+Baseline security headers are configured in `next.config.ts`. Consent-controlled browser tracking is enabled only when a valid GTM container is supplied through production environment variables.
 
-## Future implementation phases
+## Production release gates
 
-- Prompt 2: shared layout, theme architecture, and reusable primitives
-- Prompt 3: final homepage sections and approved brand assets
-- Later prompts: services, packages, portfolio, server-side Bizosto lead routing, campaign landing pages, analytics, legal pages, and final security hardening
+- Run the complete quality gate and `npm run env:check -- --production` against the intended Vercel production configuration.
+- Confirm the apex domain redirects to the `www` canonical host and that sitemap, Open Graph, and structured-data URLs use the same origin.
+- Submit one approved production lead and confirm its reference, tenant, attribution fields, consent state, and delivery in Bizosto. Keep lead submission disabled until this succeeds.
+- Verify Turnstile on every form family and confirm distributed rate limiting is active.
+- Supply the legitimate GTM container ID, test default-denied consent behavior, and remove any Meta test-event code before launch.
+- Verify the email provider's DKIM selector records, a published DMARC record, and From-domain alignment with a real delivery test.
+- Complete manual desktop/mobile review, keyboard review, and counsel-approved legal consistency review before merging or promoting to production.
 
 ## Security rules
 
 - Never commit secrets or real API keys.
 - Never expose server-only integration keys to browser code.
-- Future lead submissions must route server-side to the Website Design Dogs tenant in Bizosto.
+- Lead submissions route server-side to the Website Design Dogs tenant in Bizosto.
 - Do not implement direct browser-to-Firestore lead writes.

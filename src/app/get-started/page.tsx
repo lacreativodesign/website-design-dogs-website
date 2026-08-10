@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { QuoteForm } from "@/components/forms/quote-form";
-import { PageHero } from "@/components/pages/page-hero";
+import { ProofStrip, TopLevelHero, type ProofItem } from "@/components/pages/top-level-hero";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
@@ -11,6 +11,13 @@ import { DEFAULT_SERVICE_SLUG, serviceBySlug } from "@/content/services";
 import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({ title: "Get a Free Website Quote", description: "Tell Website Design Dogs about your business, current website, goals, scope, preferred package, budget, and timeline.", path: "/get-started" });
+
+const projectBriefProof: ProofItem[] = [
+  { title: "Five focused steps", body: "Business, project, website shape, starting point, and final context.", icon: "clipboard-check" },
+  { title: "Nothing sent early", body: "Your details stay in the form until you explicitly submit the brief.", icon: "shield-check" },
+  { title: "Preferences preserved", body: "Selected service, package, industry, and campaign context follow you here.", icon: "mouse-pointer-click" },
+  { title: "Reviewed before scope", body: "A selection is a starting point—not an automatic final quote or commitment.", icon: "heart-handshake" },
+];
 
 type SearchParams = Record<string, string | string[] | undefined>;
 type PageProps = { searchParams: Promise<SearchParams> };
@@ -50,20 +57,19 @@ export default async function Page({ searchParams }: PageProps) {
         description="Tell Website Design Dogs about your business, current website, goals, scope, preferred package, budget, and timeline."
         path="/get-started"
       />
-      <PageHero
+      <TopLevelHero
+        id="get-started-title"
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Get Started" }]}
         eyebrow="START YOUR PROJECT"
-        title="Build your project brief."
+        title={<>Build your <em>project brief.</em></>}
         body="Five focused steps turn the essentials into a useful starting point—without pretending the scope is final before we review it."
-        darkSrc={illustrationScenes.getStarted.desktop.webp}
-        darkAvifSrc={illustrationScenes.getStarted.desktop.avif}
-        tabletDarkSrc={illustrationScenes.getStarted.tablet.webp}
-        tabletDarkAvifSrc={illustrationScenes.getStarted.tablet.avif}
-        mobileDarkSrc={illustrationScenes.getStarted.mobile.webp}
-        mobileDarkAvifSrc={illustrationScenes.getStarted.mobile.avif}
+        scene={illustrationScenes.getStarted}
         alt="Border collie designer mapping a new website project at a studio planning board"
+        primaryCta={{ label: "Start the Brief", href: "#project-brief" }}
+        secondaryCta={{ label: "Compare Packages", href: "/packages" }}
       />
-      <Section alternate className="get-started-section">
+      <ProofStrip label="Project brief expectations" items={projectBriefProof} />
+      <Section alternate className="get-started-section" id="project-brief">
         <Container>
           <div className="get-started-intro">
             <p className="home-eyebrow">Free project review</p>

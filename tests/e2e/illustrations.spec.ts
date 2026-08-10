@@ -5,31 +5,31 @@ const scenes = [
   {
     name: "services",
     route: "/services",
-    selector: ".services-hero__scene",
+    selector: ".top-level-hero__scene",
     slug: "services",
   },
   {
     name: "portfolio",
     route: "/portfolio",
-    selector: ".portfolio-hero__scene",
+    selector: ".top-level-hero__scene",
     slug: "portfolio",
   },
   {
     name: "about",
     route: "/about",
-    selector: ".visual-page-hero__scene",
+    selector: ".top-level-hero__scene",
     slug: "about",
   },
   {
     name: "contact",
     route: "/contact",
-    selector: ".contact-hero__scene",
+    selector: ".top-level-hero__scene",
     slug: "contact",
   },
   {
     name: "get started",
     route: "/get-started",
-    selector: ".guided-hero__scene",
+    selector: ".top-level-hero__scene",
     slug: "get-started",
   },
   {

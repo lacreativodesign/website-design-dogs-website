@@ -1,50 +1,84 @@
 import { expect, test } from "@playwright/test";
+import {
+  allPackages,
+  packageCategories,
+  packageFaqs,
+  websitePackages,
+} from "../../src/content/packages";
 import { expectNoOverflow } from "./helpers";
 
-test("packages show approved pricing, distinct choices, and active navigation", async ({ page }) => {
+test("all 21 approved packages are reachable from the six category tabs", async ({ page }) => {
   await page.goto("/packages");
-  await expect(page.getByRole("link", { name: "Packages" }).first()).toHaveAttribute("aria-current", "page");
+  await expect(page.getByRole("link", { name: "Packages" }).first()).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+  await expect(page.locator(".package-tab")).toHaveCount(6);
 
-  for (const [slug, price] of [["starter", "$499"], ["business", "$899"], ["growth", "$1,499"]] as const) {
-    const card = page.locator(`[data-package="${slug}"]`);
-    await expect(card).toContainText(price);
-    await expect(card.getByRole("link", { name: "Order Now" })).toHaveAttribute("href", `/get-started?package=${slug}`);
-    await expect(card.getByRole("link", { name: "View Details" })).toHaveAttribute("href", `/packages/${slug}`);
+  for (const category of packageCategories) {
+    const tab = page.getByRole("button", {
+      name: category.shortTitle,
+      exact: true,
+    });
+    await tab.click();
+    await expect(tab).toHaveAttribute("aria-pressed", "true");
+    const grid = page.locator(`.packages-card-grid[data-category="${category.slug}"]`);
+    await expect(grid.locator(".packages-card")).toHaveCount(category.packages.length);
+
+    for (const item of category.packages) {
+      const card = grid.locator(`[data-package="${item.slug}"]`);
+      await expect(card).toContainText(item.price);
+      await expect(
+        card.getByRole("link", { name: "Order Now" }),
+      ).toHaveAttribute("href", item.quoteHref);
+      await expect(card.getByRole("link", { name: "View Details" })).toHaveAttribute(
+        "href",
+        item.href,
+      );
+    }
   }
 });
 
-test("comparison link, FAQ, package details, and form path are usable", async ({ page, request }) => {
+test("comparison, FAQ, detail pages, and guided brief paths are usable", async ({
+  page,
+  request,
+}) => {
+  test.setTimeout(120_000);
   await page.goto("/packages");
-  await page.getByRole("link", { name: "Compare Packages" }).click();
+  await page.getByRole("link", { name: "Compare Website Tiers" }).click();
   const comparison = page.locator("#compare");
   await expect(comparison).toBeInViewport();
   const table = comparison.getByRole("table");
   await expect(table).toBeVisible();
-  await expect(table.getByRole("columnheader", { name: "Feature", exact: true })).toBeVisible();
+  await expect(table.getByRole("columnheader", { name: "Scope", exact: true })).toBeVisible();
+  for (const item of websitePackages) {
+    await expect(table.getByRole("columnheader", { name: new RegExp(item.name) })).toBeVisible();
+  }
 
-  const faq = page.getByRole("button", { name: "What is included in the one-time price?" });
+  const [question, answer] = packageFaqs[0]!;
+  const faq = page.getByRole("button", { name: question });
   await expect(faq).toHaveAttribute("aria-expanded", "false");
   await faq.click();
   await expect(faq).toHaveAttribute("aria-expanded", "true");
-  await expect(page.locator("#package-faq-0")).toContainText(/project proposal/i);
+  await expect(page.getByText(answer)).toBeVisible();
 
-  for (const [slug, price] of [["starter", "$499"], ["business", "$899"], ["growth", "$1,499"]] as const) {
-    const response = await request.get(`/packages/${slug}`);
-    expect(response.ok()).toBeTruthy();
-    await page.goto(`/packages/${slug}`);
-    await expect(page.locator("h1")).toHaveCount(1);
-    await expect(page.locator(".package-detail-price")).toContainText(price);
+  for (const item of allPackages) {
+    const response = await request.get(item.href);
+    expect(response.ok(), item.href).toBeTruthy();
+  }
+
+  for (const category of packageCategories) {
+    const item = category.packages[0]!;
+    await page.goto(item.href);
+    await expect(page.locator("h1")).toHaveText(item.tagline);
+    await expect(page.locator(".package-detail-price")).toContainText(item.price);
     await expect(
-      page.getByRole("link", {
-        name: `Order ${slug[0].toUpperCase()}${slug.slice(1)}`,
-      }),
-    ).toHaveAttribute("href", `/get-started?package=${slug}`);
+      page.getByRole("link", { name: `Start with ${item.name}` }),
+    ).toHaveAttribute("href", item.quoteHref);
   }
 
   const sitemap = await (await request.get("/sitemap.xml")).text();
-  for (const slug of ["starter", "business", "growth"]) {
-    expect(sitemap).toContain(`/packages/${slug}`);
-  }
+  for (const item of allPackages) expect(sitemap).toContain(item.href);
 });
 
 test("packages mobile layout has no horizontal page overflow", async ({ page }) => {
