@@ -59,8 +59,19 @@ test("the supplied GTM container remains blocked until optional consent", async 
 test("services and platforms use polished artwork, unique scenes, icons, and numbered sections", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/services");
-  await expect(page.locator(".service-showcase-card__media img").first()).toHaveCSS("object-fit", "contain");
+  const firstServiceCard = page.locator(".service-showcase-card").first();
+  const firstServiceMedia = firstServiceCard.locator(".service-showcase-card__media");
+  await expect(firstServiceMedia.locator("img")).toHaveCSS("object-fit", "contain");
+  const serviceCardBox = await firstServiceCard.boundingBox();
+  const serviceMediaBox = await firstServiceMedia.boundingBox();
+  expect(serviceMediaBox?.width ?? 0).toBeGreaterThan((serviceCardBox?.width ?? 0) * .9);
+  expect((serviceMediaBox?.width ?? 0) / (serviceMediaBox?.height ?? 1)).toBeCloseTo(1.5, 1);
   await expect(page.locator(".decision-cta__panel")).toBeVisible();
+  expect((await page.locator(".compact-cta-strip .decision-cta__panel").boundingBox())?.height ?? 0).toBeGreaterThan(190);
+  const platformLink = page.locator(".platform-name-grid a").first();
+  await expect(platformLink).toHaveAttribute("href", /\/platforms#/);
+  await platformLink.hover();
+  expect(await platformLink.evaluate((element) => getComputedStyle(element).transform)).not.toBe("none");
   await expect(page.locator(".top-level-hero__scene .theme-scene__image")).toHaveCSS("object-position", "50% 0%");
 
   await page.goto("/platforms");
@@ -90,10 +101,22 @@ test("portfolio filter is integrated and the contact disclosure stays on one lin
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/portfolio");
   await expect(page.locator(".portfolio-filter-studio")).toBeVisible();
+  await expect(page.locator(".portfolio-filter-studio__count")).toHaveCount(0);
+  await expect(page.locator(".portfolio-browse-switch").getByRole("button")).toHaveCount(2);
+  await page.getByRole("button", { name: "Website Type", exact: true }).click();
+  await expect(page.locator('[data-browse-mode="type"]')).toBeVisible();
+  await expect(page.locator(".portfolio-filter__tab--active")).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
   await expect(page.locator(".portfolio-directory .numbered-section-description")).toContainText("Explore layout direction");
   await expect(page.locator(".portfolio-process article")).toHaveCount(3);
 
   await page.goto("/contact");
   await expect(page.locator(".contact-disclosure p")).toHaveCSS("white-space", "nowrap");
   await expect(page.locator(".contact-disclosure p")).toHaveText("Website Design Dogs is a service brand of LA CREATIVO GROUP, LLC.");
+  const disclosure = page.locator(".contact-disclosure");
+  expect(await disclosure.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true);
+
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.goto("/contact");
+  await expect(page.locator(".contact-disclosure p")).toHaveCSS("white-space", "normal");
+  await expectNoOverflow(page);
 });
