@@ -37,7 +37,8 @@ test("the supplied GTM container remains blocked until optional consent", async 
   await page.goto("/");
   await expect(page.locator('script[src*="GTM-N625DJ7Z"]')).toHaveCount(0);
   await page.getByRole("button", { name: "Accept optional" }).click();
-  await expect(page.locator('script[src*="GTM-N625DJ7Z"]')).toHaveCount(1);
+  const expectedScripts = process.env.NEXT_PUBLIC_ENABLE_GTM === "true" ? 1 : 0;
+  await expect(page.locator('script[src*="GTM-N625DJ7Z"]')).toHaveCount(expectedScripts);
 });
 
 test("services and platforms use polished artwork, unique scenes, icons, and numbered sections", async ({ page }) => {
