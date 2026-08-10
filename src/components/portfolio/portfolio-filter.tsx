@@ -75,18 +75,19 @@ export function PortfolioFilter() {
         <div className="portfolio-filter-studio__header">
           <div>
             <span className="portfolio-filter-studio__kicker">Browse the concept studio</span>
-            <strong>Choose your viewing lens.</strong>
+            <strong>Find a direction that fits.</strong>
           </div>
-          <span className="portfolio-filter-studio__count">{concepts.length} concepts</span>
-        </div>
-        <div className="portfolio-browse-switch" aria-label="Choose how to browse portfolio concepts">
-          <span>Browse by</span>
-          <button type="button" aria-pressed={mode === "industry"} onClick={() => chooseMode("industry")}>
-            Industry
-          </button>
-          <button type="button" aria-pressed={mode === "type"} onClick={() => chooseMode("type")}>
-            Website Type
-          </button>
+          <div className="portfolio-browse-control">
+            <span>Browse by</span>
+            <div className="portfolio-browse-switch" role="group" aria-label="Choose how to browse portfolio concepts">
+              <button type="button" aria-pressed={mode === "industry"} onClick={() => chooseMode("industry")}>
+                Industry
+              </button>
+              <button type="button" aria-pressed={mode === "type"} onClick={() => chooseMode("type")}>
+                Website Type
+              </button>
+            </div>
+          </div>
         </div>
 
         <div className="portfolio-filter__tabs" aria-label={mode === "industry" ? "Filter concepts by industry" : "Filter concepts by website type"}>
