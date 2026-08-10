@@ -33,6 +33,21 @@ test("homepage restores the package, process, business-context, and footer detai
   await expectNoOverflow(page);
 });
 
+test("rapid scrolling cannot leave motion-managed content transparent", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await page.waitForTimeout(400);
+
+  const unrevealedAfterJump = page.locator('[data-reveal="true"]:not(.is-revealed)');
+  await expect(unrevealedAfterJump).toHaveCount(0);
+
+  await page.goto("/services");
+  await page.waitForTimeout(3_200);
+  await expect(page.locator('[data-reveal="true"]:not(.is-revealed)')).toHaveCount(0);
+});
+
 test("the supplied GTM container remains blocked until optional consent", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator('script[src*="GTM-N625DJ7Z"]')).toHaveCount(0);
