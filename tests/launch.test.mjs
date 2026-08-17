@@ -109,10 +109,27 @@ test('GTM starts its data layer before loading and remains consent-controlled', 
   assert.match(source, /prefs\.analytics \|\| prefs\.marketing/);
   assert.match(source, /"gtm\.start": Date\.now\(\)/);
   assert.match(source, /window\.__wddGtmLoaded = true/);
+  assert.match(source, /window\.dispatchEvent\(new Event\("wdd:gtm-ready"\)\)/);
   assert.ok(
     source.indexOf('"gtm.start": Date.now()') <
       source.indexOf('src={`https://www.googletagmanager.com'),
     'dataLayer bootstrap should be declared before the GTM script',
+  );
+});
+
+test('page views wait for GTM and retry when its queue is ready', () => {
+  const source = fs.readFileSync(
+    'src/components/consent/page-view-tracker.tsx',
+    'utf8',
+  );
+
+  assert.match(source, /!window\.__wddGtmLoaded/);
+  assert.match(source, /addEventListener\("wdd:gtm-ready", view\)/);
+  assert.match(source, /removeEventListener\("wdd:gtm-ready", view\)/);
+  assert.ok(
+    source.lastIndexOf('trackEvent("wdd_page_view"') <
+      source.indexOf('last.current = pathname;'),
+    'a page path should only be marked sent after tracking is attempted',
   );
 });
 
