@@ -29,6 +29,7 @@ export function TrackingLoader({
     });
     window.__wddGtmLoaded = true;
     initialized.current = true;
+    window.dispatchEvent(new Event("wdd:gtm-ready"));
   }, [load]);
 
   if (!id || !load) return null;
