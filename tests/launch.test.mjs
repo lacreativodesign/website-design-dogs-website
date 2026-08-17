@@ -100,6 +100,14 @@ test('conversion event contract uses safe names, safe fields, and consent gating
   assert.equal(/fullName|email|phone|businessName|referenceId|turnstileToken/.test(source), false);
 });
 
+test('CSP allows GTM scripts, connections, and measurement images', () => {
+  const source = fs.readFileSync('next.config.ts', 'utf8');
+
+  assert.match(source, /script-src[^"]*https:\/\/www\.googletagmanager\.com/);
+  assert.match(source, /connect-src[^"]*https:\/\/www\.googletagmanager\.com/);
+  assert.match(source, /img-src[^"]*https:\/\/www\.googletagmanager\.com/);
+});
+
 test('GTM starts its data layer before loading and remains consent-controlled', () => {
   const source = fs.readFileSync(
     'src/components/consent/tracking-loader.tsx',
