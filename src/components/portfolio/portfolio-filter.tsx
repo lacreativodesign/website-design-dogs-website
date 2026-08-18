@@ -106,7 +106,14 @@ export function PortfolioFilter({ heading }: { heading: ReactNode }) {
         Showing {concepts.length} design concepts{active === "All" ? "" : ` for ${active}`}.
       </p>
       <div data-active-filter={active} data-browse-mode={mode}>
-        <PortfolioGallery concepts={concepts} />
+        {concepts.length > 0 ? (
+          <PortfolioGallery concepts={concepts} />
+        ) : (
+          <div className="portfolio-filter__empty" role="status">
+            <strong>{active}</strong>
+            <p>This design concept is currently in production and will be available before the expanded portfolio is published.</p>
+          </div>
+        )}
       </div>
     </div>
   );
