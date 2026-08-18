@@ -2,13 +2,25 @@ export type PortfolioIndustry =
   | "Home & Field Services"
   | "Professional & Property"
   | "Health, Wellness & Beauty"
-  | "Retail, Food & Hospitality";
+  | "Retail, Food & Hospitality"
+  | "Technology & SaaS"
+  | "Creators & Education"
+  | "Nonprofit & Community"
+  | "Events & Entertainment";
 
 export type PortfolioWebsiteType =
   | "Business & Lead Generation"
   | "E-Commerce & Online Ordering"
   | "Booking & Appointment"
-  | "Listings & Directories";
+  | "Listings & Directories"
+  | "Landing Pages"
+  | "Portfolio & Personal Brand"
+  | "Membership & Subscription"
+  | "Marketplaces"
+  | "Courses & Education"
+  | "Events & Ticketing"
+  | "Nonprofit & Donations"
+  | "Custom Portals & Web Applications";
 
 export type PortfolioConcept = {
   id: string;
@@ -34,10 +46,94 @@ const concepts: readonly PortfolioConcept[] = [
   { id: "salon", title: "Salon Website Concept", industries: ["Health, Wellness & Beauty"], websiteTypes: ["Booking & Appointment", "Business & Lead Generation"], image: "/portfolio/concepts/salon-concept.webp", description: "A service-led concept for beauty services, appointment paths, offers, and brand presentation." },
 ];
 
+export type PortfolioExpansionConcept = Omit<PortfolioConcept, "image">;
+
+export const portfolioExpansionQueue: readonly PortfolioExpansionConcept[] = [
+  {
+    id: "saas-launch",
+    title: "SaaS Launch Landing Page Concept",
+    industries: ["Technology & SaaS"],
+    websiteTypes: ["Landing Pages"],
+    description: "A conversion-focused product launch page for positioning, feature education, proof, pricing, and demo acquisition.",
+  },
+  {
+    id: "creative-portfolio",
+    title: "Creative Portfolio Website Concept",
+    industries: ["Creators & Education"],
+    websiteTypes: ["Portfolio & Personal Brand"],
+    description: "An editorial personal-brand portfolio for selected work, expertise, services, and direct enquiries.",
+  },
+  {
+    id: "wellness-membership",
+    title: "Wellness Membership Website Concept",
+    industries: ["Health, Wellness & Beauty"],
+    websiteTypes: ["Membership & Subscription"],
+    description: "A recurring-membership experience for plan comparison, member benefits, programmes, and account access.",
+  },
+  {
+    id: "services-marketplace",
+    title: "Local Services Marketplace Concept",
+    industries: ["Home & Field Services", "Technology & SaaS"],
+    websiteTypes: ["Marketplaces"],
+    description: "A two-sided marketplace concept for service discovery, provider profiles, trust, availability, and booking.",
+  },
+  {
+    id: "course-academy",
+    title: "Online Course Academy Concept",
+    industries: ["Creators & Education"],
+    websiteTypes: ["Courses & Education"],
+    description: "A structured learning platform for programme discovery, curriculum previews, instructor authority, and enrolment.",
+  },
+  {
+    id: "conference-ticketing",
+    title: "Conference & Ticketing Website Concept",
+    industries: ["Events & Entertainment"],
+    websiteTypes: ["Events & Ticketing"],
+    description: "An event-led experience for schedules, speakers, venue information, ticket tiers, and registration.",
+  },
+  {
+    id: "nonprofit-foundation",
+    title: "Nonprofit Foundation Website Concept",
+    industries: ["Nonprofit & Community"],
+    websiteTypes: ["Nonprofit & Donations"],
+    description: "A mission-first nonprofit concept for programmes, transparent impact communication, volunteering, and donations.",
+  },
+  {
+    id: "client-operations-portal",
+    title: "Client Operations Portal Concept",
+    industries: ["Technology & SaaS", "Professional & Property"],
+    websiteTypes: ["Custom Portals & Web Applications"],
+    description: "A secure application concept for client onboarding, project visibility, documents, approvals, and account actions.",
+  },
+];
+
 export const portfolioConcepts = concepts;
-export const portfolioIndustryFilters = ["All", "Home & Field Services", "Professional & Property", "Health, Wellness & Beauty", "Retail, Food & Hospitality"] as const;
-export const portfolioWebsiteTypeFilters = ["All", "Business & Lead Generation", "E-Commerce & Online Ordering", "Booking & Appointment", "Listings & Directories"] as const;
-export const futureWebsiteTypes = ["Landing Pages", "Portfolio & Personal Brand", "Membership & Subscription", "Marketplaces", "Courses & Education", "Events & Ticketing", "Nonprofit & Donations", "Custom Portals & Web Applications"] as const;
+export const portfolioIndustryFilters = [
+  "All",
+  "Home & Field Services",
+  "Professional & Property",
+  "Health, Wellness & Beauty",
+  "Retail, Food & Hospitality",
+  "Technology & SaaS",
+  "Creators & Education",
+  "Nonprofit & Community",
+  "Events & Entertainment",
+] as const;
+export const portfolioWebsiteTypeFilters = [
+  "All",
+  "Business & Lead Generation",
+  "E-Commerce & Online Ordering",
+  "Booking & Appointment",
+  "Listings & Directories",
+  "Landing Pages",
+  "Portfolio & Personal Brand",
+  "Membership & Subscription",
+  "Marketplaces",
+  "Courses & Education",
+  "Events & Ticketing",
+  "Nonprofit & Donations",
+  "Custom Portals & Web Applications",
+] as const;
 export const portfolioTrustPoints = [["12", "DESIGN CONCEPTS", "Different industries. Responsive layouts. Clear direction."], ["02", "WAYS TO BROWSE", "Filter by industry or the kind of website you need."], ["03", "SCREEN SIZES", "Thoughtful layouts for desktop, tablet, and mobile."], ["04", "CLEAR PATHS", "Structure that makes the next action easy to find."]] as const;
 export const portfolioStrategy = [["Clear Positioning", "Make the offer and next step easy to understand at a glance."], ["Strong Visual Hierarchy", "Use layout, contrast, and spacing to guide attention through the page."], ["Mobile-Responsive Design", "Keep the experience practical and readable across screen sizes."], ["Conversion-Focused Structure", "Give visitors a clear path from interest to action."], ["Consistent Brand System", "Coordinate colors, typography, imagery, and components with purpose."]] as const;
 export const portfolioProcess = [["01", "Choose a Direction", "Identify the relevant style, business goal, platform, and audience focus."], ["02", "Make It Yours", "Customize the structure, content, services, and functionality around the approved project."], ["03", "Build and Launch", "Implement the responsive experience, review it together, and launch with clear ownership."]] as const;
