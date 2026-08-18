@@ -6,6 +6,7 @@ import type { PortfolioConcept } from "@/content/portfolio";
 
 export function PortfolioGallery({ concepts, className = "" }: { concepts: readonly PortfolioConcept[]; className?: string }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const touchStart = useRef<number | null>(null);
@@ -21,6 +22,7 @@ export function PortfolioGallery({ concepts, className = "" }: { concepts: reado
     const dialog = dialogRef.current;
     if (!dialog || activeIndex === null) return;
     if (!dialog.open) dialog.showModal();
+    contentRef.current?.scrollTo({ top: 0 });
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     const onKeyDown = (event: KeyboardEvent) => {
@@ -34,21 +36,24 @@ export function PortfolioGallery({ concepts, className = "" }: { concepts: reado
 
   useEffect(() => {
     if (activeIndex === null) return;
-    [-1, 1].forEach((offset) => { const preload = new window.Image(); preload.src = concepts[(activeIndex + offset + concepts.length) % concepts.length].image; });
+    [-1, 1].forEach((offset) => { const preload = new window.Image(); preload.src = concepts[(activeIndex + offset + concepts.length) % concepts.length].fullImage; });
   }, [activeIndex, concepts]);
 
   return <>
     <div className={`portfolio-image-grid ${className}`}>
       {concepts.map((concept, index) => <button key={concept.id} type="button" className="portfolio-thumbnail" data-concept-id={concept.id} aria-label={`Open ${concept.title}`} onClick={(event) => { triggerRef.current = event.currentTarget; setActiveIndex(index); }}>
-        <Image src={concept.image} alt={`${concept.title} design concept`} fill sizes="(max-width: 599px) 100vw, (max-width: 899px) 50vw, (max-width: 1199px) 33vw, 25vw" className="portfolio-thumbnail__image" />
+        <Image src={concept.thumbnail} alt={`${concept.title} design concept by ${concept.brand}`} fill sizes="(max-width: 599px) 100vw, (max-width: 899px) 50vw, (max-width: 1199px) 33vw, 25vw" className="portfolio-thumbnail__image" />
         <span aria-hidden="true" className="portfolio-thumbnail__overlay" />
       </button>)}
     </div>
     <dialog ref={dialogRef} className="portfolio-lightbox" aria-label="Portfolio image gallery" onClose={() => setActiveIndex(null)} onCancel={(event) => { event.preventDefault(); close(); }}>
-      {active ? <div className="portfolio-lightbox__content" onTouchStart={(event: TouchEvent) => { touchStart.current = event.changedTouches[0]?.clientX ?? null; }} onTouchEnd={(event: TouchEvent) => { const start = touchStart.current; const end = event.changedTouches[0]?.clientX; if (start !== null && end !== undefined && Math.abs(end - start) > 40) move(end < start ? 1 : -1); touchStart.current = null; }}>
+      {active ? <div ref={contentRef} className="portfolio-lightbox__content" onTouchStart={(event: TouchEvent) => { touchStart.current = event.changedTouches[0]?.clientX ?? null; }} onTouchEnd={(event: TouchEvent) => { const start = touchStart.current; const end = event.changedTouches[0]?.clientX; if (start !== null && end !== undefined && Math.abs(end - start) > 40) move(end < start ? 1 : -1); touchStart.current = null; }}>
         <button type="button" className="portfolio-lightbox__close" onClick={close} aria-label="Close gallery">×</button>
         <button type="button" className="portfolio-lightbox__control portfolio-lightbox__control--previous" onClick={() => move(-1)} aria-label="Previous image">‹</button>
-        <figure><Image src={active.image} alt={`${active.title} design concept`} width={1600} height={1067} sizes="100vw" priority className="portfolio-lightbox__image" /><figcaption><span aria-live="polite">{(activeIndex ?? 0) + 1} of {concepts.length}</span><strong>{active.title}</strong><p>{active.description}</p></figcaption></figure>
+        <figure>
+          <figcaption><span aria-live="polite">{(activeIndex ?? 0) + 1} of {concepts.length}</span><strong>{active.title}</strong><p>{active.description}</p></figcaption>
+          <Image src={active.fullImage} alt={`${active.title} full-page design concept by ${active.brand}`} width={1440} height={active.fullImageHeight} sizes="(max-width: 1536px) 100vw, 1440px" priority className="portfolio-lightbox__image" />
+        </figure>
         <button type="button" className="portfolio-lightbox__control portfolio-lightbox__control--next" onClick={() => move(1)} aria-label="Next image">›</button>
       </div> : null}
     </dialog>

@@ -12,7 +12,7 @@ Total locked delivery window: 6–7 working days.
 
 ## Launch inventory
 
-The completed portfolio will contain 20 clearly labelled design concepts. The original twelve remain:
+The completed portfolio contains 20 clearly labelled design concepts. The original twelve remain:
 
 1. Roofing
 2. Cleaning
@@ -27,7 +27,7 @@ The completed portfolio will contain 20 clearly labelled design concepts. The or
 11. Home Services
 12. Salon
 
-The expansion adds one approved production slot for each activated website type:
+The expansion includes one completed concept for each activated website type:
 
 13. SaaS Launch Landing Page — Landing Pages
 14. Creative Portfolio Website — Portfolio & Personal Brand
@@ -66,7 +66,7 @@ Website-type filters:
 - Nonprofit & Donations
 - Custom Portals & Web Applications
 
-No category may be released with an empty gallery. Expanded filters stay on the draft branch until their matching concepts are approved and integrated.
+Every activated category now has matching work in the gallery; no filter resolves to an empty state.
 
 ## Asset standard
 
@@ -89,3 +89,12 @@ No category may be released with an empty gallery. Expanded filters stay on the 
 - Responsive verification at 1440, 1024, 768, 390, and 320 px
 - No clipping, overflow, unreadable copy, or duplicated hero composition
 - Lint, typecheck, tests, asset verification, and production build pass
+
+
+## Completion status
+
+- 20 dedicated full-page concepts integrated
+- 20 optimized 1200 × 1500 portfolio thumbnails integrated
+- Full-page lightbox upgraded for vertical scrolling
+- Keyboard, Escape, previous/next controls, focus restoration, and live position status retained
+- Approved Roofing and Cleaning masters retained without redesign
