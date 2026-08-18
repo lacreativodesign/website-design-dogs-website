@@ -6019,3 +6019,9 @@ fieldset[aria-invalid="true"] {
     transition: none;
   }
 }
+
+
+/* Expanded portfolio production state. Removed once every activated filter has approved work. */
+.portfolio-filter__empty{display:grid;min-height:18rem;place-content:center;justify-items:center;border:1px dashed #29425f;background:linear-gradient(145deg,rgb(255 255 255/.03),transparent),#061426;padding:2rem;text-align:center}
+.portfolio-filter__empty strong{color:#fff;font-size:clamp(1.1rem,2vw,1.5rem)}
+.portfolio-filter__empty p{max-width:34rem;margin:.65rem 0 0;color:#a9b4c3;font-size:.82rem;line-height:1.55}
