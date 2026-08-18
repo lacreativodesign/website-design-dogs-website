@@ -1,10 +1,10 @@
 import { expect, test } from "@playwright/test";
 import { expectNoOverflow } from "./helpers";
 
-test("Portfolio presents twelve borderless portrait design concepts", async ({ page }) => {
+test("Portfolio presents twenty borderless portrait design concepts", async ({ page }) => {
   await page.goto("/portfolio");
-  await expect(page.locator("[data-concept-id]")).toHaveCount(12);
-  await expect(page.locator(".portfolio-thumbnail")).toHaveCount(12);
+  await expect(page.locator("[data-concept-id]")).toHaveCount(20);
+  await expect(page.locator(".portfolio-thumbnail")).toHaveCount(20);
   await expect(page.locator(".portfolio-thumbnail").first()).toHaveCSS("border-top-width", "0px");
   await expect(page.locator(".portfolio-filter__tab--active")).toHaveText("All");
   await expect(page.getByRole("link", { name: "Portfolio" }).first()).toHaveAttribute("aria-current", "page");
@@ -18,11 +18,15 @@ test("Portfolio gallery supports keyboard controls, wrapping, and focus restorat
   await first.press("Enter");
   const dialog = page.locator(".portfolio-lightbox");
   await expect(dialog).toBeVisible();
-  await expect(dialog.getByText("1 of 12")).toBeVisible();
+  await expect(dialog.getByText("1 of 20")).toBeVisible();
+  const lightboxContent = dialog.locator(".portfolio-lightbox__content");
+  await expect
+    .poll(() => lightboxContent.evaluate((element) => element.scrollHeight > element.clientHeight))
+    .toBe(true);
   await page.keyboard.press("ArrowLeft");
-  await expect(dialog.getByText("12 of 12")).toBeVisible();
+  await expect(dialog.getByText("20 of 20")).toBeVisible();
   await page.keyboard.press("ArrowRight");
-  await expect(dialog.getByText("1 of 12")).toBeVisible();
+  await expect(dialog.getByText("1 of 20")).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(dialog).not.toBeVisible();
   await expect(first).toBeFocused();
@@ -40,7 +44,7 @@ test("Portfolio supports keyboard-operable industry and website-type filtering",
   });
   await healthAndWellness.click();
   await expect(healthAndWellness).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("[data-concept-id]")).toHaveCount(3);
+  await expect(page.locator("[data-concept-id]")).toHaveCount(4);
   await expect(page.locator("[data-browse-mode='industry']")).toHaveAttribute(
     "data-active-filter",
     "Health, Wellness & Beauty",
