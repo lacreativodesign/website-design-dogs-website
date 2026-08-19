@@ -6019,3 +6019,14 @@ fieldset[aria-invalid="true"] {
     transition: none;
   }
 }
+
+/* Full-page portfolio concept viewer */
+.portfolio-lightbox{width:100vw;height:100dvh;overflow:hidden}
+.portfolio-lightbox__content{position:relative;display:block;width:100%;height:100%;overflow-x:hidden;overflow-y:auto;padding:4.75rem clamp(1rem,6vw,6rem) 3rem;scrollbar-gutter:stable}
+.portfolio-lightbox figure{display:block;width:min(100%,1440px);max-width:none;max-height:none;margin:0 auto}
+.portfolio-lightbox__image{display:block;width:100%;height:auto;max-width:none;max-height:none;object-fit:initial;background:#fff}
+.portfolio-lightbox figcaption{position:relative;max-width:52rem;margin:0 auto 1rem;padding:.85rem 1rem;border:1px solid rgb(255 255 255/.16);border-radius:.45rem;background:rgb(2 11 24/.92);text-align:center}
+.portfolio-lightbox__close,.portfolio-lightbox__control{position:fixed;z-index:3}
+.portfolio-lightbox__close{top:1rem;right:1rem}
+.portfolio-lightbox__control{top:50%;transform:translateY(-50%)}
+@media(max-width:599px){.portfolio-lightbox__content{padding:4.25rem .5rem 2rem}.portfolio-lightbox figcaption{margin-inline:3rem}.portfolio-lightbox__control{top:55%}}

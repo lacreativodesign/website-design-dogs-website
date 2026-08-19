@@ -18,7 +18,7 @@ export const metadata: Metadata = pageMetadata({ title: "Website Design Portfoli
 const portfolioStrategyIcons: BrandIconName[] = ["search-check", "palette", "smartphone", "mouse-pointer-click", "shield-check"];
 const portfolioProcessIcons: BrandIconName[] = ["search", "pen-tool", "rocket"];
 const portfolioProof: ProofItem[] = [
-  { title: "12 design concepts", body: "Clearly labelled direction across common business and customer journeys.", icon: "palette" },
+  { title: "20 design concepts", body: "Clearly labelled direction across common business and customer journeys.", icon: "palette" },
   { title: "Two ways to browse", body: "Filter by industry or by the kind of website you need.", icon: "search-check" },
   { title: "Responsive thinking", body: "Every direction considers desktop, tablet, and mobile layouts.", icon: "smartphone" },
   { title: "Concepts, not case studies", body: "Nothing here is presented as completed client work or verified results.", icon: "shield-check" },
