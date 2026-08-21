@@ -102,6 +102,7 @@ export async function POST(request: Request) {
       status: "success",
       durationMs: Date.now() - started,
       upstreamStatus: result.upstreamStatus,
+      duplicate: result.duplicate,
     });
 
     if (shouldSendMetaCapi(payload.metaTracking)) {
@@ -145,6 +146,7 @@ export async function POST(request: Request) {
         message:
           "Thanks — your request was received successfully. We’ll review the details and respond using the contact information you provided.",
         ...(result.referenceId ? { referenceId: result.referenceId } : {}),
+        ...(result.duplicate ? { duplicate: true } : {}),
       },
       201,
     );
@@ -165,6 +167,12 @@ export async function POST(request: Request) {
       status: "failed",
       durationMs: Date.now() - started,
       failure: leadError.code,
+      ...(leadError.upstreamStatus
+        ? { upstreamStatus: leadError.upstreamStatus }
+        : {}),
+      ...(leadError.upstreamMessage
+        ? { upstreamError: leadError.upstreamMessage }
+        : {}),
     };
 
     if (leadError.status >= 500) logLeadError(meta);

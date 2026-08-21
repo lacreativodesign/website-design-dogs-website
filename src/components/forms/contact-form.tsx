@@ -345,6 +345,7 @@ export function ContactForm() {
       <label className="flex gap-3 text-sm text-[var(--color-text-muted)]">
         <input
           type="checkbox"
+          required
           className="mt-1 h-5 w-5"
           checked={formData.consent}
           aria-invalid={errors.consent ? true : undefined}

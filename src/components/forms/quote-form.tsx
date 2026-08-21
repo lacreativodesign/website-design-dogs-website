@@ -920,6 +920,7 @@ export function QuoteForm({
             <label className="quote-consent">
               <input
                 type="checkbox"
+                required
                 checked={data.consent}
                 aria-invalid={errors.consent ? true : undefined}
                 aria-describedby={errors.consent ? "quote-consent-error" : undefined}

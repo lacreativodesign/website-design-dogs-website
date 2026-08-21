@@ -28,7 +28,7 @@ walk(root, (path, isDir)=>{
 
 if(!existsSync(join(root, '.next'))) blockers.push('Missing .next output; run npm run build before build:audit.');
 
-const secretKeys = ['BIZOSTO_API_KEY','BIZOSTO_TENANT_ID','TURNSTILE_SECRET_KEY','META_CAPI_ACCESS_TOKEN'];
+const secretKeys = ['BIZOSTO_INGEST_KEY','TURNSTILE_SECRET_KEY','META_CAPI_ACCESS_TOKEN'];
 const actualSecrets = secretKeys.map(k=>[k, process.env[k]]).filter(([,v])=>Boolean(v && String(v).length > 3));
 walk(staticDir, (path, isDir)=>{
   if(isDir) return;

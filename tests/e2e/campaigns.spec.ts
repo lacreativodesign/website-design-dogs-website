@@ -49,3 +49,58 @@ test("unknown campaign returns 404", async ({ page }) => {
     page.getByRole("link", { name: /^back to home$/i }),
   ).toBeVisible();
 });
+
+test("campaign form submits checked consent and first-touch attribution", async ({
+  page,
+}) => {
+  await page.goto("/services?utm_source=linkedin&utm_campaign=agency-beta");
+  await expect
+    .poll(() =>
+      page.evaluate(() => sessionStorage.getItem("wdd-attribution-v1")),
+    )
+    .not.toBeNull();
+  await page.goto("/campaigns/cleaning");
+
+  let submitted:
+    | {
+        formType: string;
+        campaignSlug: string;
+        consent: boolean;
+        attribution: { utmSource: string; utmCampaign: string };
+      }
+    | undefined;
+
+  await page.route("**/api/leads", (route) => {
+    submitted = route.request().postDataJSON() as typeof submitted;
+    return route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        ok: true,
+        duplicate: true,
+        message: "Thanks — your request was received successfully.",
+        referenceId: "BIZOSTO-CAMPAIGN-TEST",
+      }),
+    });
+  });
+
+  const form = page.locator("#campaign-form");
+  await form.getByLabel("Full name").fill("Jane Smith");
+  await form.getByLabel("Business name").fill("Acme Cleaning");
+  await form.getByLabel("Email address").fill("jane@example.com");
+  await form.getByRole("checkbox", { name: /I consent/i }).check();
+  await form
+    .getByRole("button", { name: "Request a Starter Website Quote" })
+    .click();
+
+  await expect(form).toContainText("BIZOSTO-CAMPAIGN-TEST");
+  expect(submitted).toMatchObject({
+    formType: "campaign",
+    campaignSlug: "cleaning",
+    consent: true,
+    attribution: {
+      utmSource: "linkedin",
+      utmCampaign: "agency-beta",
+    },
+  });
+});

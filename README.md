@@ -64,9 +64,8 @@ Copy `.env.example` to `.env.local` for local development. Placeholder names onl
 ```bash
 NEXT_PUBLIC_SITE_URL=https://www.websitedesigndogs.com
 LEAD_SUBMISSION_ENABLED=
-BIZOSTO_API_URL=
-BIZOSTO_TENANT_ID=
-BIZOSTO_API_KEY=
+BIZOSTO_API_URL=https://app.bizosto.com/api/ingest/leads
+BIZOSTO_INGEST_KEY=
 TURNSTILE_REQUIRED=
 TURNSTILE_SECRET_KEY=
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=
@@ -74,7 +73,20 @@ NEXT_PUBLIC_ENABLE_GTM=
 NEXT_PUBLIC_GTM_ID=
 ```
 
-`BIZOSTO_API_KEY` is server-only and must never use a `NEXT_PUBLIC_` prefix. Secrets must never be committed.
+`BIZOSTO_INGEST_KEY` is a server-only secret and must never use a `NEXT_PUBLIC_` prefix. Configure its real value in Vercel environment variables or an ignored `.env.local` file; never commit it.
+
+## Bizosto CRM lead integration
+
+Contact, guided-quote, and campaign enquiries submit to the website's `/api/leads` route. The server validates the request, applies the existing anti-spam controls, and forwards it to `https://app.bizosto.com/api/ingest/leads` using `BIZOSTO_INGEST_KEY`. The API key is never included in browser JavaScript or browser requests.
+
+Set `BIZOSTO_INGEST_KEY` and `LEAD_SUBMISSION_ENABLED=true` in the Vercel deployment, together with the existing allowed-origin, Turnstile, and distributed-rate-limit settings documented in `.env.example`. `BIZOSTO_API_URL` defaults to the production ingest endpoint and can be overridden for an isolated test server.
+
+To verify the integration:
+
+1. Run `npm run leads:test`, `npm run lint`, `npm run typecheck`, and `npm run build`.
+2. Open a page with `utm_source`, `utm_medium`, `utm_campaign`, `gclid`, or `fbclid` query parameters, then navigate to an enquiry form.
+3. Enter a valid name and email, check the Privacy Policy consent box, and submit.
+4. Confirm the normal success message and verify that Bizosto received the lead, original landing attribution, checked consent timestamp, and submission ID. A duplicate response must show the same success message; a failed request must leave the entered information available for retry.
 
 ## Vercel deployment
 

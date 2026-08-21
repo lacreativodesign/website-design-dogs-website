@@ -2,17 +2,241 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { spawnSync } from 'node:child_process';
+import { createRequire, Module } from 'node:module';
+
+const require = createRequire(import.meta.url);
+
+function loadBizostoAdapter() {
+  const typescript = require('typescript');
+  const previous = Module._extensions['.ts'];
+
+  Module._extensions['.ts'] = (module, filename) => {
+    const source = fs.readFileSync(filename, 'utf8');
+    const result = typescript.transpileModule(source, {
+      compilerOptions: {
+        module: typescript.ModuleKind.CommonJS,
+        target: typescript.ScriptTarget.ES2022,
+      },
+    });
+
+    module._compile(result.outputText, filename);
+  };
+
+  try {
+    return require('../src/lib/leads/bizosto-adapter.ts');
+  } finally {
+    if (previous) Module._extensions['.ts'] = previous;
+    else delete Module._extensions['.ts'];
+  }
+}
+
+const leadEnvelope = {
+  submissionId: 'a9a46c77-9929-4ed2-8b93-2c9f09b0e5b3',
+  formType: 'quote',
+  source: 'website',
+  contact: {
+    fullName: 'Jane Smith',
+    email: 'jane@example.com',
+    phone: '+1 555 0100',
+  },
+  business: {
+    name: 'Acme Ltd',
+    website: 'https://acme.example',
+    industry: 'Professional services',
+  },
+  enquiry: {
+    service: 'New Website',
+    summary: 'We need a website that creates qualified enquiries.',
+  },
+  project: {
+    types: ['New Website'],
+    pages: '1–5 pages',
+    goal: 'Generate qualified enquiries',
+    features: ['Contact or quote form'],
+    contentStatus: 'Ready',
+    brandingStatus: 'Brand materials ready',
+    notWorking: 'Our old website is difficult to navigate.',
+    accomplish: 'Turn visitors into qualified leads.',
+    details: 'Add a prominent booking call to action.',
+  },
+  package: {
+    preferred: 'Starter',
+    budget: '$500–$999',
+    timing: 'Within 30 days',
+  },
+  attribution: {
+    landingPage: 'https://websitedesigndogs.com/services?utm_source=google',
+    currentPage: 'https://websitedesigndogs.com/contact',
+    referrer: 'https://www.google.com/',
+    utmSource: 'google',
+    utmMedium: 'cpc',
+    utmCampaign: 'spring',
+    utmTerm: 'web design',
+    utmContent: 'creative-a',
+    gclid: 'google-click-id',
+    fbclid: 'facebook-click-id',
+  },
+  consent: {
+    contact: true,
+    privacyPolicy: true,
+    agreedAt: '2026-08-18T10:00:00.000Z',
+  },
+};
+
+const leadConfig = {
+  apiUrl: 'https://app.bizosto.com/api/ingest/leads',
+  apiKey: 'server-only-test-key',
+  timeoutMs: 1_000,
+};
 
 test('lead submission source files avoid browser secret exposure', () => {
   const client = fs.readFileSync('src/components/forms/submission.ts', 'utf8');
-  assert.equal(client.includes('BIZOSTO_API_KEY'), false);
+  assert.equal(client.includes('BIZOSTO_INGEST_KEY'), false);
   assert.equal(client.includes('TURNSTILE_SECRET_KEY'), false);
 });
 
 test('environment example keeps secrets server-only', () => {
   const env = fs.readFileSync('.env.example', 'utf8');
-  assert.match(env, /BIZOSTO_API_KEY=/);
+  assert.match(env, /BIZOSTO_INGEST_KEY=/);
   assert.equal(env.includes('NEXT_PUBLIC_BIZOSTO'), false);
+
+  const audit = fs.readFileSync('scripts/audit-production-build.mjs', 'utf8');
+  assert.match(audit, /BIZOSTO_INGEST_KEY/);
+});
+
+test('first-touch attribution is initialized from the shared root layout', () => {
+  const layout = fs.readFileSync('src/app/layout.tsx', 'utf8');
+  const capture = fs.readFileSync(
+    'src/components/forms/attribution-capture.tsx',
+    'utf8',
+  );
+  const attribution = fs.readFileSync(
+    'src/components/forms/attribution.ts',
+    'utf8',
+  );
+
+  assert.match(layout, /<AttributionCapture\s*\/>/);
+  assert.match(capture, /getAttribution\(\)/);
+  assert.match(attribution, /sessionStorage\.setItem/);
+  assert.match(attribution, /window\.location\.origin/);
+});
+
+test('consent values and timestamp come from the checked visitor submission', () => {
+  const validation = fs.readFileSync('src/lib/leads/validation.ts', 'utf8');
+  assert.match(validation, /contact: p\.consent === true/);
+  assert.match(validation, /privacyPolicy: p\.consent === true/);
+  assert.match(validation, /agreedAt: submittedAt/);
+
+  for (const file of [
+    'src/components/forms/contact-form.tsx',
+    'src/components/forms/quote-form.tsx',
+    'src/components/campaigns/campaign-lead-form.tsx',
+  ]) {
+    const form = fs.readFileSync(file, 'utf8');
+    assert.match(form, /type="checkbox"\s+required/);
+    assert.match(form, /href="\/privacy-policy"/);
+  }
+});
+
+test('Bizosto payload preserves enquiry details, attribution, and checked consent', () => {
+  const { toBizostoPayload } = loadBizostoAdapter();
+  const payload = toBizostoPayload(leadEnvelope);
+
+  assert.equal(payload.lead.name, 'Jane Smith');
+  assert.equal(payload.lead.email, 'jane@example.com');
+  assert.equal(payload.lead.phone, '+1 555 0100');
+  assert.equal(payload.lead.company, 'Acme Ltd');
+  assert.equal(payload.lead.source, 'website');
+  assert.match(payload.lead.message, /Preferred package: Starter/);
+  assert.match(payload.lead.message, /Generate qualified enquiries/);
+  assert.deepEqual(payload.attribution.utm, {
+    source: 'google',
+    medium: 'cpc',
+    campaign: 'spring',
+    term: 'web design',
+    content: 'creative-a',
+  });
+  assert.equal(payload.attribution.landingPage, leadEnvelope.attribution.landingPage);
+  assert.equal(payload.attribution.currentPage, leadEnvelope.attribution.currentPage);
+  assert.equal(payload.attribution.gclid, 'google-click-id');
+  assert.equal(payload.attribution.fbclid, 'facebook-click-id');
+  assert.deepEqual(payload.consent, leadEnvelope.consent);
+});
+
+test('upstream retry reuses the idempotency key and accepts duplicate success', async () => {
+  const { sendToBizosto } = loadBizostoAdapter();
+  const originalFetch = globalThis.fetch;
+  const requests = [];
+
+  globalThis.fetch = async (url, options) => {
+    requests.push({ url, options });
+
+    if (requests.length === 1) {
+      return Response.json(
+        { ok: false, error: 'Temporary upstream failure.' },
+        { status: 503 },
+      );
+    }
+
+    return Response.json({
+      ok: true,
+      duplicate: true,
+      leadId: 'bizosto-existing-lead',
+    });
+  };
+
+  try {
+    const result = await sendToBizosto(leadEnvelope, leadConfig);
+
+    assert.equal(requests.length, 2);
+    assert.equal(requests[0].url, leadConfig.apiUrl);
+    assert.equal(requests[0].options.headers['x-api-key'], leadConfig.apiKey);
+    assert.equal(
+      requests[0].options.headers['Idempotency-Key'],
+      leadEnvelope.submissionId,
+    );
+    assert.equal(
+      requests[1].options.headers['Idempotency-Key'],
+      requests[0].options.headers['Idempotency-Key'],
+    );
+    assert.deepEqual(result, {
+      referenceId: 'bizosto-existing-lead',
+      upstreamStatus: 200,
+      duplicate: true,
+    });
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
+test('upstream authentication failures retain diagnostics without leaking the secret', async () => {
+  const { sendToBizosto } = loadBizostoAdapter();
+  const originalFetch = globalThis.fetch;
+  let attempts = 0;
+
+  globalThis.fetch = async () => {
+    attempts += 1;
+    return Response.json(
+      { ok: false, error: `Invalid credentials: ${leadConfig.apiKey}` },
+      { status: 401 },
+    );
+  };
+
+  try {
+    await assert.rejects(
+      sendToBizosto(leadEnvelope, leadConfig),
+      (error) => {
+        assert.equal(error.code, 'INTEGRATION_MISCONFIGURED');
+        assert.equal(error.upstreamStatus, 401);
+        assert.equal(error.upstreamMessage, 'Invalid credentials: [redacted]');
+        assert.equal(error.upstreamMessage.includes(leadConfig.apiKey), false);
+        return true;
+      },
+    );
+    assert.equal(attempts, 1);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
 });
 
 test('campaign implementation uses server-owned offer mapping and allowlisted slugs', () => {
@@ -102,11 +326,8 @@ test('production environment gate passes a complete setup and blocks missing con
     ...process.env,
     NEXT_PUBLIC_SITE_URL: 'https://websitedesigndogs.com',
     LEAD_SUBMISSION_ENABLED: 'true',
-    BIZOSTO_API_URL: 'https://api.example.test/leads',
-    BIZOSTO_TENANT_ID: 'wdd',
-    BIZOSTO_API_KEY: 'server-only-test-key',
-    BIZOSTO_API_KEY_HEADER: 'x-api-key',
-    BIZOSTO_TENANT_HEADER: 'x-tenant-id',
+    BIZOSTO_API_URL: 'https://app.bizosto.com/api/ingest/leads',
+    BIZOSTO_INGEST_KEY: 'server-only-test-key',
     LEAD_ALLOWED_ORIGINS: 'https://websitedesigndogs.com,https://www.websitedesigndogs.com',
     LEAD_REQUEST_TIMEOUT_MS: '10000',
     LEAD_RATE_LIMIT_WINDOW_MS: '600000',
@@ -130,6 +351,14 @@ test('production environment gate passes a complete setup and blocks missing con
     );
 
   assert.equal(run(complete).status, 0);
+
+  const defaultEndpoint = { ...complete };
+  delete defaultEndpoint.BIZOSTO_API_URL;
+  assert.equal(run(defaultEndpoint).status, 0);
+
+  const missingIngestKey = { ...complete };
+  delete missingIngestKey.BIZOSTO_INGEST_KEY;
+  assert.equal(run(missingIngestKey).status, 1);
 
   const missingRateLimit = { ...complete };
   delete missingRateLimit.LEAD_DISTRIBUTED_RATE_LIMIT_ID;

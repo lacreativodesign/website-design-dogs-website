@@ -2,11 +2,8 @@ import { LeadError } from "./errors";
 
 export type LeadConfig = {
   enabled: boolean;
-  apiUrl?: string;
-  tenantId?: string;
+  apiUrl: string;
   apiKey?: string;
-  apiKeyHeader: string;
-  tenantHeader: string;
   timeoutMs: number;
   rateWindowMs: number;
   rateMax: number;
@@ -34,6 +31,9 @@ const csv = (value: string | undefined) =>
     .map((item) => item.trim().toLowerCase())
     .filter(Boolean);
 
+export const BIZOSTO_INGEST_URL =
+  "https://app.bizosto.com/api/ingest/leads";
+
 export function getLeadConfig(): LeadConfig {
   const origins = [
     process.env.LEAD_ALLOWED_ORIGINS,
@@ -54,11 +54,8 @@ export function getLeadConfig(): LeadConfig {
 
   return {
     enabled: bool(process.env.LEAD_SUBMISSION_ENABLED),
-    apiUrl: process.env.BIZOSTO_API_URL || undefined,
-    tenantId: process.env.BIZOSTO_TENANT_ID || undefined,
-    apiKey: process.env.BIZOSTO_API_KEY || undefined,
-    apiKeyHeader: process.env.BIZOSTO_API_KEY_HEADER || "x-api-key",
-    tenantHeader: process.env.BIZOSTO_TENANT_HEADER || "x-tenant-id",
+    apiUrl: process.env.BIZOSTO_API_URL || BIZOSTO_INGEST_URL,
+    apiKey: process.env.BIZOSTO_INGEST_KEY || undefined,
     timeoutMs: num(process.env.LEAD_REQUEST_TIMEOUT_MS, 10_000),
     rateWindowMs: num(process.env.LEAD_RATE_LIMIT_WINDOW_MS, 600_000),
     rateMax: num(process.env.LEAD_RATE_LIMIT_MAX, 5),
@@ -130,13 +127,7 @@ export function assertCanSubmit(config: LeadConfig) {
   if (process.env.VERCEL_ENV === "preview" && !config.allowPreview) {
     throw new LeadError("SUBMISSION_DISABLED", unavailable, 503);
   }
-  if (!config.apiUrl || !config.tenantId || !config.apiKey) {
-    throw new LeadError("INTEGRATION_MISCONFIGURED", unavailable, 503);
-  }
-  if (
-    !/^[!#$%&'*+.^_`|~0-9A-Za-z-]+$/.test(config.apiKeyHeader) ||
-    !/^[!#$%&'*+.^_`|~0-9A-Za-z-]+$/.test(config.tenantHeader)
-  ) {
+  if (!config.apiUrl || !config.apiKey) {
     throw new LeadError("INTEGRATION_MISCONFIGURED", unavailable, 503);
   }
   if (

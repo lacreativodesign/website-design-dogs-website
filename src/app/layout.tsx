@@ -3,6 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 import { ConsentProvider } from "@/components/consent/consent-provider";
 import { PageViewTracker } from "@/components/consent/page-view-tracker";
+import { AttributionCapture } from "@/components/forms/attribution-capture";
 import { SiteMotion } from "@/components/motion/site-motion";
 import { RouteFooter } from "@/components/layout/route-footer";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -30,6 +31,7 @@ export default function RootLayout({
       </head>
       <body className={`${bodyFont.variable} ${headingFont.variable}`}>
         <ConsentProvider>
+          <AttributionCapture />
           <PageViewTracker />
           <SiteMotion />
           <SiteJsonLd />
