@@ -29,6 +29,7 @@ test("contact form validation, failure preservation, and mocked success", async 
   const service = page.getByRole("combobox", { name: /^Service needed/ });
   const consent = page.getByRole("checkbox", { name: /I consent/i });
   const status = page.locator("#contact-status");
+  const submissionIds: string[] = [];
 
   await expect(status).toHaveClass("sr-only");
   await expect(page.getByText(/loading secure enquiry/i)).toHaveCount(0);
@@ -41,13 +42,15 @@ test("contact form validation, failure preservation, and mocked success", async 
   await submit.click();
   await expect(page.getByText("Enter a valid email address.")).toBeVisible();
 
-  await page.route("**/api/leads", (route) =>
-    route.fulfill({
+  await page.route("**/api/leads", (route) => {
+    const body = route.request().postDataJSON() as { submissionId: string };
+    submissionIds.push(body.submissionId);
+    return route.fulfill({
       status: 503,
       contentType: "application/json",
       body: JSON.stringify(failedResponse),
-    }),
-  );
+    });
+  });
 
   await fullName.fill("Example Person");
   await businessName.fill("Example Business");
@@ -64,18 +67,150 @@ test("contact form validation, failure preservation, and mocked success", async 
   await expect(status).not.toContainText(/thanks/i);
 
   await page.unroute("**/api/leads");
-  await page.route("**/api/leads", (route) =>
-    route.fulfill({
+  await page.route("**/api/leads", (route) => {
+    const body = route.request().postDataJSON() as { submissionId: string };
+    submissionIds.push(body.submissionId);
+    return route.fulfill({
       status: 200,
       contentType: "application/json",
       body: JSON.stringify(successfulResponse),
-    }),
-  );
+    });
+  });
 
   await submit.click();
   await expect(status).toContainText(/thanks/i);
   await expect(status).toContainText("WDD-20260713-TEST");
   await expect(fullName).toHaveValue("");
+  expect(submissionIds).toHaveLength(2);
+  expect(submissionIds[1]).toBe(submissionIds[0]);
+});
+
+test("contact form retains first-landing attribution across navigation", async ({
+  page,
+}) => {
+  const query =
+    "utm_source=google&utm_medium=cpc&utm_campaign=spring&gclid=google-click&fbclid=facebook-click";
+
+  await page.goto(`/services?${query}`);
+  await expect
+    .poll(() =>
+      page.evaluate(() => sessionStorage.getItem("wdd-attribution-v1")),
+    )
+    .not.toBeNull();
+  await page.goto("/contact");
+
+  let submitted:
+    | {
+        consent: boolean;
+        attribution: {
+          landingPage: string;
+          currentPage: string;
+          utmSource: string;
+          utmMedium: string;
+          utmCampaign: string;
+          gclid: string;
+          fbclid: string;
+        };
+      }
+    | undefined;
+
+  await page.route("**/api/leads", (route) => {
+    submitted = route.request().postDataJSON() as typeof submitted;
+    return route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ ...successfulResponse, duplicate: true }),
+    });
+  });
+
+  await page.getByRole("textbox", { name: /^Full name/ }).fill("Jane Smith");
+  await page
+    .getByRole("textbox", { name: /^Business name/ })
+    .fill("Acme Ltd");
+  await page
+    .getByRole("textbox", { name: /^Email address/ })
+    .fill("jane@example.com");
+  await page
+    .getByRole("combobox", { name: /^Service needed/ })
+    .selectOption({ label: "New Website" });
+  await page
+    .getByRole("textbox", { name: /^Project summary/ })
+    .fill("We need a professional website for our growing service business.");
+  await page.getByRole("checkbox", { name: /I consent/i }).check();
+  await page.getByRole("button", { name: "Send Enquiry" }).click();
+
+  await expect(page.locator("#contact-status")).toContainText(/thanks/i);
+  expect(submitted?.consent).toBe(true);
+  expect(submitted?.attribution).toMatchObject({
+    utmSource: "google",
+    utmMedium: "cpc",
+    utmCampaign: "spring",
+    gclid: "google-click",
+    fbclid: "facebook-click",
+  });
+  expect(submitted?.attribution.landingPage).toContain(`/services?${query}`);
+  expect(submitted?.attribution.currentPage).toMatch(/\/contact$/);
+});
+
+test("guided quote submits the project brief with checked consent", async ({
+  page,
+}) => {
+  await page.goto("/get-started");
+
+  let submitted:
+    | {
+        formType: string;
+        consent: boolean;
+        contact: { email: string };
+        project: { goal: string };
+      }
+    | undefined;
+
+  await page.route("**/api/leads", (route) => {
+    submitted = route.request().postDataJSON() as typeof submitted;
+    return route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        ...successfulResponse,
+        referenceId: "BIZOSTO-QUOTE-TEST",
+      }),
+    });
+  });
+
+  await page.getByLabel("Full name").fill("Jane Smith");
+  await page.getByLabel("Business name").fill("Acme Ltd");
+  await page.getByLabel("Email").fill("jane@example.com");
+  await page.getByLabel("Industry").fill("Home services");
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByLabel("New Website").check();
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByLabel("Estimated number of pages").selectOption("1–5 pages");
+  await page.getByLabel("Main business goal").fill("Generate qualified leads");
+  await page.getByLabel("Contact or quote form").check();
+  await page.getByLabel("Content status").selectOption("Ready");
+  await page.getByLabel("Branding status").selectOption("Brand materials ready");
+  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByLabel("Starter — $499 one time").check();
+  await page.getByLabel("Budget range").selectOption("$500–$999");
+  await page.getByLabel("Preferred start timing").selectOption("Within 30 days");
+  await page.getByRole("button", { name: "Next" }).click();
+  await page
+    .getByLabel("What is not working today?")
+    .fill("Our website is not generating qualified enquiries.");
+  await page
+    .getByLabel("What should the new website help accomplish?")
+    .fill("Convert visitors into qualified sales opportunities.");
+  await page.getByRole("checkbox", { name: /I consent/i }).check();
+  await page.getByRole("button", { name: "Send Quote Request" }).click();
+
+  await expect(page.getByText(/BIZOSTO-QUOTE-TEST/)).toBeVisible();
+  expect(submitted).toMatchObject({
+    formType: "quote",
+    consent: true,
+    contact: { email: "jane@example.com" },
+    project: { goal: "Generate qualified leads" },
+  });
 });
 
 test("quote package query renders and privacy link works", async ({ page }) => {

@@ -16,6 +16,7 @@ export type LeadSubmissionResponse =
       ok: true;
       message: string;
       referenceId?: string;
+      duplicate?: boolean;
     }
   | {
       ok: false;
@@ -96,9 +97,9 @@ export type LeadSubmissionEnvelope = {
   };
   attribution: Attribution;
   consent: {
-    contact: true;
-    privacyPolicyAcknowledged: true;
-    timestamp: string;
+    contact: boolean;
+    privacyPolicy: boolean;
+    agreedAt: string;
   };
 };
 

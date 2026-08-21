@@ -61,18 +61,14 @@ const distributedRateLimitRequired = enabled(
 const turnstileRequired = enabled(env.TURNSTILE_REQUIRED, true);
 
 if (leadSubmissionEnabled) {
-  url("BIZOSTO_API_URL", { https: true, required: true });
-
-  for (const key of ["BIZOSTO_TENANT_ID", "BIZOSTO_API_KEY"]) {
-    add(env[key] ? "PASS" : "BLOCKER", `${key} ${env[key] ? "configured" : "missing"}`);
+  if (env.BIZOSTO_API_URL) {
+    url("BIZOSTO_API_URL", { https: true, required: true });
+  } else {
+    add("PASS", "BIZOSTO_API_URL using the production ingest endpoint");
   }
 
-  for (const key of ["BIZOSTO_API_KEY_HEADER", "BIZOSTO_TENANT_HEADER"]) {
-    if (env[key] && !/^[!#$%&'*+.^_`|~0-9A-Za-z-]+$/.test(env[key])) {
-      add("BLOCKER", `${key} invalid header name`);
-    } else {
-      add("PASS", `${key} acceptable`);
-    }
+  for (const key of ["BIZOSTO_INGEST_KEY"]) {
+    add(env[key] ? "PASS" : "BLOCKER", `${key} ${env[key] ? "configured" : "missing"}`);
   }
 
   const allowedOrigins = csv(env.LEAD_ALLOWED_ORIGINS);

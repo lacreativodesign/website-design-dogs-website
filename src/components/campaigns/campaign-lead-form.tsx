@@ -362,6 +362,7 @@ export function CampaignLeadForm({ campaignSlug }: Props) {
             <label className="flex gap-3 text-sm">
               <input
                 type="checkbox"
+                required
                 checked={values.consent}
                 onChange={(event) =>
                   update("consent", event.target.checked)
