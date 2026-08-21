@@ -41,7 +41,7 @@ const concept = (
   industries: PortfolioIndustry[],
   websiteTypes: PortfolioWebsiteType[],
   description: string,
-  fullImageHeight = 8400,
+  fullImageHeight = 8800,
 ): PortfolioConcept => ({
   id,
   title,
