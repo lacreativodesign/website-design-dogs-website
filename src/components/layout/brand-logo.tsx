@@ -9,7 +9,7 @@ export function BrandLogo({ className, priority = false }: { className?: string;
       <Image
         src={siteConfig.logo}
         alt=""
-        width={58}
+        width={48}
         height={64}
         priority={priority}
         className="brand-logo__mark"

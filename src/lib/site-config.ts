@@ -5,8 +5,8 @@ export const LEGAL_OWNER = "LA CREATIVO GROUP, LLC";
 export const SITE_DESCRIPTION = "Website Design Dogs creates professional, mobile-ready websites for local and growing businesses, with clear packages, conversion-focused design, and dependable ongoing support.";
 export const SITE_CATEGORY = "Website Design and Development";
 export const BRAND_DISCLOSURE = `${SITE_NAME} is a service brand of ${LEGAL_OWNER}.`;
-export const OG_IMAGE_PATH = "/brand/og/website-design-dogs-dark.webp";
-export const LOGO_PATH = "/brand/logos/wdd-logo-mark.svg";
+export const OG_IMAGE_PATH = "/brand/social/wdd-social-share-1200x630.jpg";
+export const LOGO_PATH = "/brand/identity/wdd-logo-horizontal-black-glasses-1600.webp";
 export function getSiteUrl(value = process.env.NEXT_PUBLIC_SITE_URL): string {
   const raw = (value || SITE_FALLBACK_URL).trim().replace(/\/+$/, "");
   try { const url = new URL(raw); if (url.protocol !== "http:" && url.protocol !== "https:") return SITE_FALLBACK_URL; return url.toString().replace(/\/+$/, ""); } catch { return SITE_FALLBACK_URL; }

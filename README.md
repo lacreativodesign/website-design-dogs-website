@@ -57,6 +57,16 @@ public/og      Approved Open Graph assets
 scripts        Maintenance and automation scripts
 ```
 
+## Brand identity assets
+
+The approved black-sunglasses identity system is stored under `public/brand`:
+
+- `identity/` contains web-optimized transparent shield and complete horizontal logo exports derived from the approved high-resolution masters.
+- `social/` contains the optimized 1200 x 630 Open Graph image.
+- `favicons/` contains the matching browser, Apple touch, and PWA icon family.
+
+The header and footer use the optimized shield mark while structured organization metadata uses the complete horizontal logo. Full-resolution social, print, transparent PNG, and guideline files are maintained in the controlled brand handoff package rather than shipped as public website payloads. Do not redraw, recolor, or restore the previous orange eyewear; the approved sunglasses frame is black.
+
 ## Environment variables
 
 Copy `.env.example` to `.env.local` for local development. Placeholder names only are committed.

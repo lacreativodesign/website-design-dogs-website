@@ -10,7 +10,7 @@ test("shared header uses the rebuilt mark with a live wordmark", async ({ page }
     await expect(header).not.toHaveClass(/site-header--home/);
     await expect(header.locator(".brand-logo__mark")).toHaveAttribute(
       "src",
-      "/brand/logos/wdd-logo-mark.svg",
+      "/brand/identity/wdd-shield-black-glasses-512.webp",
     );
     await expect(header.locator(".brand-logo__wordmark")).toContainText(
       /Website Design\s*Dogs/,
@@ -21,7 +21,7 @@ test("shared header uses the rebuilt mark with a live wordmark", async ({ page }
   await expect(page.locator(".campaign-header")).toBeVisible();
   await expect(page.locator(".campaign-header .brand-logo__mark")).toHaveAttribute(
     "src",
-    "/brand/logos/wdd-logo-mark.svg",
+    "/brand/identity/wdd-shield-black-glasses-512.webp",
   );
 });
 

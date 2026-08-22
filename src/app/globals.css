@@ -4513,7 +4513,7 @@ body { overflow-wrap: anywhere; }
 }
 .brand-logo img.brand-logo__mark {
   display: block;
-  width: 2.35rem;
+  width: 2rem;
   height: 2.65rem;
   max-height: none;
   object-fit: contain;
@@ -4535,7 +4535,7 @@ body { overflow-wrap: anywhere; }
   letter-spacing: .035em;
 }
 .site-footer .brand-logo img.brand-logo__mark {
-  width: 3.2rem;
+  width: 2.7rem;
   height: 3.55rem;
   max-height: none;
 }
@@ -5488,7 +5488,7 @@ fieldset[aria-invalid="true"] {
 }
 
 @media (max-width: 760px) {
-  .brand-logo img.brand-logo__mark { width: 2.05rem; height: 2.3rem; }
+  .brand-logo img.brand-logo__mark { width: 1.74rem; height: 2.3rem; }
   .brand-logo__wordmark { font-size: .65rem; }
   .brand-logo__wordmark strong { font-size: 1.05rem; }
   .top-level-hero {
@@ -5553,7 +5553,7 @@ fieldset[aria-invalid="true"] {
 
 @media (max-width: 520px) {
   .brand-logo { gap: .4rem; }
-  .brand-logo img.brand-logo__mark { width: 1.85rem; height: 2.08rem; }
+  .brand-logo img.brand-logo__mark { width: 1.57rem; height: 2.08rem; }
   .brand-logo__wordmark { font-size: .58rem; }
   .brand-logo__wordmark strong { font-size: .92rem; }
   .shared-proof-strip > div > div { grid-template-columns: 1fr; }
