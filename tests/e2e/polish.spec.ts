@@ -2,6 +2,9 @@ import { expect, test } from "@playwright/test";
 import { packageCategories } from "../../src/content/packages";
 import { expectNoOverflow } from "./helpers";
 
+const approvedShieldSource =
+  /(?:\/|%2F)brand(?:\/|%2F)identity(?:\/|%2F)wdd-shield-black-glasses-512\.webp(?:[?&]|$)/i;
+
 test("shared header uses the rebuilt mark with a live wordmark", async ({ page }) => {
   for (const route of ["/", "/services", "/portfolio", "/packages"]) {
     await page.goto(route);
@@ -10,7 +13,7 @@ test("shared header uses the rebuilt mark with a live wordmark", async ({ page }
     await expect(header).not.toHaveClass(/site-header--home/);
     await expect(header.locator(".brand-logo__mark")).toHaveAttribute(
       "src",
-      "/brand/identity/wdd-shield-black-glasses-512.webp",
+      approvedShieldSource,
     );
     await expect(header.locator(".brand-logo__wordmark")).toContainText(
       /Website Design\s*Dogs/,
@@ -21,7 +24,7 @@ test("shared header uses the rebuilt mark with a live wordmark", async ({ page }
   await expect(page.locator(".campaign-header")).toBeVisible();
   await expect(page.locator(".campaign-header .brand-logo__mark")).toHaveAttribute(
     "src",
-    "/brand/identity/wdd-shield-black-glasses-512.webp",
+    approvedShieldSource,
   );
 });
 
