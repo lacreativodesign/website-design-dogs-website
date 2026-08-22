@@ -11,6 +11,7 @@ export function BrandLogo({ className, priority = false }: { className?: string;
         alt=""
         width={1600}
         height={795}
+        sizes="170px"
         priority={priority}
         className="brand-logo__image"
       />

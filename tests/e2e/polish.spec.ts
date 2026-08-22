@@ -15,6 +15,10 @@ test("shared header and footer use the approved complete logo artwork", async ({
       "src",
       approvedHorizontalLogoSource,
     );
+    await expect(header.locator(".brand-logo__image")).toHaveAttribute(
+      "sizes",
+      "170px",
+    );
     await expect(page.locator(".site-footer .brand-logo__image")).toHaveAttribute(
       "src",
       approvedHorizontalLogoSource,
