@@ -18,12 +18,12 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ["business", "design", "productivity"],
     icons: [
       {
-        src: "/brand/favicons/favicon-192x192.png",
+        src: "/brand/favicons/wdd-icon-192x192.png",
         sizes: "192x192",
         type: "image/png",
       },
       {
-        src: "/brand/favicons/favicon-512x512.png",
+        src: "/brand/favicons/wdd-icon-512x512.png",
         sizes: "512x512",
         type: "image/png",
       },

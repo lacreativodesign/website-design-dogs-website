@@ -9,15 +9,12 @@ export function BrandLogo({ className, priority = false }: { className?: string;
       <Image
         src={siteConfig.logo}
         alt=""
-        width={58}
-        height={64}
+        width={1600}
+        height={795}
+        sizes="170px"
         priority={priority}
-        className="brand-logo__mark"
+        className="brand-logo__image"
       />
-      <span className="brand-logo__wordmark" aria-hidden="true">
-        <span>Website Design</span>
-        <strong>Dogs</strong>
-      </span>
     </Link>
   );
 }

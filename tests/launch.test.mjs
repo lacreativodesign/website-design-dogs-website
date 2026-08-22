@@ -61,8 +61,8 @@ test("manifest and page metadata expose canonical launch assets", () => {
   const metadata = fs.readFileSync("src/lib/metadata.ts", "utf8");
   const pageMetadata = fs.readFileSync("src/lib/seo.ts", "utf8");
 
-  assert.match(manifest, /favicon-192x192\.png/);
-  assert.match(manifest, /favicon-512x512\.png/);
+  assert.match(manifest, /wdd-icon-192x192\.png/);
+  assert.match(manifest, /wdd-icon-512x512\.png/);
   assert.match(metadata, /manifest: "\/manifest\.webmanifest"/);
   assert.match(pageMetadata, /"max-image-preview": "large"/);
   assert.match(pageMetadata, /languages: \{ "en-US": url \}/);

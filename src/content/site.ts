@@ -4,7 +4,7 @@ export const siteConfig = {
   description: "Professional website design and digital growth solutions for local and growing businesses.",
   legalOwner: "LA CREATIVO GROUP, LLC",
   legalDisclosure: "Website Design Dogs is a service brand of LA CREATIVO GROUP, LLC.",
-  logo: "/brand/logos/wdd-logo-mark.svg",
+  logo: "/brand/identity/wdd-logo-horizontal-black-glasses-1600.webp",
   mascot: "/brand/mascot/wdd-mascot-transparent.png",
   contact: {
     address: {

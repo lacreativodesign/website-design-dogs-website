@@ -4493,9 +4493,7 @@ body { overflow-wrap: anywhere; }
 .site-main:not(:has(.legal-shell-section)) h1,
 .site-main:not(:has(.legal-shell-section)) h2,
 .site-main:not(:has(.legal-shell-section)) h3,
-.site-main:not(:has(.legal-shell-section)) h4,
-.site-header .brand-logo__wordmark,
-.site-footer .brand-logo__wordmark {
+.site-main:not(:has(.legal-shell-section)) h4 {
   font-family: var(--font-heading), "Arial Narrow", sans-serif;
 }
 .site-main:not(:has(.legal-shell-section)) h1,
@@ -4508,42 +4506,20 @@ body { overflow-wrap: anywhere; }
 }
 
 .brand-logo {
-  gap: .55rem;
   min-width: max-content;
 }
-.brand-logo img.brand-logo__mark {
+.brand-logo img.brand-logo__image {
   display: block;
-  width: 2.35rem;
-  height: 2.65rem;
+  width: auto;
+  height: 3.35rem;
+  max-width: 11.5rem;
   max-height: none;
   object-fit: contain;
-  object-position: center;
+  object-position: left center;
 }
-.brand-logo__wordmark {
-  display: grid;
-  color: #fff;
-  font-size: .78rem;
-  font-weight: 800;
-  letter-spacing: .055em;
-  line-height: .92;
-  text-transform: uppercase;
-}
-.brand-logo__wordmark strong {
-  color: var(--color-primary-orange);
-  font-family: inherit;
-  font-size: 1.28rem;
-  letter-spacing: .035em;
-}
-.site-footer .brand-logo img.brand-logo__mark {
-  width: 3.2rem;
-  height: 3.55rem;
-  max-height: none;
-}
-.site-footer .brand-logo__wordmark {
-  font-size: .95rem;
-}
-.site-footer .brand-logo__wordmark strong {
-  font-size: 1.55rem;
+.site-footer .brand-logo img.brand-logo__image {
+  height: 5.25rem;
+  max-width: 13rem;
 }
 
 .top-level-hero {
@@ -5488,9 +5464,7 @@ fieldset[aria-invalid="true"] {
 }
 
 @media (max-width: 760px) {
-  .brand-logo img.brand-logo__mark { width: 2.05rem; height: 2.3rem; }
-  .brand-logo__wordmark { font-size: .65rem; }
-  .brand-logo__wordmark strong { font-size: 1.05rem; }
+  .brand-logo img.brand-logo__image { height: 2.9rem; }
   .top-level-hero {
     min-height: 37rem;
   }
@@ -5552,10 +5526,7 @@ fieldset[aria-invalid="true"] {
 }
 
 @media (max-width: 520px) {
-  .brand-logo { gap: .4rem; }
-  .brand-logo img.brand-logo__mark { width: 1.85rem; height: 2.08rem; }
-  .brand-logo__wordmark { font-size: .58rem; }
-  .brand-logo__wordmark strong { font-size: .92rem; }
+  .brand-logo img.brand-logo__image { height: 2.65rem; }
   .shared-proof-strip > div > div { grid-template-columns: 1fr; }
   .shared-proof-strip article,
   .shared-proof-strip article:nth-child(2) {

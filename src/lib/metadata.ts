@@ -57,27 +57,26 @@ export const rootMetadata: Metadata = {
   other,
   icons: {
     icon: [
-      { url: "/brand/favicons/wdd-mark.svg", type: "image/svg+xml" },
-      { url: "/brand/favicons/favicon.ico" },
+      { url: "/brand/favicons/wdd-favicon.ico" },
       {
-        url: "/brand/favicons/favicon-16x16.png",
+        url: "/brand/favicons/wdd-icon-16x16.png",
         sizes: "16x16",
         type: "image/png",
       },
       {
-        url: "/brand/favicons/favicon-32x32.png",
+        url: "/brand/favicons/wdd-icon-32x32.png",
         sizes: "32x32",
         type: "image/png",
       },
       {
-        url: "/brand/favicons/favicon-48x48.png",
+        url: "/brand/favicons/wdd-icon-48x48.png",
         sizes: "48x48",
         type: "image/png",
       },
     ],
     apple: [
       {
-        url: "/brand/favicons/favicon-180x180.png",
+        url: "/brand/favicons/wdd-icon-180x180.png",
         sizes: "180x180",
         type: "image/png",
       },
@@ -85,13 +84,13 @@ export const rootMetadata: Metadata = {
     other: [
       {
         rel: "icon",
-        url: "/brand/favicons/favicon-192x192.png",
+        url: "/brand/favicons/wdd-icon-192x192.png",
         sizes: "192x192",
         type: "image/png",
       },
       {
         rel: "icon",
-        url: "/brand/favicons/favicon-512x512.png",
+        url: "/brand/favicons/wdd-icon-512x512.png",
         sizes: "512x512",
         type: "image/png",
       },

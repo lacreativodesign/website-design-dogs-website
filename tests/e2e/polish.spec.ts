@@ -2,26 +2,45 @@ import { expect, test } from "@playwright/test";
 import { packageCategories } from "../../src/content/packages";
 import { expectNoOverflow } from "./helpers";
 
-test("shared header uses the rebuilt mark with a live wordmark", async ({ page }) => {
+const approvedHorizontalLogoSource =
+  /(?:\/|%2F)brand(?:\/|%2F)identity(?:\/|%2F)wdd-logo-horizontal-black-glasses-1600\.webp(?:[?&]|$)/i;
+
+test("shared header and footer use the approved complete logo artwork", async ({ page }) => {
   for (const route of ["/", "/services", "/portfolio", "/packages"]) {
     await page.goto(route);
     const header = page.locator(".site-header");
     await expect(header).toBeVisible();
     await expect(header).not.toHaveClass(/site-header--home/);
-    await expect(header.locator(".brand-logo__mark")).toHaveAttribute(
+    await expect(header.locator(".brand-logo__image")).toHaveAttribute(
       "src",
-      "/brand/logos/wdd-logo-mark.svg",
+      approvedHorizontalLogoSource,
     );
-    await expect(header.locator(".brand-logo__wordmark")).toContainText(
-      /Website Design\s*Dogs/,
+    await expect(header.locator(".brand-logo__image")).toHaveAttribute(
+      "sizes",
+      "170px",
+    );
+    await expect(page.locator(".site-footer .brand-logo__image")).toHaveAttribute(
+      "src",
+      approvedHorizontalLogoSource,
     );
   }
 
   await page.goto("/campaigns/cleaning");
   await expect(page.locator(".campaign-header")).toBeVisible();
-  await expect(page.locator(".campaign-header .brand-logo__mark")).toHaveAttribute(
+  await expect(page.locator(".campaign-header .brand-logo__image")).toHaveAttribute(
     "src",
-    "/brand/logos/wdd-logo-mark.svg",
+    approvedHorizontalLogoSource,
+  );
+});
+
+test("mobile navigation uses the approved complete logo artwork", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.getByRole("button", { name: "Open main menu" }).click();
+
+  await expect(page.locator(".mobile-nav__panel .brand-logo__image")).toHaveAttribute(
+    "src",
+    approvedHorizontalLogoSource,
   );
 });
 
