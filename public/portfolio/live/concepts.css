@@ -497,6 +497,11 @@
   .lw-principles article > span { color: #8a313d; font-family: var(--serif); font-size: 1.5rem; }
   .lw-principles h3 { font-family: var(--serif); font-size: 1.35rem; font-weight: 500; }
   .lw-principles article p { color: #59656c; line-height: 1.6; }
+  .lw-library { display: grid; grid-template-columns: .62fr 1.38fr; min-height: 580px; background: #d2c6b6; }
+  .lw-library__note { display: flex; flex-direction: column; justify-content: space-between; padding: 3rem; }
+  .lw-library__note span { color: #7d2d38; font-size: .61rem; font-weight: 800; letter-spacing: .14em; }
+  .lw-library__note p { margin: 0; font-family: var(--serif); font-size: clamp(2rem, 3.3vw, 4rem); letter-spacing: -.04em; line-height: 1.05; }
+  .lw-library > div:last-child img { height: 100%; object-fit: cover; }
   .lw-process { display: grid; grid-template-columns: 1fr 1fr; min-height: 750px; background: #792c36; color: #f4ebdd; }
   .lw-process__copy { padding: clamp(4rem, 8vw, 8rem); }
   .lw-process h2 { font-family: var(--serif); font-size: clamp(3rem, 5.4vw, 6rem); font-weight: 500; letter-spacing: -.06em; line-height: .9; }
@@ -573,6 +578,11 @@
   .cs-studio p { color: #d4dcff; line-height: 1.7; }
   .cs-studio ul { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin: 2rem 0 0; padding: 0; list-style: none; }
   .cs-studio li { border-top: 1px solid #8ca5ff; padding-top: .7rem; font-size: .67rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+  .cs-signal { display: grid; grid-template-columns: .7fr 1.3fr; min-height: 620px; background: #111640; color: #fff; }
+  .cs-signal__copy { display: flex; flex-direction: column; justify-content: space-between; padding: clamp(3rem, 6vw, 6rem); }
+  .cs-signal__copy span { color: #dfff27; font-size: .62rem; font-weight: 900; letter-spacing: .14em; }
+  .cs-signal h2 { margin: 0; font-family: var(--grotesk); font-size: clamp(3rem, 5vw, 5.8rem); font-weight: 950; letter-spacing: -.08em; line-height: .73; }
+  .cs-signal > div:last-child img { height: 100%; object-fit: cover; }
   .cs-output { display: grid; grid-template-columns: 180px 1fr; gap: 3rem; background: #dfff27; }
   .cs-output__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; }
   .cs-output h2 { font-family: var(--grotesk); font-size: clamp(3.3rem, 5.8vw, 6.8rem); font-weight: 950; letter-spacing: -.08em; line-height: .78; text-transform: uppercase; }
@@ -962,7 +972,7 @@
     .rf-band { grid-template-columns: 1fr 1fr; }
     .rf-service-grid, .cl-card-row, .dn-care__bubbles, .ft-training-grid, .hs-service-grid { grid-template-columns: 1fr; }
     .rf-service-grid article, .cl-card-row article, .dn-care__bubbles article, .ft-training-grid article, .hs-service-grid article { min-height: 300px; transform: none; }
-    .rf-story, .rf-materials, .rf-scope__grid, .cl-note, .cl-rooms, .cl-rhythm, .ls-method, .re-editor, .re-approach, .rs-fire, .rs-plate, .rs-gather__grid, .lw-hero__grid, .lw-image-break, .lw-principles, .lw-process, .cs-method, .cs-studio, .cs-output__grid, .dn-visit, .dn-comfort, .ft-week, .ft-coaching, .ft-room, .ec-maker, .ec-journal, .hs-rooms, .hs-detail, .hs-finish, .sl-intro, .sl-approach, .sl-ritual, .sl-still, .sl-faq { grid-template-columns: 1fr; }
+    .rf-story, .rf-materials, .rf-scope__grid, .cl-note, .cl-rooms, .cl-rhythm, .ls-method, .re-editor, .re-approach, .rs-fire, .rs-plate, .rs-gather__grid, .lw-hero__grid, .lw-image-break, .lw-principles, .lw-library, .lw-process, .cs-method, .cs-studio, .cs-signal, .cs-output__grid, .dn-visit, .dn-comfort, .ft-week, .ft-coaching, .ft-room, .ec-maker, .ec-journal, .hs-rooms, .hs-detail, .hs-finish, .sl-intro, .sl-approach, .sl-ritual, .sl-still, .sl-faq { grid-template-columns: 1fr; }
     .rf-story__image, .cl-note__image, .dn-visit__image, .lw-process__image, .cs-studio__image, .sl-approach__image { min-height: 560px; }
     .rf-materials, .cl-rooms, .cl-rhythm, .ls-method, .dn-comfort, .hs-rooms, .hs-finish, .sl-ritual { gap: 3rem; }
     .rf-cta, .ls-cta, .rs-cta, .cs-cta, .ec-cta { align-items: flex-start; flex-direction: column; justify-content: flex-end; }
@@ -1000,6 +1010,7 @@
     .cs-image-grid { grid-template-columns: 1fr; }
     .cs-image-grid > div:first-child { min-height: 560px; }
     .cs-image-grid__note { min-height: 360px; }
+    .cs-signal > div:last-child, .lw-library > div:last-child { min-height: 520px; }
     .cs-service-grid { grid-template-columns: 1fr; }
     .cs-service-grid article { min-height: 300px; border-right: 0; border-bottom: 2px solid #111640; }
     .cs-method__steps, .cs-output ul { margin-top: 2rem; }
