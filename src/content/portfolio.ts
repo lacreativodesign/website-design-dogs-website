@@ -51,7 +51,7 @@ const concept = (
   thumbnail: `/portfolio/concepts/${id}-thumb.webp`,
   fullImage: `/portfolio/concepts/${id}-full.webp`,
   fullImageHeight: 8800,
-  liveUrl: `/portfolio/live/?concept=${id}`,
+  liveUrl: `/portfolio/live?concept=${id}`,
   description,
 });
 

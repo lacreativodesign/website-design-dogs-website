@@ -129,7 +129,7 @@
   const root = document.getElementById("main");
 
   function asset(c, kind) {
-    return "./assets/" + c.id + "-" + kind + ".webp";
+    return "/portfolio/live/assets/" + c.id + "-" + kind + ".webp";
   }
 
   function image(c, kind, alt, className) {

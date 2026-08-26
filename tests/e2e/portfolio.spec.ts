@@ -11,7 +11,7 @@ test("Portfolio presents twelve live, labelled design concepts", async ({ page }
   );
   await expect(page.locator(".portfolio-thumbnail__preview-frame").first()).toHaveAttribute(
     "src",
-    /\/portfolio\/live\/?\?concept=roofing/,
+    /\/portfolio\/live\?concept=roofing/,
   );
   await expect(page.locator(".portfolio-thumbnail").first()).toHaveCSS(
     "border-top-width",
