@@ -102,7 +102,7 @@ export default function PortfolioPage() {
                     Explore the Whole Site.
                   </>
                 }
-                description="Every concept has its own brand system, page architecture, original copy, responsive behavior, and coordinated AI-generated imagery."
+                description="Explore layout direction through twelve concepts, each with its own brand system, page architecture, original copy, responsive behavior, and coordinated AI-generated imagery."
               />
             }
           />
