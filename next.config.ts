@@ -56,6 +56,14 @@ function withPreviewRobots(
 }
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: "/portfolio/live",
+        destination: "/portfolio/live/index.html",
+      },
+    ];
+  },
   async headers() {
     return [
       {
