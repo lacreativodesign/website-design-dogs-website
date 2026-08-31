@@ -6273,3 +6273,20 @@ fieldset[aria-invalid="true"] {
     min-width: 0;
   }
 }
+
+/* Preserve the original condensed display face in hero sections only. */
+.site-main :is(
+  .home-hero,
+  .top-level-hero,
+  .services-hero,
+  .portfolio-hero,
+  .packages-hero,
+  .visual-page-hero,
+  .compact-title-section,
+  .contact-hero__content,
+  .guided-hero,
+  .service-detail-hero,
+  .package-detail-hero
+) h1 {
+  font-family: Impact, "Arial Narrow", Inter, sans-serif;
+}
