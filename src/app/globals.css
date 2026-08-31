@@ -4562,7 +4562,8 @@ body { overflow-wrap: anywhere; }
   max-width: 35rem;
   margin: .62rem 0 .85rem;
   color: #fff;
-  font-family: Impact, "Arial Narrow", Inter, sans-serif;\n  font-size: clamp(3rem, 5.2vw, 5.1rem);
+  font-family: Impact, "Arial Narrow", Inter, sans-serif;
+  font-size: clamp(3rem, 5.2vw, 5.1rem);
   font-weight: 900;
   line-height: .9;
   text-transform: uppercase;
