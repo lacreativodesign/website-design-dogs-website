@@ -37,22 +37,27 @@ test("about process icons remain centered in their containers", async ({ page })
   }
 });
 
-test("display headings and package prices use the readable local heading font", async ({ page }) => {
-  const targets = [
+test("hero titles keep the approved condensed face while package prices stay readable", async ({ page }) => {
+  const heroTargets = [
     { path: "/", selector: ".home-hero__title" },
     { path: "/portfolio", selector: ".top-level-hero__copy h1" },
     { path: "/privacy-policy", selector: ".visual-page-hero--legal h1" },
-    { path: "/packages", selector: ".packages-card__price" },
   ] as const;
 
-  for (const target of targets) {
+  for (const target of heroTargets) {
     await page.goto(target.path);
-    const element = page.locator(target.selector).first();
-    await expect(element).toBeVisible();
-    const fontFamily = await element.evaluate((node) => getComputedStyle(node).fontFamily);
-    expect(fontFamily).toMatch(/headingFont|Manrope/i);
-    expect(fontFamily).not.toMatch(/^Impact/i);
+    const heroTitle = page.locator(target.selector).first();
+    await expect(heroTitle).toBeVisible();
+    const fontFamily = await heroTitle.evaluate((node) => getComputedStyle(node).fontFamily);
+    expect(fontFamily).toMatch(/^Impact/i);
   }
+
+  await page.goto("/packages");
+  const packagePrice = page.locator(".packages-card__price").first();
+  await expect(packagePrice).toBeVisible();
+  const priceFontFamily = await packagePrice.evaluate((node) => getComputedStyle(node).fontFamily);
+  expect(priceFontFamily).toMatch(/headingFont|Manrope/i);
+  expect(priceFontFamily).not.toMatch(/^Impact/i);
 });
 
 test.describe("mobile portfolio browse control", () => {
