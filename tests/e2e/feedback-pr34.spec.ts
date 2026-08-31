@@ -28,7 +28,7 @@ test("homepage restores the package, process, business-context, and footer detai
   const footer = page.locator(".site-footer");
   await expect(footer.getByRole("heading", { name: "Support" })).toHaveCount(0);
   await expect(footer.getByRole("link", { name: "FAQ", exact: true })).toHaveCount(1);
-  await expect(footer.locator(".footer-socials svg")).toHaveCount(2);
+  await expect(footer.locator(".footer-socials svg")).toHaveCount(3);
   await expect(footer.getByRole("heading", { name: "Contact" }).locator("xpath=../ul/li")).toHaveCount(3);
   await expectNoOverflow(page);
 });
