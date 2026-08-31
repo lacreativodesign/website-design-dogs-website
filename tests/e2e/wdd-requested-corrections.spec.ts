@@ -46,7 +46,7 @@ test("original heading fonts remain while spacing improves readability", async (
       return {
         family: style.fontFamily,
         fontSize: Number.parseFloat(style.fontSize),
-        letterSpacing: Number.parseFloat(style.letterSpacing),
+        letterSpacing: style.letterSpacing === "normal" ? 0 : Number.parseFloat(style.letterSpacing),
         lineHeight: Number.parseFloat(style.lineHeight),
       };
     });
