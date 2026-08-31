@@ -27,6 +27,11 @@ export const siteConfig = {
       value: "Message us on WhatsApp",
       href: "https://wa.me/14159002374?text=Hi%20Website%20Design%20Dogs%2C%20I%27d%20like%20to%20discuss%20a%20website%20project.",
     },
+    availability: {
+      label: "Working hours",
+      days: "Monday–Friday",
+      hours: "8:00 AM–5:00 PM CT",
+    },
   },
   social: {
     facebook: {

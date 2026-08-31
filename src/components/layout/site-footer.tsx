@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { CookieSettingsButton } from "@/components/consent/cookie-settings-button";
 import { siteConfig } from "@/content/site";
-import { SocialIcon } from "@/components/ui/icon";
+import { SocialLinks } from "./social-links";
 import { BrandLogo } from "./brand-logo";
 
 function FooterList({
@@ -50,39 +50,6 @@ function FooterContact({ compact }: { compact: boolean }) {
   );
 }
 
-function FooterSocials() {
-  const socialLinks = [siteConfig.social.facebook, siteConfig.social.instagram] as const;
-
-  return (
-    <div className="footer-socials" aria-label="Website Design Dogs social profiles">
-      {socialLinks.map((social) =>
-        social.href ? (
-          <a
-            key={social.label}
-            href={social.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={social.label}
-            title={social.label}
-          >
-            <SocialIcon name={social.label.toLowerCase() as "facebook" | "instagram"} />
-          </a>
-        ) : (
-          <span
-            key={social.label}
-            className="footer-socials__pending"
-            aria-label={`${social.label} profile link pending`}
-            aria-disabled="true"
-            title={`${social.label} profile link pending`}
-          >
-            <SocialIcon name="instagram" />
-          </span>
-        ),
-      )}
-    </div>
-  );
-}
-
 export function SiteFooter({ compact = false }: { compact?: boolean }) {
   const year = new Date().getFullYear();
 
@@ -103,7 +70,7 @@ export function SiteFooter({ compact = false }: { compact?: boolean }) {
             <p className="mt-4 max-w-sm text-sm leading-6 text-white/68">
               {siteConfig.legalDisclosure}
             </p>
-            <FooterSocials />
+            <SocialLinks />
           </div>
           <FooterList
             title={compact ? "Quick Links" : "Company"}

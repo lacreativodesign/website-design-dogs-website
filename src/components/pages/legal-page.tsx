@@ -171,9 +171,9 @@ export function LegalPage({
               <p className="home-eyebrow">Plain-language overview</p>
               <h2 id="legal-overview-title">Policy overview</h2>
               <p>
-                {BRAND_DISCLOSURE} These general website terms may be controlled by a
-                signed proposal, order form, statement of work, or written agreement
-                where those terms differ.
+                {BRAND_DISCLOSURE} This page explains the general policy for this
+                website. A signed agreement may add project-specific terms, but it does
+                not waive rights or obligations that cannot lawfully be waived.
               </p>
             </div>
 

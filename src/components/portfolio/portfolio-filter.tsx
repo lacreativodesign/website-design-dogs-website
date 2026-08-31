@@ -29,7 +29,7 @@ export function PortfolioFilter({ heading }: { heading: ReactNode }) {
   const filters = filtersFor(mode);
   return <div className="portfolio-filter">
     <div className="portfolio-filter-studio">
-      <div className="portfolio-filter-studio__header">{heading}<div className="portfolio-browse-control"><span>Browse by</span><div className="portfolio-browse-switch" role="group" aria-label="Choose how to browse portfolio concepts"><button type="button" aria-pressed={mode === "industry"} onClick={() => sync("industry", "All")}>Industry</button><button type="button" aria-pressed={mode === "type"} onClick={() => sync("type", "All")}>Website Type</button></div></div></div>
+      <div className="portfolio-filter-studio__header">{heading}<div className="portfolio-browse-control"><div className="portfolio-browse-switch" role="group" aria-label="Choose how to browse portfolio concepts"><span>Browse by</span><button type="button" aria-pressed={mode === "industry"} onClick={() => sync("industry", "All")}>Industry</button><button type="button" aria-pressed={mode === "type"} onClick={() => sync("type", "All")}>Website Type</button></div></div></div>
       <div className="portfolio-filter__tabs" aria-label={mode === "industry" ? "Filter concepts by industry" : "Filter concepts by website type"}>{filters.map((filter) => <button key={filter} type="button" aria-pressed={active === filter} className={cn("portfolio-filter__tab", active === filter && "portfolio-filter__tab--active")} onClick={() => sync(mode, filter)}>{filter}</button>)}</div>
     </div>
     <p className="sr-only" aria-live="polite">Showing {concepts.length} design concepts{active === "All" ? "" : ` for ${active}`}.</p>

@@ -106,7 +106,7 @@ export default function AboutPage() {
           <ol className="about-process-grid" aria-label="Website Design Dogs process">
             {aboutProcessTiles.map((tile, index) => (
               <li key={tile.number} className="about-process-tile">
-                <strong className="inner-card-icon"><BrandIcon name={aboutProcessIcons[index] ?? "clipboard-check"} /></strong>
+                <span className="inner-card-icon"><BrandIcon name={aboutProcessIcons[index] ?? "clipboard-check"} /></span>
                 <h3>{tile.title}</h3>
                 <p>{tile.body}</p>
               </li>
