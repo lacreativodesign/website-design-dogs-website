@@ -37,27 +37,44 @@ test("about process icons remain centered in their containers", async ({ page })
   }
 });
 
-test("hero titles keep the approved condensed face while package prices stay readable", async ({ page }) => {
-  const heroTargets = [
-    { path: "/", selector: ".home-hero__title" },
-    { path: "/portfolio", selector: ".top-level-hero__copy h1" },
-    { path: "/privacy-policy", selector: ".visual-page-hero--legal h1" },
-  ] as const;
+test("original heading fonts remain while spacing improves readability", async ({ page }) => {
+  const readTypography = async (selector: string) => {
+    const element = page.locator(selector).first();
+    await expect(element).toBeVisible();
+    return element.evaluate((node) => {
+      const style = getComputedStyle(node);
+      return {
+        family: style.fontFamily,
+        fontSize: Number.parseFloat(style.fontSize),
+        letterSpacing: Number.parseFloat(style.letterSpacing),
+        lineHeight: Number.parseFloat(style.lineHeight),
+      };
+    });
+  };
 
-  for (const target of heroTargets) {
-    await page.goto(target.path);
-    const heroTitle = page.locator(target.selector).first();
-    await expect(heroTitle).toBeVisible();
-    const fontFamily = await heroTitle.evaluate((node) => getComputedStyle(node).fontFamily);
-    expect(fontFamily).toMatch(/^Impact/i);
-  }
+  await page.goto("/");
+  const homeHero = await readTypography(".home-hero__title");
+  expect(homeHero.family).toContain("headingFont");
+  expect(homeHero.letterSpacing / homeHero.fontSize).toBeCloseTo(-0.01, 2);
+  expect(homeHero.lineHeight / homeHero.fontSize).toBeGreaterThanOrEqual(0.99);
+
+  await page.goto("/privacy-policy");
+  const legalHero = await readTypography(".visual-page-hero--legal h1");
+  expect(legalHero.family).toMatch(/^Impact/i);
+  expect(legalHero.letterSpacing / legalHero.fontSize).toBeCloseTo(-0.01, 2);
+  expect(legalHero.lineHeight / legalHero.fontSize).toBeGreaterThanOrEqual(0.99);
 
   await page.goto("/packages");
-  const packagePrice = page.locator(".packages-card__price").first();
-  await expect(packagePrice).toBeVisible();
-  const priceFontFamily = await packagePrice.evaluate((node) => getComputedStyle(node).fontFamily);
-  expect(priceFontFamily).toMatch(/headingFont|Manrope/i);
-  expect(priceFontFamily).not.toMatch(/^Impact/i);
+  const packagePrice = await readTypography(".packages-card__price");
+  expect(packagePrice.family).toContain("headingFont");
+  expect(packagePrice.letterSpacing).toBe(0);
+  expect(packagePrice.lineHeight / packagePrice.fontSize).toBeGreaterThanOrEqual(1.04);
+
+  await page.goto("/about");
+  const smallHeading = await readTypography(".about-process-grid h3");
+  expect(smallHeading.family).toContain("headingFont");
+  expect(smallHeading.letterSpacing / smallHeading.fontSize).toBeCloseTo(0.01, 2);
+  expect(smallHeading.lineHeight / smallHeading.fontSize).toBeGreaterThanOrEqual(1.17);
 });
 
 test.describe("mobile portfolio browse control", () => {
