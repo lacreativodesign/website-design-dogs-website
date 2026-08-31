@@ -37,6 +37,24 @@ test("about process icons remain centered in their containers", async ({ page })
   }
 });
 
+test("display headings and package prices use the readable local heading font", async ({ page }) => {
+  const targets = [
+    { path: "/", selector: ".home-hero__title" },
+    { path: "/portfolio", selector: ".portfolio-hero h1" },
+    { path: "/privacy-policy", selector: ".visual-page-hero--legal h1" },
+    { path: "/packages", selector: ".packages-card__price" },
+  ] as const;
+
+  for (const target of targets) {
+    await page.goto(target.path);
+    const element = page.locator(target.selector).first();
+    await expect(element).toBeVisible();
+    const fontFamily = await element.evaluate((node) => getComputedStyle(node).fontFamily);
+    expect(fontFamily).toMatch(/headingFont|Manrope/i);
+    expect(fontFamily).not.toMatch(/^Impact/i);
+  }
+});
+
 test.describe("mobile portfolio browse control", () => {
   test.use({ viewport: { width: 390, height: 844 } });
 
