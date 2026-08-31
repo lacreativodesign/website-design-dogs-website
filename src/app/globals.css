@@ -6208,6 +6208,11 @@ fieldset[aria-invalid="true"] {
   padding-top: .85rem;
 }
 
+.about-process-tile > .inner-card-icon {
+  display: inline-flex;
+  margin-top: 0;
+}
+
 .platform-name-grid a {
   grid-template-columns: auto minmax(0, max-content);
   justify-content: center;
