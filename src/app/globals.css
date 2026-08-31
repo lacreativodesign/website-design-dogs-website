@@ -6170,3 +6170,100 @@ fieldset[aria-invalid="true"] {
     transition: none;
   }
 }
+
+
+/* WDD requested contact, typography, platform-icon, and responsive-filter corrections */
+.contact-availability {
+  display: flex;
+  gap: .8rem;
+  align-items: center;
+  margin-top: 1rem;
+  border: 1px solid #29425f;
+  border-radius: .5rem;
+  background: rgb(255 255 255 / .025);
+  padding: .8rem;
+}
+.contact-availability .inner-card-icon {
+  width: 2.7rem;
+  height: 2.7rem;
+}
+.contact-availability strong,
+.contact-availability span:not(.inner-card-icon) {
+  display: block;
+}
+.contact-availability strong {
+  color: var(--color-foreground);
+  font-size: .8rem;
+  font-weight: 800;
+}
+.contact-availability span:not(.inner-card-icon) {
+  margin-top: .18rem;
+  color: var(--color-text-muted);
+  font-size: .72rem;
+  line-height: 1.4;
+}
+.contact-socials {
+  margin-top: .85rem;
+  border-top: 1px solid rgb(255 255 255 / .1);
+  padding-top: .85rem;
+}
+
+.platform-name-grid a {
+  grid-template-columns: auto minmax(0, max-content);
+  justify-content: center;
+  column-gap: .55rem;
+}
+.platform-name-grid__icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  color: var(--color-primary-orange);
+}
+
+.site-main:not(:has(.legal-shell-section)) h1,
+.site-main:not(:has(.legal-shell-section)) h2,
+.visual-page-hero--legal h1,
+.legal-shell-section h2,
+.legal-shell-section h3 {
+  letter-spacing: -.025em;
+  line-height: 1.06;
+}
+.packages-card__price,
+.pricing-card__price,
+.home-section__heading--numbered > span,
+.home-process__number,
+.packages-process li > p:first-of-type,
+.package-detail-process li > p:first-of-type,
+.service-process__grid li > p,
+.service-results__grid span,
+.portfolio-process__top b {
+  letter-spacing: -.02em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.portfolio-browse-switch > span {
+  align-self: center;
+  white-space: nowrap;
+}
+.portfolio-browse-switch button {
+  flex: 1 1 0;
+}
+
+@media (max-width: 640px) {
+  .portfolio-browse-control,
+  .portfolio-browse-switch {
+    width: 100%;
+  }
+  .portfolio-browse-switch {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: .35rem;
+  }
+  .portfolio-browse-switch > span {
+    grid-column: 1 / -1;
+    padding: .2rem .35rem .1rem;
+  }
+  .portfolio-browse-switch button {
+    width: 100%;
+    min-width: 0;
+  }
+}

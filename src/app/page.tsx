@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ContactForm } from "@/components/forms/contact-form";
 import { PackageExplorer } from "@/components/packages/package-explorer";
+import { PlatformGlyph } from "@/components/platforms/platform-glyph";
 import { PortfolioGallery } from "@/components/portfolio/portfolio-gallery";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
@@ -141,6 +142,7 @@ export default function Home() {
             <div className="platform-name-grid">
               {platforms.map((platform) => (
                 <Link key={platform.slug} href={`/platforms#${platform.slug}`}>
+                  <PlatformGlyph category={platform.category} />
                   {platform.name}
                 </Link>
               ))}

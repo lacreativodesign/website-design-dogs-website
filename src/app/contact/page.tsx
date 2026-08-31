@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/forms/contact-form";
+import { SocialLinks } from "@/components/layout/social-links";
 import { ProofStrip, TopLevelHero, type ProofItem } from "@/components/pages/top-level-hero";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
@@ -88,6 +89,20 @@ export default function ContactPage() {
                   </a>
                 ))}
               </div>
+              <div className="contact-availability">
+                <span className="inner-card-icon">
+                  <BrandIcon name="calendar-clock" />
+                </span>
+                <div>
+                  <strong>{siteConfig.contact.availability.label}</strong>
+                  <span>{siteConfig.contact.availability.days}</span>
+                  <span>{siteConfig.contact.availability.hours}</span>
+                </div>
+              </div>
+              <SocialLinks
+                className="contact-socials"
+                label="Connect with Website Design Dogs"
+              />
             </aside>
 
             <div className="contact-form-card">
