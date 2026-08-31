@@ -40,7 +40,7 @@ test("about process icons remain centered in their containers", async ({ page })
 test("display headings and package prices use the readable local heading font", async ({ page }) => {
   const targets = [
     { path: "/", selector: ".home-hero__title" },
-    { path: "/portfolio", selector: ".portfolio-hero h1" },
+    { path: "/portfolio", selector: ".top-level-hero__copy h1" },
     { path: "/privacy-policy", selector: ".visual-page-hero--legal h1" },
     { path: "/packages", selector: ".packages-card__price" },
   ] as const;
