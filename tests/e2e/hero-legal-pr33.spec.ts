@@ -35,7 +35,7 @@ test("shared public heroes keep full-width containers with left-aligned copy", a
   }
 });
 
-test("public hero headings use the restored condensed typography", async ({ page }) => {
+test("public marketing headings use the locked heading typography", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/");
   const homeTypography = await page.locator(".home-hero__title").evaluate((element) => {
@@ -43,7 +43,7 @@ test("public hero headings use the restored condensed typography", async ({ page
     return { family: style.fontFamily, transform: style.textTransform };
   });
 
-  expect(homeTypography.family).toMatch(/^Impact/i);
+  expect(homeTypography.family).toContain("headingFont");
   expect(homeTypography.transform).toBe("uppercase");
 
   for (const route of [
