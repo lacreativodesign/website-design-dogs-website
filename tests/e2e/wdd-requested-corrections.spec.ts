@@ -15,6 +15,17 @@ test("contact and footer expose hours plus Facebook, Instagram, and WhatsApp", a
     "href",
     /wa\.me\/14159002374/,
   );
+
+  const contactWhatsAppIcon = page.locator(
+    '.contact-socials [data-social-brand="whatsapp"]',
+  );
+  const footerWhatsAppIcon = page.locator(
+    'footer [data-social-brand="whatsapp"]',
+  );
+  await expect(contactWhatsAppIcon).toHaveCount(1);
+  await expect(footerWhatsAppIcon).toHaveCount(1);
+  await expect(contactWhatsAppIcon).toHaveAttribute("fill", "currentColor");
+  await expect(contactWhatsAppIcon).toHaveAttribute("stroke", "none");
 });
 
 test("platform displays use each platform’s individual brand mark", async ({ page }) => {
