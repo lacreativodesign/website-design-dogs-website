@@ -6225,12 +6225,22 @@ fieldset[aria-invalid="true"] {
 }
 
 .site-main:not(:has(.legal-shell-section)) h1,
+.visual-page-hero--legal h1 {
+  letter-spacing: -.01em;
+  line-height: 1;
+}
 .site-main:not(:has(.legal-shell-section)) h2,
-.visual-page-hero--legal h1,
-.legal-shell-section h2,
+.legal-shell-section h2 {
+  letter-spacing: 0;
+  line-height: 1.1;
+  word-spacing: .01em;
+}
+.site-main:not(:has(.legal-shell-section)) h3,
+.site-main:not(:has(.legal-shell-section)) h4,
 .legal-shell-section h3 {
-  letter-spacing: -.025em;
-  line-height: 1.06;
+  letter-spacing: .01em;
+  line-height: 1.18;
+  word-spacing: .015em;
 }
 .packages-card__price,
 .pricing-card__price,
@@ -6241,7 +6251,8 @@ fieldset[aria-invalid="true"] {
 .service-process__grid li > p,
 .service-results__grid span,
 .portfolio-process__top b {
-  letter-spacing: -.02em;
+  letter-spacing: 0;
+  line-height: 1.05;
   font-variant-numeric: lining-nums tabular-nums;
 }
 
