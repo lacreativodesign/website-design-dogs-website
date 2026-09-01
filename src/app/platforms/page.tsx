@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { TopLevelHero, ProofStrip, type ProofItem } from "@/components/pages/top-level-hero";
+import { PlatformLogo } from "@/components/platforms/platform-glyph";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { JsonLd } from "@/components/seo/json-ld";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { ArrowRightIcon, BrandIcon, type BrandIconName } from "@/components/ui/icon";
+import { ArrowRightIcon } from "@/components/ui/icon";
 import { NumberedSectionHeading } from "@/components/ui/numbered-section-heading";
 import { illustrationScenes } from "@/content/illustrations";
 import { platformPrinciples, platforms } from "@/content/platforms";
@@ -26,11 +27,6 @@ const proofItems: ProofItem[] = [
 ];
 
 const categories = ["Website & CMS", "E-Commerce", "Custom"] as const;
-const categoryIcons: Record<(typeof categories)[number], BrandIconName> = {
-  "Website & CMS": "globe-2",
-  "E-Commerce": "shopping-cart",
-  Custom: "blocks",
-};
 
 export default function PlatformsPage() {
   return (
@@ -76,7 +72,7 @@ export default function PlatformsPage() {
               {platforms.filter((platform) => platform.category === category).map((platform) => (
                 <article key={platform.slug} id={platform.slug}>
                   <div className="platform-card__header">
-                    <span className="inner-card-icon"><BrandIcon name={categoryIcons[category]} /></span>
+                    <span className="inner-card-icon"><PlatformLogo platform={platform} /></span>
                     <div><p className="home-eyebrow">{platform.category}</p><h3>{platform.name}</h3></div>
                   </div>
                   <p>{platform.bestFor}</p>

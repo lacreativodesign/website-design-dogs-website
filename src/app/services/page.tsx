@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { TopLevelHero, ProofStrip, type ProofItem } from "@/components/pages/top-level-hero";
-import { PlatformGlyph } from "@/components/platforms/platform-glyph";
+import { PlatformLogo } from "@/components/platforms/platform-glyph";
 import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
 import { JsonLd } from "@/components/seo/json-ld";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
@@ -110,7 +110,7 @@ export default function ServicesPage() {
           <div className="platform-name-grid" aria-label="Selected supported platforms">
             {platforms.slice(0, 6).map((platform) => (
               <Link key={platform.slug} href={`/platforms#${platform.slug}`}>
-                <PlatformGlyph category={platform.category} />
+                <PlatformLogo platform={platform} className="platform-name-grid__logo" />
                 {platform.name}
               </Link>
             ))}
