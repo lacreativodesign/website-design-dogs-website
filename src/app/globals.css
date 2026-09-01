@@ -836,7 +836,7 @@ body:has(.campaign-page) .site-main > section:first-child { padding-top: 0; }
   letter-spacing: -.07em;
   line-height: .9;
 }
-.about-process-tile span {
+.about-process-tile span:not(.inner-card-icon) {
   display: block;
   margin-top: .7rem;
   color: var(--color-foreground);
@@ -6218,10 +6218,33 @@ fieldset[aria-invalid="true"] {
   justify-content: center;
   column-gap: .55rem;
 }
-.platform-name-grid__icon {
+.platform-logo {
+  display: block;
+  width: 1.45rem;
+  height: 1.45rem;
+  flex: 0 0 auto;
+}
+.inner-card-icon .platform-logo {
+  width: 1.45rem;
+  height: 1.45rem;
+}
+.platform-name-grid__logo {
   width: 1.15rem;
   height: 1.15rem;
-  color: var(--color-primary-orange);
+}
+.inner-card-icon .platform-logo--duda,
+.inner-card-icon .platform-logo--wix-studio,
+.inner-card-icon .platform-logo--wix-ecommerce,
+.inner-card-icon .platform-logo--woocommerce {
+  width: 1.7rem;
+  height: 1.1rem;
+}
+.platform-name-grid__logo.platform-logo--duda,
+.platform-name-grid__logo.platform-logo--wix-studio,
+.platform-name-grid__logo.platform-logo--wix-ecommerce,
+.platform-name-grid__logo.platform-logo--woocommerce {
+  width: 1.35rem;
+  height: .9rem;
 }
 
 .site-main:not(:has(.legal-shell-section)) h1,
