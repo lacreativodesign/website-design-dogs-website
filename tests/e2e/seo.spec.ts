@@ -89,7 +89,7 @@ test("structured data parses, exposes verified contacts, and avoids fake local p
   expect(structuredData).toContain(
     '"email":"hello@websitedesigndogs.com"',
   );
-  expect(structuredData).toContain('"telephone":"+14159002374"');
+  expect(structuredData).toContain('"telephone":"+15127647834"');
   expect(structuredData).toContain('"parentOrganization"');
   expect(structuredData).toContain('"legalName":"LA CREATIVO GROUP, LLC"');
 

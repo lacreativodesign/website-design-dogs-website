@@ -18,14 +18,14 @@ export const siteConfig = {
     },
     phone: {
       label: "Phone",
-      value: "+1 (415) 900-2374",
-      e164: "+14159002374",
-      href: "tel:+14159002374",
+      value: "+1 (512) 764-7834",
+      e164: "+15127647834",
+      href: "tel:+15127647834",
     },
     whatsapp: {
       label: "WhatsApp Business",
       value: "Message us on WhatsApp",
-      href: "https://wa.me/14159002374?text=Hi%20Website%20Design%20Dogs%2C%20I%27d%20like%20to%20discuss%20a%20website%20project.",
+      href: "https://wa.me/15127647834?text=Hi%20Website%20Design%20Dogs%2C%20I%27d%20like%20to%20discuss%20a%20website%20project.",
     },
     availability: {
       label: "Working hours",
