@@ -9,11 +9,11 @@ test("contact and footer expose hours plus Facebook, Instagram, and WhatsApp", a
   await expect(page.locator(".contact-socials").getByLabel("Instagram profile link pending")).toHaveCount(1);
   await expect(page.locator(".contact-socials").getByLabel("WhatsApp")).toHaveAttribute(
     "href",
-    /wa\.me\/14159002374/,
+    /wa\.me\/15127647834/,
   );
   await expect(page.locator("footer").getByLabel("WhatsApp")).toHaveAttribute(
     "href",
-    /wa\.me\/14159002374/,
+    /wa\.me\/15127647834/,
   );
 
   const contactWhatsAppIcon = page.locator(
