@@ -2,7 +2,13 @@ import { siteConfig } from "@/content/site";
 import { cn } from "@/lib/utils";
 import { SocialIcon } from "@/components/ui/icon";
 
-const socialLinks = [
+type SocialLink = {
+  label: string;
+  href: string | null;
+  icon: "facebook" | "instagram" | "whatsapp";
+};
+
+const socialLinks: readonly SocialLink[] = [
   { ...siteConfig.social.facebook, icon: "facebook" },
   { ...siteConfig.social.instagram, icon: "instagram" },
   {
@@ -10,7 +16,7 @@ const socialLinks = [
     href: siteConfig.contact.whatsapp.href,
     icon: "whatsapp",
   },
-] as const;
+];
 
 export function SocialLinks({
   className,

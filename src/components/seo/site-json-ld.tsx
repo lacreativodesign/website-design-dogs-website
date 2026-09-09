@@ -14,10 +14,13 @@ export function SiteJsonLd() {
   const site = getSiteUrl();
   const organizationId = `${site}/#organization`;
   const websiteId = `${site}/#website`;
-  const socialProfiles = [
+  const socialProfileUrls: readonly (string | null)[] = [
     siteConfig.social.facebook.href,
     siteConfig.social.instagram.href,
-  ].filter((href): href is string => Boolean(href));
+  ];
+  const socialProfiles = socialProfileUrls.filter(
+    (href): href is string => Boolean(href),
+  );
 
   return (
     <JsonLd

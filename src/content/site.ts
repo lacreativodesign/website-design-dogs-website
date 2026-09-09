@@ -40,7 +40,7 @@ export const siteConfig = {
     },
     instagram: {
       label: "Instagram",
-      href: process.env.NEXT_PUBLIC_INSTAGRAM_URL?.trim() || null,
+      href: "https://www.instagram.com/websitedesigndogs/",
     },
   },
   primaryCta: { label: "Get a Free Quote", href: "/get-started" },
