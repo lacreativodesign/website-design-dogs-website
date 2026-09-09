@@ -19,7 +19,7 @@ export function PageViewTracker() {
     const view = () => {
       const prefs = readConsent();
       if (
-        !prefs?.analytics ||
+        !(prefs?.analytics || prefs?.marketing) ||
         process.env.NEXT_PUBLIC_ENABLE_GTM !== "true" ||
         !window.__wddGtmLoaded
       ) {

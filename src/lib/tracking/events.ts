@@ -16,7 +16,7 @@ export type TrackingEventName =
 type ConsentRequirement = "analytics" | "marketing" | "analytics-or-marketing" | "necessary";
 
 const eventConsent: Record<TrackingEventName, ConsentRequirement> = {
-  wdd_page_view: "analytics", wdd_theme_changed: "analytics", wdd_primary_cta_click: "analytics",
+  wdd_page_view: "analytics-or-marketing", wdd_theme_changed: "analytics", wdd_primary_cta_click: "analytics",
   wdd_portfolio_filter_used: "analytics", wdd_faq_opened: "analytics", wdd_consent_banner_viewed: "necessary",
   wdd_consent_updated: "necessary", wdd_view_packages: "analytics-or-marketing", wdd_select_package: "analytics-or-marketing",
   wdd_quote_start: "analytics-or-marketing", wdd_lead_submit: "analytics-or-marketing",
