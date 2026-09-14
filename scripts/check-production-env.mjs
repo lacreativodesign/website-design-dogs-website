@@ -54,6 +54,8 @@ const site = url("NEXT_PUBLIC_SITE_URL", {
   noPreview: production,
 });
 const leadSubmissionEnabled = enabled(env.LEAD_SUBMISSION_ENABLED);
+const bizostoEnabled = enabled(env.LEAD_BIZOSTO_ENABLED, true);
+const emailEnabled = enabled(env.LEAD_EMAIL_ENABLED, false);
 const distributedRateLimitRequired = enabled(
   env.LEAD_DISTRIBUTED_RATE_LIMIT_REQUIRED,
   true,
@@ -61,14 +63,52 @@ const distributedRateLimitRequired = enabled(
 const turnstileRequired = enabled(env.TURNSTILE_REQUIRED, true);
 
 if (leadSubmissionEnabled) {
-  if (env.BIZOSTO_API_URL) {
-    url("BIZOSTO_API_URL", { https: true, required: true });
+  if (!emailEnabled) {
+    add(
+      "BLOCKER",
+      "LEAD_EMAIL_ENABLED must remain true because email is the permanent WDD lead-safety channel",
+    );
   } else {
-    add("PASS", "BIZOSTO_API_URL using the production ingest endpoint");
+    add("PASS", "Permanent WDD email lead-safety channel enabled");
+
+    add(
+      (env.RESEND_API_KEY || "").length >= 10 ? "PASS" : "BLOCKER",
+      `RESEND_API_KEY ${env.RESEND_API_KEY ? "configured" : "missing"}`,
+    );
+
+    const emailFrom = env.LEAD_EMAIL_FROM || "";
+    add(
+      /@websitedesigndogs\.com>?$/i.test(emailFrom.trim())
+        ? "PASS"
+        : "BLOCKER",
+      "LEAD_EMAIL_FROM must use the verified websitedesigndogs.com domain",
+    );
+
+    add(
+      (env.LEAD_EMAIL_TO || "").trim().toLowerCase() ===
+        "leads@websitedesigndogs.com"
+        ? "PASS"
+        : "BLOCKER",
+      "LEAD_EMAIL_TO must be leads@websitedesigndogs.com",
+    );
   }
 
-  for (const key of ["BIZOSTO_INGEST_KEY"]) {
-    add(env[key] ? "PASS" : "BLOCKER", `${key} ${env[key] ? "configured" : "missing"}`);
+  if (bizostoEnabled) {
+    if (env.BIZOSTO_API_URL) {
+      url("BIZOSTO_API_URL", { https: true, required: true });
+    } else {
+      add("PASS", "BIZOSTO_API_URL using the production ingest endpoint");
+    }
+
+    add(
+      env.BIZOSTO_INGEST_KEY ? "PASS" : "BLOCKER",
+      `BIZOSTO_INGEST_KEY ${env.BIZOSTO_INGEST_KEY ? "configured" : "missing"}`,
+    );
+  } else {
+    add(
+      "PASS",
+      "Bizosto lead delivery deferred; email remains the active capture channel",
+    );
   }
 
   const allowedOrigins = csv(env.LEAD_ALLOWED_ORIGINS);
@@ -81,6 +121,7 @@ if (leadSubmissionEnabled) {
 
   for (const key of [
     "LEAD_REQUEST_TIMEOUT_MS",
+    "LEAD_EMAIL_TIMEOUT_MS",
     "LEAD_RATE_LIMIT_WINDOW_MS",
     "LEAD_RATE_LIMIT_MAX",
   ]) {
