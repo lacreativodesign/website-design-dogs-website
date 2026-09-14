@@ -93,12 +93,16 @@ test('lead submission source files avoid browser secret exposure', () => {
   const client = fs.readFileSync('src/components/forms/submission.ts', 'utf8');
   assert.equal(client.includes('BIZOSTO_INGEST_KEY'), false);
   assert.equal(client.includes('TURNSTILE_SECRET_KEY'), false);
+  assert.equal(client.includes('RESEND_API_KEY'), false);
 });
 
 test('environment example keeps secrets server-only', () => {
   const env = fs.readFileSync('.env.example', 'utf8');
   assert.match(env, /BIZOSTO_INGEST_KEY=/);
+  assert.match(env, /RESEND_API_KEY=/);
+  assert.match(env, /LEAD_EMAIL_TO=leads@websitedesigndogs\.com/);
   assert.equal(env.includes('NEXT_PUBLIC_BIZOSTO'), false);
+  assert.equal(env.includes('NEXT_PUBLIC_RESEND'), false);
 
   const audit = fs.readFileSync('scripts/audit-production-build.mjs', 'utf8');
   assert.match(audit, /BIZOSTO_INGEST_KEY/);
@@ -300,11 +304,11 @@ test('Meta CAPI is server-only, consent-gated, hashed, and deduplicated', () => 
   assert.match(server, /marketingConsent === true/);
   assert.match(server, /sha256\(envelope\.contact\.email/);
   assert.match(server, /event_id: envelope\.submissionId/);
-  assert.match(route, /sendToBizosto/);
+  assert.match(route, /deliverLead/);
   assert.match(route, /after\(async \(\) =>/);
   assert.ok(
-    route.indexOf('sendToBizosto') < route.indexOf('sendMetaLeadEvent'),
-    'Meta delivery must be scheduled only after Bizosto succeeds',
+    route.indexOf('deliverLead') < route.indexOf('sendMetaLeadEvent'),
+    'Meta delivery must be scheduled only after durable lead capture succeeds',
   );
   assert.match(events, /"eventId"/);
 });
@@ -326,8 +330,13 @@ test('production environment gate passes a complete setup and blocks missing con
     ...process.env,
     NEXT_PUBLIC_SITE_URL: 'https://websitedesigndogs.com',
     LEAD_SUBMISSION_ENABLED: 'true',
+    LEAD_EMAIL_ENABLED: 'true',
+    LEAD_BIZOSTO_ENABLED: 'false',
+    RESEND_API_KEY: 'test-resend-key-value',
+    LEAD_EMAIL_FROM: 'Website Design Dogs <leads@websitedesigndogs.com>',
+    LEAD_EMAIL_TO: 'leads@websitedesigndogs.com',
+    LEAD_EMAIL_TIMEOUT_MS: '8000',
     BIZOSTO_API_URL: 'https://app.bizosto.com/api/ingest/leads',
-    BIZOSTO_INGEST_KEY: 'server-only-test-key',
     LEAD_ALLOWED_ORIGINS: 'https://websitedesigndogs.com,https://www.websitedesigndogs.com',
     LEAD_REQUEST_TIMEOUT_MS: '10000',
     LEAD_RATE_LIMIT_WINDOW_MS: '600000',
@@ -352,13 +361,9 @@ test('production environment gate passes a complete setup and blocks missing con
 
   assert.equal(run(complete).status, 0);
 
-  const defaultEndpoint = { ...complete };
-  delete defaultEndpoint.BIZOSTO_API_URL;
-  assert.equal(run(defaultEndpoint).status, 0);
-
-  const missingIngestKey = { ...complete };
-  delete missingIngestKey.BIZOSTO_INGEST_KEY;
-  assert.equal(run(missingIngestKey).status, 1);
+  const missingEmailKey = { ...complete };
+  delete missingEmailKey.RESEND_API_KEY;
+  assert.equal(run(missingEmailKey).status, 1);
 
   const missingRateLimit = { ...complete };
   delete missingRateLimit.LEAD_DISTRIBUTED_RATE_LIMIT_ID;
@@ -367,6 +372,21 @@ test('production environment gate passes a complete setup and blocks missing con
   const missingHostname = { ...complete };
   delete missingHostname.TURNSTILE_ALLOWED_HOSTNAMES;
   assert.equal(run(missingHostname).status, 1);
+
+  const bizostoMode = {
+    ...complete,
+    LEAD_BIZOSTO_ENABLED: 'true',
+    BIZOSTO_INGEST_KEY: 'server-only-test-key',
+  };
+  assert.equal(run(bizostoMode).status, 0);
+
+  const defaultEndpoint = { ...bizostoMode };
+  delete defaultEndpoint.BIZOSTO_API_URL;
+  assert.equal(run(defaultEndpoint).status, 0);
+
+  const missingIngestKey = { ...bizostoMode };
+  delete missingIngestKey.BIZOSTO_INGEST_KEY;
+  assert.equal(run(missingIngestKey).status, 1);
 
   const metaTestMode = {
     ...complete,

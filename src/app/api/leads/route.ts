@@ -1,6 +1,6 @@
 import { after, NextResponse } from "next/server";
 import { MAX_BODY_BYTES } from "@/lib/leads/constants";
-import { sendToBizosto } from "@/lib/leads/bizosto-adapter";
+import { deliverLead } from "@/lib/leads/delivery";
 import { LeadError, errorResponse } from "@/lib/leads/errors";
 import { logLead, logLeadError } from "@/lib/leads/logger";
 import {
@@ -92,18 +92,29 @@ export async function POST(request: Request) {
       cData: envelope.submissionId,
       idempotencyKey: requestId,
     });
-    const result = await sendToBizosto(envelope, config);
 
-    logLead({
-      requestId,
-      submissionId: envelope.submissionId,
-      formType: envelope.formType,
-      stage: "bizosto",
-      status: "success",
-      durationMs: Date.now() - started,
-      upstreamStatus: result.upstreamStatus,
-      duplicate: result.duplicate,
-    });
+    const deliveryStarted = Date.now();
+    const delivery = await deliverLead(envelope, config);
+
+    for (const channel of delivery.channels) {
+      const meta = {
+        requestId,
+        submissionId: envelope.submissionId,
+        formType: envelope.formType,
+        stage: channel.channel,
+        status: channel.ok ? "success" : "failed",
+        durationMs: Date.now() - deliveryStarted,
+        upstreamStatus: channel.upstreamStatus,
+        duplicate: channel.duplicate,
+        ...(channel.error?.code ? { failure: channel.error.code } : {}),
+        ...(channel.error?.upstreamMessage
+          ? { upstreamError: channel.error.upstreamMessage }
+          : {}),
+      };
+
+      if (channel.ok) logLead(meta);
+      else logLeadError(meta);
+    }
 
     if (shouldSendMetaCapi(payload.metaTracking)) {
       const tracking = payload.metaTracking!;
@@ -145,8 +156,8 @@ export async function POST(request: Request) {
         ok: true,
         message:
           "Thanks — your request was received successfully. We’ll review the details and respond using the contact information you provided.",
-        ...(result.referenceId ? { referenceId: result.referenceId } : {}),
-        ...(result.duplicate ? { duplicate: true } : {}),
+        ...(delivery.referenceId ? { referenceId: delivery.referenceId } : {}),
+        ...(delivery.duplicate ? { duplicate: true } : {}),
       },
       201,
     );

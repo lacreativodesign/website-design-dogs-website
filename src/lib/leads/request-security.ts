@@ -2,8 +2,14 @@ import { LeadError } from "./errors";
 
 export type LeadConfig = {
   enabled: boolean;
+  bizostoEnabled: boolean;
+  emailEnabled: boolean;
   apiUrl: string;
   apiKey?: string;
+  emailApiKey?: string;
+  emailFrom?: string;
+  emailTo?: string;
+  emailTimeoutMs: number;
   timeoutMs: number;
   rateWindowMs: number;
   rateMax: number;
@@ -54,8 +60,14 @@ export function getLeadConfig(): LeadConfig {
 
   return {
     enabled: bool(process.env.LEAD_SUBMISSION_ENABLED),
+    bizostoEnabled: bool(process.env.LEAD_BIZOSTO_ENABLED, true),
+    emailEnabled: bool(process.env.LEAD_EMAIL_ENABLED),
     apiUrl: process.env.BIZOSTO_API_URL || BIZOSTO_INGEST_URL,
     apiKey: process.env.BIZOSTO_INGEST_KEY || undefined,
+    emailApiKey: process.env.RESEND_API_KEY || undefined,
+    emailFrom: process.env.LEAD_EMAIL_FROM || undefined,
+    emailTo: process.env.LEAD_EMAIL_TO || undefined,
+    emailTimeoutMs: num(process.env.LEAD_EMAIL_TIMEOUT_MS, 8_000),
     timeoutMs: num(process.env.LEAD_REQUEST_TIMEOUT_MS, 10_000),
     rateWindowMs: num(process.env.LEAD_RATE_LIMIT_WINDOW_MS, 600_000),
     rateMax: num(process.env.LEAD_RATE_LIMIT_MAX, 5),
@@ -127,9 +139,17 @@ export function assertCanSubmit(config: LeadConfig) {
   if (process.env.VERCEL_ENV === "preview" && !config.allowPreview) {
     throw new LeadError("SUBMISSION_DISABLED", unavailable, 503);
   }
-  if (!config.apiUrl || !config.apiKey) {
+
+  const bizostoReady =
+    config.bizostoEnabled && Boolean(config.apiUrl && config.apiKey);
+  const emailReady =
+    config.emailEnabled &&
+    Boolean(config.emailApiKey && config.emailFrom && config.emailTo);
+
+  if (!bizostoReady && !emailReady) {
     throw new LeadError("INTEGRATION_MISCONFIGURED", unavailable, 503);
   }
+
   if (
     config.distributedRateLimitRequired &&
     !config.distributedRateLimitId

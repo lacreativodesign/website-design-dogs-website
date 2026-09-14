@@ -27,7 +27,10 @@ Repository: `lacreativodesign/website-design-dogs-website`.
 - Essential legal pages planned for later are Privacy Policy, Terms and Conditions, Refund and Cancellation Policy, and Cookie Policy.
 
 ## Security and Integration Rules
-- All future lead submissions will eventually route server-side to a Website Design Dogs tenant in Bizosto.
-- Never expose Bizosto API keys or other secrets to browser code.
+- Email to `leads@websitedesigndogs.com` is the permanent WDD lead-safety channel.
+- Bizosto becomes the system of record once the Website Design Dogs tenant is certified for production.
+- A website lead must not be lost merely because Bizosto is unavailable; a successful email safety delivery may accept the lead while Bizosto is degraded or disabled.
+- Once Bizosto is enabled, keep the email safety delivery active in parallel rather than replacing it.
+- Never expose Bizosto, Resend, Turnstile, Meta CAPI, or other server credentials to browser code.
 - Do not implement direct browser-to-Firestore lead writes.
 - Do not commit secrets.

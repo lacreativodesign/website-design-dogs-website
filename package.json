@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "assets:verify": "node scripts/verify-assets.mjs",
-    "leads:test": "node --test tests/leads.test.mjs",
+    "leads:test": "node --test tests/leads.test.mjs tests/email-lead-safety.test.mjs",
     "launch:test": "node --test tests/launch.test.mjs",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
