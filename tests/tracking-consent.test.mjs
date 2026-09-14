@@ -74,6 +74,31 @@ for (const [name, prefs, allowed] of [
   });
 }
 
+test("successful lead queues while GTM readiness is still pending", () => {
+  const window = makeWindow();
+  window.dataLayer = undefined;
+  window.__wddGtmLoaded = false;
+  const events = loadModule("src/lib/tracking/events.ts", {
+    "@/components/consent/consent-storage": {
+      readConsent: () => ({ analytics: false, marketing: true }),
+    },
+  }, {
+    window,
+    CustomEvent: class {
+      constructor(type, options) { this.type = type; this.detail = options.detail; }
+    },
+  });
+
+  const eventId = "123e4567-e89b-42d3-a456-426614174000";
+  events.trackEvent("wdd_lead_success", { eventId, email: "private@example.com" });
+
+  assert.equal(Array.isArray(window.dataLayer), true);
+  assert.equal(window.dataLayer.length, 1);
+  assert.equal(window.dataLayer[0].event, "wdd_lead_success");
+  assert.equal(window.dataLayer[0].eventId, eventId);
+  assert.equal("email" in window.dataLayer[0], false);
+});
+
 test("PageView waits for consent and GTM, then emits once per route", () => {
   let prefs = { analytics: false, marketing: false };
   let pathname = "/";
