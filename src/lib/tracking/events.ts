@@ -48,5 +48,19 @@ export function trackEvent(name: TrackingEventName, data: Record<string, unknown
   if (typeof window === "undefined" || !hasConsent(eventConsent[name])) return;
   const payload = sanitizeEvent(data);
   window.dispatchEvent(new CustomEvent(name, { detail: payload }));
-  if (Array.isArray(window.dataLayer) && window.__wddGtmLoaded) window.dataLayer.push({ event: name, ...payload });
+
+  // A successful lead is conversion-critical. Queue it in dataLayer even if the
+  // GTM loader has not flipped its readiness flag yet; GTM consumes queued
+  // dataLayer events when it becomes available. This prevents an accepted lead
+  // from being silently lost to analytics during a loader/readiness race.
+  if (name === "wdd_lead_success" && !Array.isArray(window.dataLayer)) {
+    window.dataLayer = [];
+  }
+
+  if (
+    Array.isArray(window.dataLayer) &&
+    (window.__wddGtmLoaded || name === "wdd_lead_success")
+  ) {
+    window.dataLayer.push({ event: name, ...payload });
+  }
 }
