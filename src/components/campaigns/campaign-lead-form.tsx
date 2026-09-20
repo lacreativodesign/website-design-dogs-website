@@ -105,6 +105,9 @@ export function CampaignLeadForm({ campaignSlug }: Props) {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(values.email)) {
       nextErrors.email = "Enter a valid email address.";
     }
+    if (!values.phone.trim()) {
+      nextErrors.phone = "Enter your phone number.";
+    }
     if (hasInvalidUrl(values.website)) {
       nextErrors.website = "Enter a valid public URL.";
     }
@@ -135,7 +138,7 @@ export function CampaignLeadForm({ campaignSlug }: Props) {
         contact: {
           fullName: values.fullName,
           email: values.email,
-          phone: values.phone || undefined,
+          phone: values.phone,
         },
         business: {
           name: values.businessName,
@@ -288,7 +291,12 @@ export function CampaignLeadForm({ campaignSlug }: Props) {
                   aria-invalid={Boolean(errors.email)}
                 />
               </Field>
-              <Field id="phone" label="Phone number" error={errors.phone}>
+              <Field
+                id="phone"
+                label="Phone number"
+                required
+                error={errors.phone}
+              >
                 <input
                   id="phone"
                   type="tel"
