@@ -10,6 +10,7 @@ declare global {
         options: Record<string, unknown>,
       ) => string;
       reset: (widgetId?: string) => void;
+      execute: (widgetId?: string) => void;
       remove: (widgetId: string) => void;
     };
   }
@@ -25,6 +26,8 @@ type Props = {
   cData: string;
   onToken: (token: string) => void;
   resetKey: number;
+  execution?: "render" | "execute";
+  executeKey?: number;
 };
 
 export function TurnstileWidget({
@@ -32,6 +35,8 @@ export function TurnstileWidget({
   cData,
   onToken,
   resetKey,
+  execution = "render",
+  executeKey = 0,
 }: Props) {
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
   const containerRef = useRef<HTMLDivElement>(null);
@@ -68,7 +73,7 @@ export function TurnstileWidget({
         theme: "dark",
         size: "flexible",
         appearance: "interaction-only",
-        execution: "render",
+        execution,
         language: "auto",
         retry: "auto",
         "refresh-expired": "auto",
@@ -110,7 +115,7 @@ export function TurnstileWidget({
       }
       widgetIdRef.current = undefined;
     };
-  }, [action, cData, onToken, siteKey]);
+  }, [action, cData, execution, onToken, siteKey]);
 
   useEffect(() => {
     if (widgetIdRef.current && window.turnstile) {
@@ -119,10 +124,33 @@ export function TurnstileWidget({
     }
   }, [onToken, resetKey]);
 
+  useEffect(() => {
+    if (!siteKey || execution !== "execute" || executeKey < 1) return;
+
+    let attempts = 0;
+    const timer = window.setInterval(() => {
+      attempts += 1;
+      if (widgetIdRef.current && window.turnstile) {
+        window.turnstile.execute(widgetIdRef.current);
+        window.clearInterval(timer);
+      } else if (attempts >= 100) {
+        window.clearInterval(timer);
+      }
+    }, 50);
+
+    return () => window.clearInterval(timer);
+  }, [executeKey, execution, siteKey]);
+
   if (!siteKey) return null;
 
   return (
-    <div className="min-h-[4.1rem] w-full overflow-hidden [&>div]:w-full">
+    <div
+      className={
+        execution === "execute"
+          ? "w-full overflow-hidden [&>div]:w-full"
+          : "min-h-[4.1rem] w-full overflow-hidden [&>div]:w-full"
+      }
+    >
       <div ref={containerRef} />
       <p className="sr-only" aria-live="polite">
         {message}
