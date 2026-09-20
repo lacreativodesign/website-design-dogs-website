@@ -167,17 +167,13 @@ function projectCategories(data: QuoteRequestPayload): PackageCategorySlug[] {
 
 function categoryForProject(
   data: QuoteRequestPayload,
-  requestedPackage: string,
 ): PackageCategorySlug | null {
-  const selectedPackage = packageBySlug.get(requestedPackage);
-  if (selectedPackage) return selectedPackage.categorySlug;
-
   const categories = projectCategories(data);
   return categories.length === 1 ? categories[0] : null;
 }
 
-function packageOptionsFor(data: QuoteRequestPayload, requestedPackage: string) {
-  const categorySlug = categoryForProject(data, requestedPackage);
+function packageOptionsFor(data: QuoteRequestPayload) {
+  const categorySlug = categoryForProject(data);
   if (!categorySlug) return flexiblePackageOptions;
 
   const category = packageCategoryBySlug.get(categorySlug);
@@ -215,9 +211,16 @@ function empty(
 }
 
 function toggleValue(values: string[], value: string) {
-  return values.includes(value)
-    ? values.filter((item) => item !== value)
-    : [...values, value];
+  const unknownValues = new Set(["Not Sure Yet", "Not sure yet"]);
+
+  if (unknownValues.has(value)) {
+    return values.includes(value) ? [] : [value];
+  }
+
+  const knownValues = values.filter((item) => !unknownValues.has(item));
+  return knownValues.includes(value)
+    ? knownValues.filter((item) => item !== value)
+    : [...knownValues, value];
 }
 
 function recommendationFor(
@@ -225,6 +228,17 @@ function recommendationFor(
   options: PackageOption[],
   requestedPackage: string,
 ) {
+  if (
+    data.project.types.length === 1 &&
+    data.project.types.includes("Not Sure Yet")
+  ) {
+    return {
+      option: flexiblePackageOptions[1],
+      reason:
+        "You marked the project type as not sure yet, so we’ll review the brief before steering you into a package.",
+    };
+  }
+
   const requested = options.find(({ slug }) => slug === requestedPackage);
   if (requested) {
     return {
@@ -378,7 +392,7 @@ export function QuoteForm({
   const formRef = useRef<HTMLFormElement>(null);
   const stageHeadingRef = useRef<HTMLHeadingElement>(null);
   const statusRef = useRef<HTMLElement>(null);
-  const packageOptions = packageOptionsFor(data, requestedPackage);
+  const packageOptions = packageOptionsFor(data);
   const recommendation = recommendationFor(data, packageOptions, requestedPackage);
   const onToken = useCallback((token: string) => {
     turnstileTokenRef.current = token;
@@ -489,7 +503,7 @@ export function QuoteForm({
     const nextStep = Math.min(4, step + 1);
 
     if (step === 2) {
-      const nextOptions = packageOptionsFor(data, requestedPackage);
+      const nextOptions = packageOptionsFor(data);
       const nextRecommendation = recommendationFor(
         data,
         nextOptions,
@@ -660,7 +674,7 @@ export function QuoteForm({
       onChange={markStarted}
       noValidate
       className="quote-builder"
-      aria-busy={submitting}
+      aria-busy={submitting || verifying}
     >
       <div className="hidden" aria-hidden="true">
         <label>
