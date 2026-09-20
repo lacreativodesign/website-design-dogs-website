@@ -233,7 +233,7 @@ function recommendationFor(
     data.project.types.includes("Not Sure Yet")
   ) {
     return {
-      option: flexiblePackageOptions[1],
+      option: flexiblePackageOptions[1]!,
       reason:
         "You marked the project type as not sure yet, so we’ll review the brief before steering you into a package.",
     };
@@ -254,7 +254,7 @@ function recommendationFor(
 
   if (scoped.length === 0) {
     return {
-      option: flexiblePackageOptions[0],
+      option: flexiblePackageOptions[0]!,
       reason:
         "Your brief spans multiple service areas, so a custom scope is safer than forcing the project into one package.",
     };
@@ -308,7 +308,7 @@ function recommendationFor(
       "The number of selected needs places this brief at this service tier as a starting point.";
   }
 
-  return { option: scoped[index], reason };
+  return { option: scoped[index] ?? scoped[0]!, reason };
 }
 
 function ChoiceGrid({
@@ -377,10 +377,8 @@ export function QuoteForm({
   const [submitting, setSubmitting] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
   const [resetKey, setResetKey] = useState(0);
-  const [submissionId, setSubmissionId] = useState(() => crypto.randomUUID());
-  const [formStartedAt, setFormStartedAt] = useState(() =>
-    new Date().toISOString(),
-  );
+  const [submissionId] = useState(() => crypto.randomUUID());
+  const [formStartedAt] = useState(() => new Date().toISOString());
   const [reference, setReference] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [verifying, setVerifying] = useState(false);
@@ -391,7 +389,7 @@ export function QuoteForm({
   const turnstileTokenRef = useRef("");
   const formRef = useRef<HTMLFormElement>(null);
   const stageHeadingRef = useRef<HTMLHeadingElement>(null);
-  const statusRef = useRef<HTMLElement>(null);
+  const statusRef = useRef<HTMLParagraphElement>(null);
   const packageOptions = packageOptionsFor(data);
   const recommendation = recommendationFor(data, packageOptions, requestedPackage);
   const onToken = useCallback((token: string) => {
@@ -555,8 +553,9 @@ export function QuoteForm({
       pendingVerificationRef.current = true;
       setVerifying(true);
       setErrors((current) => {
-        const { turnstile: _turnstile, ...rest } = current;
-        return rest;
+        const nextErrors = { ...current };
+        delete nextErrors.turnstile;
+        return nextErrors;
       });
       setStatus("Securely verifying your request…");
       setVerificationExecuteKey((key) => key + 1);
@@ -621,13 +620,17 @@ export function QuoteForm({
   if (submitted) {
     return (
       <section
-        ref={statusRef}
-        tabIndex={-1}
-        role="status"
-        aria-live="polite"
         className="mx-auto max-w-4xl rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 text-center shadow-[var(--shadow-md)] sm:p-10"
       >
-        <p className="home-eyebrow">Request received</p>
+        <p
+          ref={statusRef}
+          tabIndex={-1}
+          role="status"
+          aria-live="polite"
+          className="home-eyebrow"
+        >
+          Request received
+        </p>
         <h2 className="mt-3 text-3xl font-black tracking-[-0.02em] sm:text-4xl">
           Thanks — your project brief is in.
         </h2>
