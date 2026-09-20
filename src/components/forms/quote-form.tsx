@@ -431,6 +431,9 @@ export function QuoteForm({
       if (!/^\S+@\S+\.\S+$/.test(data.contact.email)) {
         nextErrors.email = "Enter a valid email.";
       }
+      if (!data.contact.phone?.trim()) {
+        nextErrors.phone = "Enter your phone number.";
+      }
       if (!data.business.name.trim()) nextErrors.business = "Enter your business name.";
       if (!data.business.industry.trim()) nextErrors.industry = "Enter your industry.";
     }
@@ -770,13 +773,19 @@ export function QuoteForm({
                   }
                 />
               </Field>
-              <Field id="q-phone" label="Phone">
+              <Field
+                id="q-phone"
+                label="Phone number"
+                required
+                error={errors.phone}
+              >
                 <input
                   id="q-phone"
                   type="tel"
                   autoComplete="tel"
                   className={inputClass}
                   value={data.contact.phone}
+                  aria-invalid={Boolean(errors.phone)}
                   onChange={(event) =>
                     setData((current) => ({
                       ...current,
