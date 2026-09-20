@@ -92,3 +92,21 @@ test('get-started uses one primary submit action and renders a dedicated confirm
   assert.doesNotMatch(source, /setStep\(0\)/);
 });
 
+test('phone number remains mandatory across every WDD website lead form', () => {
+  const contact = fs.readFileSync('src/components/forms/contact-form.tsx', 'utf8');
+  const quote = fs.readFileSync('src/components/forms/quote-form.tsx', 'utf8');
+  const campaign = fs.readFileSync('src/components/campaigns/campaign-lead-form.tsx', 'utf8');
+  const submission = fs.readFileSync('src/components/forms/submission.ts', 'utf8');
+  const validation = fs.readFileSync('src/lib/leads/validation.ts', 'utf8');
+
+  for (const source of [contact, quote, campaign]) {
+    assert.match(source, /nextErrors\.phone\s*=\s*"Enter your phone number\."/);
+    assert.match(source, /label="Phone number"[\s\S]{0,100}required/);
+    assert.match(source, /aria-invalid=\{Boolean\(errors\.phone\)\}/);
+  }
+
+  assert.match(validation, /req\(p\.contact\?\.phone, "phone", 7, 40, errs\)/);
+  assert.match(validation, /contact: \{ fullName, email: mail, phone \}/);
+  assert.doesNotMatch(submission, /phone\?: string/);
+});
+
