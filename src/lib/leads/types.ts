@@ -57,7 +57,7 @@ export type LeadSubmissionEnvelope = {
   contact: {
     fullName: string;
     email: string;
-    phone?: string;
+    phone: string;
   };
   business: {
     name: string;
