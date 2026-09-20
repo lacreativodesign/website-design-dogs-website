@@ -125,22 +125,66 @@ function initialPackage(requestedPackage: string) {
   return catalogPackageOptions.find(({ slug }) => slug === requestedPackage)?.value ?? "";
 }
 
-function categoryForProject(data: QuoteRequestPayload, requestedPackage: string): PackageCategorySlug {
+function projectCategories(data: QuoteRequestPayload): PackageCategorySlug[] {
+  const categories = new Set<PackageCategorySlug>();
+  const types = data.project.types;
+
+  if (types.includes("Mobile App Development")) categories.add("mobile-apps");
+  if (types.includes("Social Media Marketing")) categories.add("social-media");
+  if (types.includes("SEO & Local Optimization")) categories.add("seo-local");
+  if (
+    types.includes("Website Care") ||
+    types.includes("Website Care, Hosting & Security")
+  ) {
+    categories.add("website-care");
+  }
+  if (
+    types.includes("E-Commerce Solutions") ||
+    data.project.features.includes("E-commerce") ||
+    data.project.features.includes("Payment integration")
+  ) {
+    categories.add("e-commerce");
+  }
+
+  const websiteSignals = [
+    "New Website",
+    "Website Redesign",
+    "Campaign Landing Page",
+    "Custom Website Design",
+    "Website Development",
+    "Conversion Optimization",
+    "Content & Copywriting",
+    "Analytics & Reporting",
+    "AI or Workflow Integration",
+  ];
+  if (websiteSignals.some((type) => types.includes(type))) {
+    categories.add("website-design");
+  }
+
+  if (categories.size === 0) categories.add("website-design");
+  return [...categories];
+}
+
+function categoryForProject(
+  data: QuoteRequestPayload,
+  requestedPackage: string,
+): PackageCategorySlug | null {
   const selectedPackage = packageBySlug.get(requestedPackage);
   if (selectedPackage) return selectedPackage.categorySlug;
-  if (data.project.types.includes("Mobile App Development")) return "mobile-apps";
-  if (data.project.types.includes("Social Media Marketing")) return "social-media";
-  if (data.project.types.includes("SEO & Local Optimization")) return "seo-local";
-  if (data.project.types.includes("Website Care") || data.project.types.includes("Website Care, Hosting & Security")) return "website-care";
-  if (data.project.types.includes("E-Commerce Solutions")) return "e-commerce";
-  return "website-design";
+
+  const categories = projectCategories(data);
+  return categories.length === 1 ? categories[0] : null;
 }
 
 function packageOptionsFor(data: QuoteRequestPayload, requestedPackage: string) {
-  const category = packageCategoryBySlug.get(categoryForProject(data, requestedPackage));
-  const scopedOptions = (category?.packages ?? []).map((item) =>
-    catalogPackageOptions.find(({ slug }) => slug === item.slug),
-  ).filter((item): item is PackageOption => Boolean(item));
+  const categorySlug = categoryForProject(data, requestedPackage);
+  if (!categorySlug) return flexiblePackageOptions;
+
+  const category = packageCategoryBySlug.get(categorySlug);
+  const scopedOptions = (category?.packages ?? [])
+    .map((item) => catalogPackageOptions.find(({ slug }) => slug === item.slug))
+    .filter((item): item is PackageOption => Boolean(item));
+
   return [...scopedOptions, ...flexiblePackageOptions];
 }
 
@@ -176,26 +220,81 @@ function toggleValue(values: string[], value: string) {
     : [...values, value];
 }
 
-function recommendationFor(data: QuoteRequestPayload, options: PackageOption[]) {
-  const scoped = options.filter(({ slug }) => slug !== "custom" && slug !== "not-sure");
-  const needsCommerce =
-    data.project.types.includes("E-Commerce Solutions") ||
-    data.project.features.includes("E-commerce") ||
-    data.project.features.includes("Payment integration");
-
-  if (needsCommerce || data.project.pages === "More than 15 pages") {
-    return scoped[Math.min(2, scoped.length - 1)]!;
+function recommendationFor(
+  data: QuoteRequestPayload,
+  options: PackageOption[],
+  requestedPackage: string,
+) {
+  const requested = options.find(({ slug }) => slug === requestedPackage);
+  if (requested) {
+    return {
+      option: requested,
+      reason:
+        "You arrived with this package selected. We’ll use it as the starting point and confirm fit after reviewing the full brief.",
+    };
   }
 
-  if (
-    data.project.pages === "6–10 pages" ||
-    data.project.pages === "11–15 pages" ||
-    data.project.types.length > 1
-  ) {
-    return scoped[Math.min(2, scoped.length - 1)]!;
+  const scoped = options.filter(
+    ({ slug }) => slug !== "custom" && slug !== "not-sure",
+  );
+
+  if (scoped.length === 0) {
+    return {
+      option: flexiblePackageOptions[0],
+      reason:
+        "Your brief spans multiple service areas, so a custom scope is safer than forcing the project into one package.",
+    };
   }
 
-  return scoped[0]!;
+  const category =
+    packageBySlug.get(scoped[0].slug)?.categorySlug ?? "website-design";
+  const featureCount = data.project.features.filter(
+    (feature) => feature !== "Not sure yet",
+  ).length;
+  const breadth = data.project.types.filter(
+    (type) => type !== "Not Sure Yet",
+  ).length + featureCount;
+
+  let index = 0;
+  let reason = "This is the closest starting point based on the scope you entered.";
+
+  if (category === "website-design") {
+    if (data.project.pages === "More than 15 pages") index = Math.min(4, scoped.length - 1);
+    else if (data.project.pages === "11–15 pages") index = Math.min(3, scoped.length - 1);
+    else if (data.project.pages === "6–10 pages") index = Math.min(2, scoped.length - 1);
+    else if (featureCount >= 4) index = Math.min(1, scoped.length - 1);
+
+    reason =
+      data.project.pages === "1–5 pages"
+        ? "Your page count and requested functionality point to a focused website starting point."
+        : "Your page count and requested functionality call for more room than the entry website scope.";
+  } else if (category === "e-commerce") {
+    index =
+      breadth >= 7
+        ? Math.min(2, scoped.length - 1)
+        : breadth >= 4
+          ? Math.min(1, scoped.length - 1)
+          : 0;
+    reason =
+      "Your commerce or payment requirements make an e-commerce package the responsible starting point.";
+  } else if (category === "mobile-apps") {
+    index = breadth >= 6 ? Math.min(1, scoped.length - 1) : 0;
+    reason =
+      index === 0
+        ? "A blueprint is the responsible first step before committing to a coded app build."
+        : "The breadth of the app requirements suggests moving beyond discovery into an MVP starting point.";
+  } else {
+    index =
+      breadth >= 7
+        ? Math.min(2, scoped.length - 1)
+        : breadth >= 4
+          ? Math.min(1, scoped.length - 1)
+          : 0;
+    reason =
+      "The number of selected needs places this brief at this service tier as a starting point.";
+  }
+
+  return { option: scoped[index], reason };
 }
 
 function ChoiceGrid({
@@ -269,13 +368,36 @@ export function QuoteForm({
     new Date().toISOString(),
   );
   const [reference, setReference] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [verifying, setVerifying] = useState(false);
+  const [verificationExecuteKey, setVerificationExecuteKey] = useState(0);
   const [attribution] = useState(getAttribution);
   const startedRef = useRef(false);
+  const pendingVerificationRef = useRef(false);
+  const turnstileTokenRef = useRef("");
+  const formRef = useRef<HTMLFormElement>(null);
   const stageHeadingRef = useRef<HTMLHeadingElement>(null);
-  const statusRef = useRef<HTMLParagraphElement>(null);
+  const statusRef = useRef<HTMLElement>(null);
   const packageOptions = packageOptionsFor(data, requestedPackage);
-  const recommendation = recommendationFor(data, packageOptions);
-  const onToken = useCallback((token: string) => setTurnstileToken(token), []);
+  const recommendation = recommendationFor(data, packageOptions, requestedPackage);
+  const onToken = useCallback((token: string) => {
+    turnstileTokenRef.current = token;
+    setTurnstileToken(token);
+
+    if (token && pendingVerificationRef.current) {
+      pendingVerificationRef.current = false;
+      setVerifying(false);
+      requestAnimationFrame(() => formRef.current?.requestSubmit());
+    } else if (!token && pendingVerificationRef.current) {
+      pendingVerificationRef.current = false;
+      setVerifying(false);
+      setErrors((current) => ({
+        ...current,
+        turnstile:
+          "Secure verification could not complete. Please click Send Quote Request to try again.",
+      }));
+    }
+  }, []);
 
   function markStarted() {
     if (startedRef.current) return;
@@ -335,9 +457,6 @@ export function QuoteForm({
         nextErrors.accomplish = "Share what the new website should accomplish.";
       }
       if (!data.consent) nextErrors.consent = "Confirm consent to be contacted.";
-      if (process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && !turnstileToken) {
-        nextErrors.turnstile = "Complete the anti-spam verification.";
-      }
     }
 
     setErrors(nextErrors);
@@ -368,6 +487,29 @@ export function QuoteForm({
       return;
     }
     const nextStep = Math.min(4, step + 1);
+
+    if (step === 2) {
+      const nextOptions = packageOptionsFor(data, requestedPackage);
+      const nextRecommendation = recommendationFor(
+        data,
+        nextOptions,
+        requestedPackage,
+      );
+      const currentChoiceIsValid = nextOptions.some(
+        ({ value }) => value === data.package.preferred,
+      );
+
+      if (!currentChoiceIsValid) {
+        setData((current) => ({
+          ...current,
+          package: {
+            ...current.package,
+            preferred: nextRecommendation.option.value,
+          },
+        }));
+      }
+    }
+
     setStep(nextStep);
     setStatus(`Step ${nextStep + 1} of 5: ${stageDetails[nextStep][0]}`);
     focusStage();
@@ -392,6 +534,22 @@ export function QuoteForm({
       return;
     }
 
+    if (
+      process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY &&
+      !turnstileTokenRef.current
+    ) {
+      pendingVerificationRef.current = true;
+      setVerifying(true);
+      setErrors((current) => {
+        const { turnstile: _turnstile, ...rest } = current;
+        return rest;
+      });
+      setStatus("Securely verifying your request…");
+      setVerificationExecuteKey((key) => key + 1);
+      return;
+    }
+
+    setVerifying(false);
     setSubmitting(true);
     leadEvent("wdd_lead_submit", {
       formType: "quote",
@@ -403,7 +561,7 @@ export function QuoteForm({
     const response = await submitLead(data, {
       submissionId,
       formStartedAt,
-      turnstileToken,
+      turnstileToken: turnstileTokenRef.current || turnstileToken,
       verificationCode: new FormData(event.currentTarget)
         .get("company-url")
         ?.toString(),
@@ -423,12 +581,8 @@ export function QuoteForm({
         pagePath: location.pathname,
       });
       setReference(response.referenceId || "");
-      setData(empty(preferredPackage, requestedService, requestedIndustry));
-      setStep(0);
       setErrors({});
-      setSubmissionId(crypto.randomUUID());
-      setFormStartedAt(new Date().toISOString());
-      startedRef.current = false;
+      setSubmitted(true);
     } else {
       leadEvent("wdd_lead_error", {
         formType: "quote",
@@ -450,8 +604,58 @@ export function QuoteForm({
       : "Not chosen yet";
   const summaryPackage = data.package.preferred || "Not chosen yet";
 
+  if (submitted) {
+    return (
+      <section
+        ref={statusRef}
+        tabIndex={-1}
+        role="status"
+        aria-live="polite"
+        className="mx-auto max-w-4xl rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 text-center shadow-[var(--shadow-md)] sm:p-10"
+      >
+        <p className="home-eyebrow">Request received</p>
+        <h2 className="mt-3 text-3xl font-black tracking-[-0.02em] sm:text-4xl">
+          Thanks — your project brief is in.
+        </h2>
+        <p className="mx-auto mt-4 max-w-2xl text-[var(--color-text-muted)]">
+          We received your details successfully. Our team will review the brief and
+          respond using the contact information you provided. You do not need to
+          submit it again.
+        </p>
+        <div className="mx-auto mt-7 grid max-w-2xl gap-3 text-left sm:grid-cols-2">
+          <div className="rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-section-alt)] p-4">
+            <strong className="block">What happens next</strong>
+            <span className="mt-1 block text-sm text-[var(--color-text-muted)]">
+              We’ll review the scope, package fit, timing, and any questions in your brief.
+            </span>
+          </div>
+          <div className="rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-section-alt)] p-4">
+            <strong className="block">Your request is safely recorded</strong>
+            <span className="mt-1 block text-sm text-[var(--color-text-muted)]">
+              Your submission has already been delivered to Website Design Dogs for review.
+            </span>
+          </div>
+        </div>
+        <div className="mt-7 flex flex-wrap justify-center gap-3">
+          <Link className="btn btn-primary btn-medium" href="/">
+            Back to Home
+          </Link>
+          <Link className="btn btn-outline btn-medium" href="/packages">
+            Review Packages
+          </Link>
+        </div>
+        {reference ? (
+          <p className="mt-5 text-xs text-[var(--color-text-subtle)]">
+            Submission reference: {reference}
+          </p>
+        ) : null}
+      </section>
+    );
+  }
+
   return (
     <form
+      ref={formRef}
       onSubmit={submit}
       onChange={markStarted}
       noValidate
@@ -748,31 +952,16 @@ export function QuoteForm({
         {step === 3 ? (
           <div className="quote-stage-fields">
             <div className="quote-recommendation">
-              <span>Practical recommendation</span>
+              <span>Recommended starting point</span>
               <div>
-                <strong>{recommendation.title}</strong>
-                <p>{recommendation.detail}</p>
+                <strong>{recommendation.option.title}</strong>
+                <p>{recommendation.reason}</p>
               </div>
-              {data.package.preferred !== recommendation.value ? (
-                <button
-                  type="button"
-                  onClick={() =>
-                    setData((current) => ({
-                      ...current,
-                      package: {
-                        ...current.package,
-                        preferred: recommendation.value,
-                      },
-                    }))
-                  }
-                >
-                  Use recommendation
-                </button>
-              ) : (
-                <b>Selected</b>
-              )}
+              <b>Recommended</b>
               <small>
-                This is an early guide based on your answers, not a final scope or quote.
+                {recommendation.option.detail} This is an early guide based on your
+                answers, not a final scope or quote. You can choose a different
+                starting point below.
               </small>
             </div>
 
@@ -945,6 +1134,8 @@ export function QuoteForm({
               cData={submissionId}
               onToken={onToken}
               resetKey={resetKey}
+              execution="execute"
+              executeKey={verificationExecuteKey}
             />
             {errors.turnstile ? (
               <p className="quote-field-error">{errors.turnstile}</p>
@@ -966,8 +1157,16 @@ export function QuoteForm({
               Next
             </Button>
           ) : (
-            <Button key="submit-brief" type="submit" disabled={submitting}>
-              {submitting ? "Sending…" : "Send Quote Request"}
+            <Button
+              key="submit-brief"
+              type="submit"
+              disabled={submitting || verifying}
+            >
+              {verifying
+                ? "Verifying…"
+                : submitting
+                  ? "Sending…"
+                  : "Send Quote Request"}
             </Button>
           )}
         </div>
