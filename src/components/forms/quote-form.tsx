@@ -6,6 +6,11 @@ import { useCallback, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { mascotDesigner } from "@/content/illustrations";
 import {
+  isLeadIndustryOption,
+  leadIndustryOptions,
+  type LeadIndustryOption,
+} from "@/content/lead-industries";
+import {
   allPackages,
   packageBySlug,
   packageCategoryBySlug,
@@ -18,6 +23,8 @@ import { getAttribution } from "./attribution";
 import { Field, inputClass } from "./form-field";
 import { submitLead, type QuoteRequestPayload } from "./submission";
 import { TurnstileWidget } from "./turnstile-widget";
+import { InternationalPhoneInput } from "./international-phone-input";
+import { normalizePhoneNumber } from "@/lib/leads/phone";
 
 const projectTypes = [
   "New Website",
@@ -190,7 +197,7 @@ function empty(
   industry = "",
 ): QuoteRequestPayload {
   return {
-    contact: { fullName: "", email: "", phone: "" },
+    contact: { fullName: "", email: "", phone: "", phoneCountry: "US" },
     business: { name: "", website: "", industry },
     project: {
       types: serviceProjectTypes[service] ? [serviceProjectTypes[service]] : [],
@@ -371,6 +378,19 @@ export function QuoteForm({
   const [data, setData] = useState(() =>
     empty(preferredPackage, requestedService, requestedIndustry),
   );
+  const initialIndustryChoice: LeadIndustryOption | "" =
+    requestedIndustry && isLeadIndustryOption(requestedIndustry)
+      ? requestedIndustry
+      : requestedIndustry
+        ? "Other"
+        : "";
+  const [industryChoice, setIndustryChoice] =
+    useState<LeadIndustryOption | "">(initialIndustryChoice);
+  const [otherIndustry, setOtherIndustry] = useState(
+    initialIndustryChoice === "Other" && requestedIndustry !== "Other"
+      ? requestedIndustry
+      : "",
+  );
   const [step, setStep] = useState(0);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState("");
@@ -432,11 +452,14 @@ export function QuoteForm({
       if (!/^\S+@\S+\.\S+$/.test(data.contact.email)) {
         nextErrors.email = "Enter a valid email.";
       }
-      if (!data.contact.phone?.trim()) {
-        nextErrors.phone = "Enter your phone number.";
+      if (!normalizePhoneNumber(data.contact.phoneCountry, data.contact.phone)) {
+        nextErrors.phone = "Enter a valid phone number for the selected country.";
       }
       if (!data.business.name.trim()) nextErrors.business = "Enter your business name.";
-      if (!data.business.industry.trim()) nextErrors.industry = "Enter your industry.";
+      if (!industryChoice) nextErrors.industry = "Select your industry.";
+      if (industryChoice === "Other" && !otherIndustry.trim()) {
+        nextErrors.otherIndustry = "Tell us your industry.";
+      }
     }
 
     if (targetStep === 1 && data.project.types.length === 0) {
@@ -575,7 +598,20 @@ export function QuoteForm({
       pagePath: location.pathname,
     });
 
-    const response = await submitLead(data, {
+    const normalizedPhone = normalizePhoneNumber(
+      data.contact.phoneCountry,
+      data.contact.phone,
+    )!;
+
+    const response = await submitLead(
+      {
+        ...data,
+        contact: {
+          ...data.contact,
+          phone: normalizedPhone,
+        },
+      },
+      {
       submissionId,
       formStartedAt,
       turnstileToken: turnstileTokenRef.current || turnstileToken,
@@ -583,7 +619,8 @@ export function QuoteForm({
         .get("company-url")
         ?.toString(),
       attribution,
-    });
+      },
+    );
 
     setSubmitting(false);
     setStatus(response.message);
@@ -793,20 +830,25 @@ export function QuoteForm({
                 label="Phone number"
                 required
                 error={errors.phone}
+                hint="United States (+1) is selected by default. Change the country for international numbers."
               >
-                <input
+                <InternationalPhoneInput
                   id="q-phone"
-                  type="tel"
-                  autoComplete="tel"
-                  className={inputClass}
-                  value={data.contact.phone}
-                  aria-invalid={Boolean(errors.phone)}
-                  onChange={(event) =>
+                  country={data.contact.phoneCountry}
+                  number={data.contact.phone}
+                  onCountryChange={(country) =>
                     setData((current) => ({
                       ...current,
-                      contact: { ...current.contact, phone: event.target.value },
+                      contact: { ...current.contact, phoneCountry: country },
                     }))
                   }
+                  onNumberChange={(number) =>
+                    setData((current) => ({
+                      ...current,
+                      contact: { ...current.contact, phone: number },
+                    }))
+                  }
+                  invalid={Boolean(errors.phone)}
                 />
               </Field>
             </div>
@@ -826,20 +868,59 @@ export function QuoteForm({
                 }
               />
             </Field>
-            <Field id="q-industry" label="Industry" required error={errors.industry}>
-              <input
+            <Field
+              id="q-industry"
+              label="Industry"
+              required
+              error={errors.industry}
+            >
+              <select
                 id="q-industry"
                 className={inputClass}
-                placeholder="For example, home services"
-                value={data.business.industry}
-                onChange={(event) =>
+                value={industryChoice}
+                onChange={(event) => {
+                  const choice = event.target.value as LeadIndustryOption | "";
+                  setIndustryChoice(choice);
                   setData((current) => ({
                     ...current,
-                    business: { ...current.business, industry: event.target.value },
-                  }))
-                }
-              />
+                    business: {
+                      ...current.business,
+                      industry: choice === "Other" ? otherIndustry : choice,
+                    },
+                  }));
+                }}
+              >
+                <option value="">Select your industry</option>
+                {leadIndustryOptions.map((industry) => (
+                  <option key={industry} value={industry}>
+                    {industry}
+                  </option>
+                ))}
+              </select>
             </Field>
+            {industryChoice === "Other" ? (
+              <Field
+                id="q-industry-other"
+                label="Please specify your industry"
+                required
+                error={errors.otherIndustry}
+              >
+                <input
+                  id="q-industry-other"
+                  className={inputClass}
+                  placeholder="For example, pet services"
+                  value={otherIndustry}
+                  onChange={(event) => {
+                    const value = event.target.value;
+                    setOtherIndustry(value);
+                    setData((current) => ({
+                      ...current,
+                      business: { ...current.business, industry: value },
+                    }));
+                  }}
+                />
+              </Field>
+            ) : null}
           </div>
         ) : null}
 
