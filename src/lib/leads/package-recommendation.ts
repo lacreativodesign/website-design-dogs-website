@@ -2,7 +2,7 @@ import {
   packageBySlug,
   type Package,
   type PackageCategorySlug,
-} from "@/content/packages";
+} from "../../content/packages";
 
 export type PrimaryProjectType = PackageCategorySlug | "not-sure";
 
