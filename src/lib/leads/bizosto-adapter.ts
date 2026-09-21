@@ -71,7 +71,14 @@ function leadMessage(envelope: LeadSubmissionEnvelope) {
                   : []),
               ]
             : []),
-          ...optionalValue("Additional needs / project types", project.types.join(", ")),
+          ...optionalValue(
+            "Additional needs",
+            project.primaryType
+              ? project.types
+                  .filter((type) => type !== primaryLabel(project.primaryType!))
+                  .join(", ")
+              : project.types.join(", "),
+          ),
           ...optionalValue("Estimated pages", project.pages),
           ...optionalValue("Business goal", project.goal),
           ...optionalValue("Requested features", project.features.join(", ")),
