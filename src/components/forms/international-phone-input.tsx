@@ -25,19 +25,26 @@ export function InternationalPhoneInput({
   const selected = phoneCountries.find((option) => option.code === country);
 
   return (
-    <div className="grid gap-2 sm:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)]">
-      <div className="relative rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] focus-within:border-[var(--color-primary-orange)]">
+    <div className="grid min-w-0 grid-cols-1 gap-2 min-[360px]:grid-cols-[8.25rem_minmax(0,1fr)]">
+      <div className="relative min-w-0 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] focus-within:border-[var(--color-primary-orange)]">
         <div
           aria-hidden="true"
-          className="flex min-h-[3rem] items-center justify-between gap-2 px-4 py-3 text-[var(--color-foreground)]"
+          className="flex min-h-[3rem] min-w-0 items-center justify-between gap-2 whitespace-nowrap px-3 py-3 text-[var(--color-foreground)]"
         >
-          <span className="inline-flex min-w-8 items-center justify-center rounded-md border border-[var(--color-border)] bg-[var(--color-section-alt)] px-2 py-1 text-xs font-black tracking-wide">
-            {country === "INTL" ? "INTL" : country}
+          <span className="inline-flex min-w-0 items-center gap-2 font-bold">
+            <span className="text-xs font-black tracking-wide">
+              {country === "INTL" ? "INTL" : country}
+            </span>
+            {selected?.dialCode ? (
+              <span className="tabular-nums">+{selected.dialCode}</span>
+            ) : null}
           </span>
-          <span className="truncate font-bold">
-            {selected?.dialCode ? `+${selected.dialCode}` : "International"}
+          <span
+            aria-hidden="true"
+            className="shrink-0 text-xs text-[var(--color-text-muted)]"
+          >
+            ▾
           </span>
-          <span className="text-xs text-[var(--color-text-muted)]">▾</span>
         </div>
         <select
           aria-label="Phone country"
@@ -56,12 +63,13 @@ export function InternationalPhoneInput({
           ))}
         </select>
       </div>
+
       <input
         id={id}
         type="tel"
         inputMode="tel"
         autoComplete="tel-national"
-        className={inputClass}
+        className={`${inputClass} min-w-0`}
         value={number}
         placeholder={phonePlaceholder(country)}
         onChange={(event) => onNumberChange(event.target.value)}
