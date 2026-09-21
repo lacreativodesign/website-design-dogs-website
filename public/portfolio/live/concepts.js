@@ -121,6 +121,86 @@
       intro: "A modern salon for expressive shape, dimensional color, and the kind of appointment that gives you a little time back.",
       services: [["Cut", "Shape, movement, and a finish designed around your texture and everyday rhythm."], ["Color", "Dimensional color, thoughtful placement, and a plan for how it grows out."], ["Ritual", "Scalp care, gloss, repair, and finishing services that make the details feel complete."]],
       nav: [["menu", "Services"], ["artists", "Approach"], ["ritual", "The ritual"], ["contact", "Book a chair"]]
+    },
+    "saas-launch": {
+      id: "saas-launch",
+      brand: "Northframe",
+      short: "Northframe",
+      title: "One operating view for the work that actually moves.",
+      kicker: "Launch page · workflow software · focused conversion",
+      intro: "A launch concept for teams replacing scattered updates with one calm operating view for priorities, ownership, approvals, and next actions.",
+      services: [["See the work", "Bring current priorities and owners into one shared operating view."], ["Move decisions", "Keep approvals and handoffs visible without another status meeting."], ["Stay aligned", "Give each person the context they need without exposing irrelevant noise."]],
+      nav: [["product", "Product"], ["workflow", "Workflow"], ["fit", "Who it fits"], ["contact", "Start a trial"]]
+    },
+    "creative-portfolio": {
+      id: "creative-portfolio",
+      brand: "Mara Vale Studio",
+      short: "Mara Vale",
+      title: "Identity, image, and digital work with a point of view.",
+      kicker: "Independent creative direction · selected work",
+      intro: "A portfolio concept built to make the work feel editorial, paced, and memorable before a visitor ever reaches the contact form.",
+      services: [["Brand systems", "Identity systems with enough structure to stay recognizable across real use."], ["Campaign worlds", "Art direction that connects image, type, motion, and launch context."], ["Digital direction", "Web systems shaped around the story the work needs to tell."]],
+      nav: [["work", "Selected work"], ["studio", "Studio"], ["notes", "Notes"], ["contact", "Start a project"]]
+    },
+    "wellness-membership": {
+      id: "wellness-membership",
+      brand: "Stillhouse Club",
+      short: "Stillhouse",
+      title: "A steadier week starts with a place to return to.",
+      kicker: "Movement · recovery · recurring membership",
+      intro: "A warm membership concept organized around weekly rituals, clear plan choices, and a calmer path from first visit to recurring care.",
+      services: [["Move", "Guided strength and mobility sessions designed to fit into a sustainable week."], ["Recover", "Quiet recovery blocks, breath-led resets, and practical restoration."], ["Belong", "A simple membership rhythm with a clear place for booking, updates, and support."]],
+      nav: [["rhythm", "Weekly rhythm"], ["membership", "Membership"], ["space", "The space"], ["contact", "Visit the club"]]
+    },
+    "local-marketplace": {
+      id: "local-marketplace",
+      brand: "Neighborly",
+      short: "Neighborly",
+      title: "Find the right local help without opening twelve tabs.",
+      kicker: "Local services marketplace · practical discovery",
+      intro: "A marketplace concept that makes category discovery, provider context, project requests, and next-step expectations easy to understand.",
+      services: [["Find a category", "Start with the job instead of guessing which provider title to search."], ["Compare fit", "Review service focus, availability context, and what each provider needs from you."], ["Send one brief", "Describe the project once and keep the next step clear."]],
+      nav: [["browse", "Browse"], ["how", "How it works"], ["providers", "For providers"], ["contact", "Post a project"]]
+    },
+    "course-academy": {
+      id: "course-academy",
+      brand: "Fieldwork Academy",
+      short: "Fieldwork",
+      title: "Learn the work by doing the work.",
+      kicker: "Online academy · structured curriculum · practical projects",
+      intro: "An education concept that lets prospective learners understand the curriculum, weekly cadence, project expectations, and enrollment path before they commit.",
+      services: [["Core lessons", "Short teaching blocks focused on the decision or skill needed for the next project step."], ["Field projects", "Applied assignments that turn concepts into tangible work instead of passive watching."], ["Review loops", "Clear checkpoints for feedback, reflection, and the next iteration."]],
+      nav: [["curriculum", "Curriculum"], ["method", "How it works"], ["projects", "Projects"], ["contact", "View enrollment"]]
+    },
+    conference: {
+      id: "conference",
+      brand: "Signal / 27",
+      short: "Signal / 27",
+      title: "Two days for the people building what comes next.",
+      kicker: "Conference · sessions · ticketing",
+      intro: "A kinetic event concept designed around session discovery, schedule clarity, venue context, and a direct path to ticket selection.",
+      services: [["Main stage", "Big-picture conversations about product, design, systems, and the choices behind them."], ["Working rooms", "Smaller sessions built around practical methods and active participation."], ["After hours", "A lighter end-of-day program designed for conversation rather than another presentation."]],
+      nav: [["schedule", "Schedule"], ["program", "Program"], ["venue", "Venue"], ["contact", "Get tickets"]]
+    },
+    nonprofit: {
+      id: "nonprofit",
+      brand: "Common Ground Fund",
+      short: "Common Ground",
+      title: "Support that stays close to the work.",
+      kicker: "Community foundation · programs · donations",
+      intro: "A nonprofit concept that keeps program understanding, donation confidence, and stewardship language clear without relying on invented impact statistics.",
+      services: [["Community grants", "Support for locally led work with transparent eligibility and review expectations."], ["Shared resources", "Practical tools, spaces, and guidance that strengthen community-led projects."], ["Direct giving", "A straightforward donation path with clear language around stewardship and use."]],
+      nav: [["programs", "Programs"], ["approach", "Approach"], ["stewardship", "Stewardship"], ["contact", "Support the work"]]
+    },
+    "client-portal": {
+      id: "client-portal",
+      brand: "OrbitOps",
+      short: "OrbitOps",
+      title: "Projects, approvals, files, and next actions in one client view.",
+      kicker: "Custom portal · operational visibility",
+      intro: "A product-style client portal concept that turns project status, approvals, files, messages, and responsibilities into one clear operating surface.",
+      services: [["Project view", "See active work, ownership, due dates, and blockers without requesting another update."], ["Approval queue", "Review decisions in context and keep a visible record of what moved forward."], ["Shared files", "Keep deliverables and reference material attached to the work they belong to."]],
+      nav: [["dashboard", "Dashboard"], ["approvals", "Approvals"], ["files", "Files"], ["contact", "Open workspace"]]
     }
   };
 
@@ -149,7 +229,15 @@
       fitness: "<path d='M7 18h7v12H7m34-12h-7v12h7M14 14h5v20h-5m20-20h-5v20h5M19 21h10v6H19'/>",
       ecommerce: "<path d='M10 17h28v23H10Z'/><path d='M17 17a7 7 0 0 1 14 0M17 26h14'/>",
       "home-services": "<path d='m8 25 16-14 16 14v15H8Z'/><path d='M18 40V29h12v11M12 17V9h7'/>",
-      salon: "<path d='M9 12c10 4 20 18 30 24M39 12C29 16 19 30 9 36'/><circle cx='13' cy='11' r='4'/><circle cx='13' cy='37' r='4'/>"
+      salon: "<path d='M9 12c10 4 20 18 30 24M39 12C29 16 19 30 9 36'/><circle cx='13' cy='11' r='4'/><circle cx='13' cy='37' r='4'/>",
+      "saas-launch": "<rect x='8' y='10' width='32' height='28' rx='4'/><path d='M14 18h20M14 25h8M26 25h8M14 32h20'/>",
+      "creative-portfolio": "<path d='M9 38 20 10l8 20 5-13 6 21M8 38h32'/>",
+      "wellness-membership": "<circle cx='24' cy='24' r='15'/><path d='M24 9c-7 8-7 22 0 30M24 9c7 8 7 22 0 30'/>",
+      "local-marketplace": "<path d='M9 17h30v22H9zM14 17V10h20v7M17 25h14M17 32h9'/>",
+      "course-academy": "<path d='m7 18 17-9 17 9-17 9-17-9Z'/><path d='M12 22v10c7 5 17 5 24 0V22'/>",
+      conference: "<path d='M9 11h30v26H9zM15 17h18M15 24h8M27 24h6M15 31h18'/>",
+      nonprofit: "<path d='M24 40V19M24 27c-9 0-14-6-14-14 9 0 14 6 14 14Zm0-3c9 0 14-6 14-14-9 0-14 6-14 14Z'/>",
+      "client-portal": "<rect x='7' y='8' width='34' height='32' rx='5'/><path d='M13 15h22M13 22h9v11h-9zM26 22h9M26 28h9M26 34h6'/>"
     };
     return "<span class='brand-mark' aria-hidden='true'><svg viewBox='0 0 48 48' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>" + marks[c.id] + "</svg></span>";
   }
@@ -322,6 +410,78 @@
       "<section class='sl-cta' id='contact'><span>YOUR CHAIR IS THE START</span><h2>Let’s change the composition.</h2>" + button("Book a chair", "#top") + "</section>" + disclosure(c);
   }
 
+
+  function saasLaunch(c) {
+    return header(c, "concept-header--saas") +
+      "<section class='sx-hero'><div class='sx-copy'><p class='eyebrow'>" + c.kicker + "</p><h1>One operating view for the work that <em>actually moves.</em></h1><p>" + c.intro + "</p><div class='button-row'>" + button("Start a guided trial", "#contact") + button("See the workflow", "#workflow", true) + "</div><div class='sx-chips'><span>Priorities</span><span>Owners</span><span>Approvals</span><span>Next actions</span></div></div><div class='sx-product' aria-label='Northframe product preview'><div class='sx-appbar'><b>NORTHFRAME</b><span>Workspace / Q4 Launch</span></div><div class='sx-grid'><article><small>TODAY</small><strong>3 decisions</strong><p>Copy approval · pricing review · launch checklist</p></article><article><small>ACTIVE WORK</small><strong>Launch page</strong><p>Design review → implementation → QA</p></article><article class='sx-wide'><small>FLOW</small><div class='sx-flow'><span>Brief</span><i>→</i><span>Review</span><i>→</i><span>Approve</span><i>→</i><span>Ship</span></div></article></div></div></section>" +
+      "<section class='sx-product-story section-pad' id='product'><p class='eyebrow'>01 · PRODUCT</p><h2>Fewer status questions.<br>More visible momentum.</h2>" + serviceCards(c, "sx-card-grid") + "</section>" +
+      "<section class='sx-workflow section-pad' id='workflow'><div><p class='eyebrow'>02 · WORKFLOW</p><h2>Keep the decision beside the work.</h2><p>Every stage shows who owns the next move, what is waiting, and what changed. The interface stays useful because the context stays attached.</p></div><ol><li><b>01</b><span>Frame the work</span></li><li><b>02</b><span>Assign the next move</span></li><li><b>03</b><span>Review in context</span></li><li><b>04</b><span>Close the loop</span></li></ol></section>" +
+      "<section class='sx-fit' id='fit'><div><span>DESIGNED FOR</span><h2>Small teams with real handoffs.</h2></div><div class='sx-fit-grid'><article>Agency delivery</article><article>Client approvals</article><article>Launch coordination</article><article>Internal operations</article></div></section>" +
+      "<section class='sx-cta' id='contact'><p>KEEP THE NEXT MOVE VISIBLE</p><h2>Replace the scattered update with one working view.</h2>" + button("Start a guided trial", "#top") + "</section>" + disclosure(c);
+  }
+
+  function creativePortfolio(c) {
+    return header(c, "concept-header--editorial") +
+      "<section class='cp-hero'><div class='cp-index'>PORTFOLIO / 26</div><div class='cp-title'><p>" + c.kicker + "</p><h1>MARA<br><em>VALE</em><br>STUDIO</h1></div><div class='cp-note'><p>" + c.intro + "</p>" + button("View selected work", "#work") + "</div></section>" +
+      "<section class='cp-work' id='work'><article class='cp-project cp-project--red'><span>01 / IDENTITY</span><h2>Quiet objects.<br>Loud point of view.</h2><b>Brand system / packaging / digital</b></article><article class='cp-project cp-project--cream'><span>02 / CAMPAIGN</span><h2>Make the image<br>do the talking.</h2><b>Art direction / image system / launch</b></article><article class='cp-project cp-project--black'><span>03 / DIGITAL</span><h2>Structure with<br>room to breathe.</h2><b>Website / type system / motion</b></article></section>" +
+      "<section class='cp-studio section-pad' id='studio'><p class='eyebrow'>STUDIO NOTE</p><blockquote>“The system should be memorable before it is decorative.”</blockquote><div><h2>Identity, image, and digital direction under one roof.</h2><p>Projects begin with the idea that needs to stay recognizable, then build the visual grammar around it: type, color, image, composition, movement, and application.</p></div></section>" +
+      "<section class='cp-notes section-pad' id='notes'>" + serviceCards(c, "cp-services") + "</section>" +
+      "<section class='cp-cta' id='contact'><span>NEW BUSINESS / SELECT COLLABORATIONS</span><h2>Bring the brief.<br>Leave room for a point of view.</h2>" + button("Start a project", "#top") + "</section>" + disclosure(c);
+  }
+
+  function wellnessMembership(c) {
+    return header(c, "concept-header--soft") +
+      "<section class='wm-hero'><div class='wm-orb'></div><div class='wm-copy'><p class='eyebrow'>" + c.kicker + "</p><h1>A steadier week starts with a place to <em>return to.</em></h1><p>" + c.intro + "</p>" + button("Plan a first visit", "#contact") + "</div><div class='wm-week'><span>MON</span><b>MOVE</b><span>WED</span><b>RECOVER</b><span>SAT</span><b>RESET</b></div></section>" +
+      "<section class='wm-rhythm section-pad' id='rhythm'><div><p class='eyebrow'>01 · WEEKLY RHYTHM</p><h2>Enough structure to make care repeatable.</h2></div>" + serviceCards(c, "wm-service-grid") + "</section>" +
+      "<section class='wm-membership section-pad' id='membership'><div class='wm-plan'><span>ESSENTIAL</span><h3>2 visits / week</h3><p>A focused recurring rhythm for movement and recovery.</p></div><div class='wm-plan wm-plan--feature'><span>CLUB</span><h3>Flexible weekly access</h3><p>More room to mix sessions around the week you actually have.</p></div><div class='wm-plan'><span>RESET</span><h3>4-visit pack</h3><p>A simple way to begin before choosing a recurring plan.</p></div></section>" +
+      "<section class='wm-space' id='space'><div class='wm-space__art'><span>STILL</span><span>HOUSE</span></div><div><p class='eyebrow'>02 · THE SPACE</p><h2>Warm light. Quiet pacing. Clear rituals.</h2><p>The visual system avoids high-pressure wellness language and instead makes the membership path, booking rhythm, and visit expectations easy to understand.</p></div></section>" +
+      "<section class='wm-cta' id='contact'><p>START WITH ONE VISIT</p><h2>Build a rhythm that can survive a busy week.</h2>" + button("Plan a first visit", "#top") + "</section>" + disclosure(c);
+  }
+
+  function localMarketplace(c) {
+    return header(c, "concept-header--market") +
+      "<section class='mp-hero'><div class='mp-copy'><span class='mp-badge'>LOCAL HELP / ONE BRIEF</span><h1>Find the right local help without opening <em>twelve tabs.</em></h1><p>" + c.intro + "</p><div class='mp-search'><span>What do you need help with?</span><b>Search services →</b></div></div><div class='mp-categories'><article>Home repair</article><article>Outdoor work</article><article>Cleaning</article><article>Moving help</article><article>Pet care</article><article>Personal services</article></div></section>" +
+      "<section class='mp-browse section-pad' id='browse'><p class='eyebrow'>01 · BROWSE BY JOB</p><h2>Start with the outcome, not the provider title.</h2>" + serviceCards(c, "mp-cards") + "</section>" +
+      "<section class='mp-how' id='how'><div><span>1</span><h3>Describe the job</h3><p>Share the location context, timing, photos, and what a good outcome looks like.</p></div><div><span>2</span><h3>Review fit</h3><p>See which providers focus on the kind of work you actually need.</p></div><div><span>3</span><h3>Choose the next step</h3><p>Keep the request, response, and handoff visible in one place.</p></div></section>" +
+      "<section class='mp-provider section-pad' id='providers'><div class='mp-provider__panel'><small>PROVIDER VIEW</small><strong>New project request</strong><p>Kitchen shelf install · photos attached · preferred window shared</p><button type='button'>Review request</button></div><div><p class='eyebrow'>02 · FOR PROVIDERS</p><h2>Better briefs create better first conversations.</h2><p>The marketplace concept is designed to reduce vague leads by collecting the right project context before a provider spends time responding.</p></div></section>" +
+      "<section class='mp-cta' id='contact'><h2>One clear brief.<br>A more useful local search.</h2>" + button("Post a project", "#top") + "</section>" + disclosure(c);
+  }
+
+  function courseAcademy(c) {
+    return header(c, "concept-header--academy") +
+      "<section class='ca-hero'><div class='ca-copy'><p>" + c.kicker + "</p><h1>Learn the work by <em>doing the work.</em></h1><p>" + c.intro + "</p><div class='button-row'>" + button("Explore the curriculum", "#curriculum") + button("View enrollment", "#contact", true) + "</div></div><div class='ca-stack'><article><span>WEEK 01</span><b>Frame the problem</b></article><article><span>WEEK 02</span><b>Build the system</b></article><article><span>WEEK 03</span><b>Ship the project</b></article></div></section>" +
+      "<section class='ca-curriculum section-pad' id='curriculum'><p class='eyebrow'>01 · CURRICULUM</p><h2>A visible learning path from first principle to finished project.</h2><div class='ca-modules'><article><b>01</b><h3>Foundations</h3><p>Language, constraints, and the decisions that shape the work.</p></article><article><b>02</b><h3>Applied method</h3><p>Turn the principle into a repeatable workflow.</p></article><article><b>03</b><h3>Field project</h3><p>Use the method on a real assignment with a clear brief.</p></article><article><b>04</b><h3>Review</h3><p>Evaluate what changed, what held, and what belongs in the next iteration.</p></article></div></section>" +
+      "<section class='ca-method' id='method'><div><p class='eyebrow'>02 · HOW IT WORKS</p><h2>Short lesson.<br>Real assignment.<br>Useful review.</h2></div><div class='ca-cycle'><span>WATCH</span><i>→</i><span>MAKE</span><i>→</i><span>REVIEW</span><i>→</i><span>REFINE</span></div></section>" +
+      "<section class='ca-projects section-pad' id='projects'>" + serviceCards(c, "ca-project-grid") + "</section>" +
+      "<section class='ca-cta' id='contact'><span>NEXT COHORT / CONCEPT ENROLLMENT</span><h2>See the whole path before you sign up.</h2>" + button("View enrollment", "#top") + "</section>" + disclosure(c);
+  }
+
+  function eventConference(c) {
+    return header(c, "concept-header--event") +
+      "<section class='ev-hero'><div class='ev-number'>27</div><div class='ev-copy'><p>" + c.kicker + "</p><h1>TWO DAYS<br>FOR THE PEOPLE<br>BUILDING <em>NEXT.</em></h1><p>" + c.intro + "</p>" + button("Get tickets", "#contact") + "</div><div class='ev-date'><b>OCT / 22–23</b><span>PROGRAM CONCEPT</span></div></section>" +
+      "<section class='ev-schedule section-pad' id='schedule'><p class='eyebrow'>01 · SCHEDULE</p><div class='ev-day'><span>DAY 01</span><article><b>09:30</b><h3>Opening signal</h3><p>What teams are changing about how they build.</p></article><article><b>11:00</b><h3>Working room</h3><p>Designing systems that survive real operating pressure.</p></article><article><b>14:00</b><h3>Main stage</h3><p>Product judgment when the roadmap is crowded.</p></article></div><div class='ev-day ev-day--alt'><span>DAY 02</span><article><b>10:00</b><h3>Studio session</h3><p>From research signal to clear product decision.</p></article><article><b>13:00</b><h3>Roundtable</h3><p>Operating habits for teams working across functions.</p></article><article><b>17:00</b><h3>Closing room</h3><p>What belongs in the next year of work.</p></article></div></section>" +
+      "<section class='ev-program' id='program'><div><span>MAIN STAGE</span><h2>Ideas worth carrying back to the work.</h2></div>" + serviceCards(c, "ev-program-grid") + "</section>" +
+      "<section class='ev-venue' id='venue'><b>SIGNAL / 27</b><div><p class='eyebrow'>02 · VENUE EXPERIENCE</p><h2>Make the schedule easy to move through.</h2><p>The design keeps timing, room context, and session type visible so attendees can decide what to do next without fighting the interface.</p></div></section>" +
+      "<section class='ev-cta' id='contact'><span>TICKETING CONCEPT</span><h2>Choose your pass.<br>Build your two days.</h2>" + button("Get tickets", "#top") + "</section>" + disclosure(c);
+  }
+
+  function nonprofit(c) {
+    return header(c, "concept-header--nonprofit") +
+      "<section class='np-hero'><div class='np-shape'></div><div class='np-copy'><p class='eyebrow'>" + c.kicker + "</p><h1>Support that stays <em>close to the work.</em></h1><p>" + c.intro + "</p><div class='button-row'>" + button("Support the work", "#contact") + button("Explore programs", "#programs", true) + "</div></div></section>" +
+      "<section class='np-programs section-pad' id='programs'><p class='eyebrow'>01 · PROGRAMS</p><h2>Clear paths for people who want to help and people doing the work.</h2>" + serviceCards(c, "np-card-grid") + "</section>" +
+      "<section class='np-approach' id='approach'><div><span>LISTEN</span><b>→</b><span>RESOURCE</span><b>→</b><span>FOLLOW THROUGH</span></div><p>Program pages explain who a resource is for, what the process asks from participants, and where responsibility sits after support is approved.</p></section>" +
+      "<section class='np-stewardship section-pad' id='stewardship'><div><p class='eyebrow'>02 · STEWARDSHIP</p><h2>Donation confidence starts with plain language.</h2><p>The concept avoids invented impact claims and instead makes stewardship, program categories, and giving choices easy to inspect before a donor acts.</p></div><div class='np-ledger'><article><span>PROGRAM SUPPORT</span><b>Direct grants and resources</b></article><article><span>SHARED CAPACITY</span><b>Tools, space, and guidance</b></article><article><span>OPERATIONS</span><b>Clearly explained organizational needs</b></article></div></section>" +
+      "<section class='np-cta' id='contact'><p>GIVE WITH CONTEXT</p><h2>Understand the work.<br>Choose how to support it.</h2>" + button("Support the work", "#top") + "</section>" + disclosure(c);
+  }
+
+  function clientPortal(c) {
+    return header(c, "concept-header--portal") +
+      "<section class='po-shell' id='dashboard'><aside><b>ORBITOPS</b><nav><span class='active'>Overview</span><span>Projects</span><span>Approvals</span><span>Files</span><span>Messages</span></nav><small>CLIENT WORKSPACE</small></aside><div class='po-main'><div class='po-top'><div><p>Good morning</p><h1>Your work, without the chase.</h1></div><button type='button'>New request</button></div><div class='po-metrics'><article><span>ACTIVE</span><b>3 projects</b></article><article><span>WAITING</span><b>2 approvals</b></article><article><span>NEXT</span><b>Friday review</b></article></div><div class='po-board'><article><small>WEBSITE REDESIGN</small><h2>Production</h2><p>Homepage build · responsive QA · content review</p><div><span>Design</span><i></i><span>Build</span><i></i><span>QA</span></div></article><article><small>CAMPAIGN PAGE</small><h2>Approval needed</h2><p>Final copy and launch date are waiting for client review.</p><button type='button'>Review decision</button></article></div></div></section>" +
+      "<section class='po-feature section-pad' id='approvals'><div><p class='eyebrow'>01 · APPROVALS</p><h2>Put the decision beside the thing being decided.</h2><p>" + c.intro + "</p></div><div class='po-approval'><span>READY FOR REVIEW</span><h3>Homepage direction</h3><p>Review the latest version, leave context, and confirm the next move.</p><button type='button'>Open approval</button></div></section>" +
+      "<section class='po-files section-pad' id='files'><p class='eyebrow'>02 · SHARED FILES</p>" + serviceCards(c, "po-file-grid") + "</section>" +
+      "<section class='po-cta' id='contact'><span>CUSTOM WEB APPLICATION CONCEPT</span><h2>Give clients one place to see what matters next.</h2>" + button("Open workspace", "#top") + "</section>" + disclosure(c);
+  }
+
   const renderers = {
     roofing: roof,
     cleaning: clean,
@@ -334,7 +494,15 @@
     fitness: fitness,
     ecommerce: commerce,
     "home-services": homeServices,
-    salon: salon
+    salon: salon,
+    "saas-launch": saasLaunch,
+    "creative-portfolio": creativePortfolio,
+    "wellness-membership": wellnessMembership,
+    "local-marketplace": localMarketplace,
+    "course-academy": courseAcademy,
+    conference: eventConference,
+    nonprofit: nonprofit,
+    "client-portal": clientPortal
   };
 
   root.className = "concept concept--" + concept.id;
