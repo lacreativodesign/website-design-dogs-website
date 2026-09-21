@@ -636,3 +636,23 @@ export function scopeLabels(
       : []),
   ];
 }
+
+
+export function isPrimaryProjectType(value: string): value is PrimaryProjectType {
+  return primaryProjectOptions.some((option) => option.value === value);
+}
+
+export function isRecommendationScopeValid(
+  primaryType: PrimaryProjectType,
+  scope: RecommendationScope,
+) {
+  if (primaryType === "not-sure") {
+    return scope.size === "" && scope.complexity === "";
+  }
+
+  const config = scopeQuestions[primaryType];
+  return (
+    config.sizeOptions.some((option) => option.value === scope.size) &&
+    config.complexityOptions.some((option) => option.value === scope.complexity)
+  );
+}
