@@ -17,6 +17,7 @@ export type LeadSubmissionResponse =
       message: string;
       referenceId?: string;
       duplicate?: boolean;
+      confirmationEmailSent?: boolean;
     }
   | {
       ok: false;
