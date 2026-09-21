@@ -55,7 +55,12 @@ const envelope = {
     summary: 'Need a lead-generating website.',
   },
   project: {
-    types: ['New Website'],
+    primaryType: 'website-design',
+    scope: {
+      size: 'web-pages-8-10',
+      complexity: 'web-integrations-3',
+    },
+    types: ['Website Design & Development', 'Analytics & Reporting'],
     pages: '6–10 pages',
     goal: 'Generate qualified leads',
     features: ['Contact or quote form', 'Analytics & reporting'],
@@ -164,7 +169,10 @@ test('customer receives a branded transactional confirmation with the complete q
     assert.match(body.text, /Preferred package: Starter/);
     assert.match(body.text, /Phone country: United States/);
     assert.match(body.text, /Budget: \$500–\$999/);
-    assert.match(body.text, /Project types: New Website/);
+    assert.match(body.text, /Primary service: Website Design & Development/);
+    assert.match(body.text, /Approximate website size: 8–10 pages/);
+    assert.match(body.text, /Forms, embeds, or standard integrations: Up to 3/);
+    assert.match(body.text, /Additional needs: Analytics & Reporting/);
     assert.match(body.text, /Requested features: Contact or quote form, Analytics & reporting/);
     assert.match(body.text, /Current challenges: The current website is dated and does not convert/);
     assert.match(body.text, /Submission reference:/);
