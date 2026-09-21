@@ -42,7 +42,8 @@ const envelope = {
   contact: {
     fullName: 'Jane Smith',
     email: 'jane@example.com',
-    phone: '+1 555 0100',
+    phone: '+14159002374',
+    phoneCountry: 'US',
   },
   business: {
     name: 'Acme Home Services',
@@ -126,6 +127,7 @@ test('email adapter sends the complete lead to the permanent WDD safety inbox', 
     assert.match(body.subject, /WDD quote lead/);
     assert.match(body.text, /UTM campaign: wdd-launch/);
     assert.match(body.text, /Meta click ID: meta-click-id/);
+    assert.match(body.text, /Phone country: United States/);
     assert.match(toLeadEmailText(envelope), /Privacy policy consent: yes/);
   } finally {
     globalThis.fetch = originalFetch;
@@ -160,6 +162,7 @@ test('customer receives a branded transactional confirmation with the complete q
     assert.equal(body.reply_to, 'leads@websitedesigndogs.com');
     assert.match(body.subject, /project brief/i);
     assert.match(body.text, /Preferred package: Starter/);
+    assert.match(body.text, /Phone country: United States/);
     assert.match(body.text, /Budget: \$500–\$999/);
     assert.match(body.text, /Project types: New Website/);
     assert.match(body.text, /Requested features: Contact or quote form, Analytics & reporting/);
