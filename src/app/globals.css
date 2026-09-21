@@ -2171,8 +2171,7 @@ body { overflow-wrap: anywhere; }
   padding: .65rem;
   cursor: pointer;
 }
-.quote-choice-card input,
-.quote-package-option input {
+.quote-choice-card input {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -2369,8 +2368,7 @@ body { overflow-wrap: anywhere; }
   .home-industry-card,
   .services-directory-card,
   .package-detail-related a,
-  .quote-choice-card,
-  .quote-package-option {
+  .quote-choice-card {
     transition:
       transform var(--transition-fast),
       border-color var(--transition-fast),
