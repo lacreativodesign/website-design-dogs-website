@@ -3,6 +3,7 @@ import { LeadError } from "./errors";
 import type { LeadConfig } from "./request-security";
 import type { LeadSubmissionEnvelope } from "./types";
 import { phoneCountryName } from "./phone";
+import { primaryLabel, scopeLabels } from "./package-recommendation";
 
 export type EmailDeliveryResult = {
   upstreamStatus: number;
@@ -74,8 +75,14 @@ function customerRows(envelope: LeadSubmissionEnvelope) {
   ];
 
   if (envelope.project) {
+    if (envelope.project.primaryType) {
+      rows.push(["Primary service", primaryLabel(envelope.project.primaryType)]);
+      if (envelope.project.scope) {
+        rows.push(...scopeLabels(envelope.project.primaryType, envelope.project.scope));
+      }
+    }
     rows.push(
-      ["Project types", envelope.project.types.join(", ")],
+      ["Additional needs / project types", envelope.project.types.join(", ")],
       ["Estimated pages", envelope.project.pages],
       ["Business goal", envelope.project.goal],
       ["Requested features", envelope.project.features.join(", ")],
@@ -143,7 +150,17 @@ export function toLeadEmailText(envelope: LeadSubmissionEnvelope) {
     ...optionalLine("Project summary", envelope.enquiry.summary),
     ...(project
       ? [
-          ...optionalLine("Project types", project.types.join(", ")),
+          ...(project.primaryType
+            ? [
+                ...optionalLine("Primary service", primaryLabel(project.primaryType)),
+                ...(project.scope
+                  ? scopeLabels(project.primaryType, project.scope).flatMap(([label, value]) =>
+                      optionalLine(label, value),
+                    )
+                  : []),
+              ]
+            : []),
+          ...optionalLine("Additional needs / project types", project.types.join(", ")),
           ...optionalLine("Estimated pages", project.pages),
           ...optionalLine("Business goal", project.goal),
           ...optionalLine("Requested features", project.features.join(", ")),
