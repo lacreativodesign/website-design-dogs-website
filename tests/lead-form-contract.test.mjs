@@ -110,3 +110,18 @@ test('phone number remains mandatory across every WDD website lead form', () => 
   assert.doesNotMatch(submission, /phone\?: string/);
 });
 
+test('successful lead UX tells customers to check their inbox when confirmation email is sent', () => {
+  const route = fs.readFileSync('src/app/api/leads/route.ts', 'utf8');
+  const quote = fs.readFileSync('src/components/forms/quote-form.tsx', 'utf8');
+  const email = fs.readFileSync('src/lib/leads/email-adapter.ts', 'utf8');
+
+  assert.match(route, /confirmationEmailSent: delivery\.customerConfirmationSent/);
+  assert.match(route, /Please check your inbox, including spam or junk if needed/);
+  assert.match(quote, /Check your inbox at \{data\.contact\.email\}/);
+  assert.match(quote, /complete copy of your submitted brief and selected package/);
+  assert.match(email, /sendCustomerConfirmationEmail/);
+  assert.match(email, /wdd-confirmation\/\$\{envelope\.submissionId\}/);
+  assert.match(email, /Your Website Design Dogs project brief/);
+  assert.match(email, /This email is your record of the information you submitted/);
+});
+
