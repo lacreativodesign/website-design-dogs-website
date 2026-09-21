@@ -1,4 +1,3 @@
-import { allPackages } from "@/content/packages";
 import { services } from "@/content/services";
 
 export const SERVICES = [
@@ -33,12 +32,6 @@ export const FEATURES = [
   "Payment integration",
   "Customer portal",
   "Not sure yet",
-] as const;
-
-export const PACKAGES = [
-  ...allPackages.map((item) => `${item.name} — ${item.price} ${item.priceSuffix}`),
-  "Custom Scope",
-  "Not Sure Yet",
 ] as const;
 
 export const BUDGETS = [
