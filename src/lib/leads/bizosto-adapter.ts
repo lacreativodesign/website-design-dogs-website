@@ -3,6 +3,7 @@ import { LeadError } from "./errors";
 import type { LeadConfig } from "./request-security";
 import type { Attribution, LeadSubmissionEnvelope } from "./types";
 import { phoneCountryName } from "./phone";
+import { primaryLabel, scopeLabels } from "./package-recommendation";
 
 export type BizostoResult = {
   referenceId?: string;
@@ -60,7 +61,17 @@ function leadMessage(envelope: LeadSubmissionEnvelope) {
     ...optionalValue("Industry", envelope.business.industry),
     ...(project
       ? [
-          ...optionalValue("Project types", project.types.join(", ")),
+          ...(project.primaryType
+            ? [
+                ...optionalValue("Primary service", primaryLabel(project.primaryType)),
+                ...(project.scope
+                  ? scopeLabels(project.primaryType, project.scope).flatMap(([label, value]) =>
+                      optionalValue(label, value),
+                    )
+                  : []),
+              ]
+            : []),
+          ...optionalValue("Additional needs / project types", project.types.join(", ")),
           ...optionalValue("Estimated pages", project.pages),
           ...optionalValue("Business goal", project.goal),
           ...optionalValue("Requested features", project.features.join(", ")),
