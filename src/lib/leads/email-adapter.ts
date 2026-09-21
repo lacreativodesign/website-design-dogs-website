@@ -85,7 +85,11 @@ function customerRows(envelope: LeadSubmissionEnvelope) {
     if (primary) {
       rows.push(["Primary service", primary]);
       if (envelope.project.scope) {
-        rows.push(...scopeLabels(envelope.project.primaryType!, envelope.project.scope));
+        rows.push(
+          ...scopeLabels(envelope.project.primaryType!, envelope.project.scope).map(
+            ([label, value]) => [label, value] as [string, string],
+          ),
+        );
       }
     }
     rows.push(
