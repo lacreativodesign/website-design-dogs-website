@@ -350,6 +350,16 @@ export function QuoteForm({
   const additionalNeeds = data.project.types.filter(
     (type) => !primaryLabels.has(type),
   );
+  const showFeatureQuestions =
+    data.project.primaryType === "website-design" ||
+    data.project.primaryType === "e-commerce" ||
+    data.project.primaryType === "mobile-apps";
+  const showPlatformQuestion =
+    data.project.primaryType === "website-design" ||
+    data.project.primaryType === "e-commerce" ||
+    data.project.primaryType === "seo-local" ||
+    data.project.primaryType === "website-care" ||
+    data.project.primaryType === "not-sure";
   const onToken = useCallback((token: string) => {
     turnstileTokenRef.current = token;
     setTurnstileToken(token);
@@ -712,6 +722,10 @@ export function QuoteForm({
             {stageDetails[step][0]}
           </h2>
           <span>{stageDetails[step][1]}</span>
+          <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-[var(--color-text-muted)]">
+            <span>Not sure about an answer?</span>
+            <LiveChatButton label="Start a live chat" />
+          </div>
         </header>
 
         {step === 0 ? (
@@ -859,79 +873,221 @@ export function QuoteForm({
         ) : null}
 
         {step === 1 ? (
-          <ChoiceGrid
-            legend="Project Type"
-            values={projectTypes}
-            selected={data.project.types}
-            onChange={(types) =>
-              setData((current) => ({
-                ...current,
-                project: { ...current.project, types },
-              }))
-            }
-            error={errors.types}
-          />
+          <div className="quote-stage-fields">
+            <fieldset
+              className="quote-choice-fieldset"
+              aria-invalid={errors.primaryType ? true : undefined}
+              aria-describedby={
+                errors.primaryType ? "primary-service-error" : undefined
+              }
+            >
+              <legend className="quote-field-label">Primary service *</legend>
+              <div className="quote-choice-grid">
+                {primaryProjectOptions.map((option) => {
+                  const checked = data.project.primaryType === option.value;
+                  return (
+                    <label
+                      key={option.value}
+                      className={
+                        checked
+                          ? "quote-choice-card quote-choice-card--selected"
+                          : "quote-choice-card"
+                      }
+                    >
+                      <input
+                        type="radio"
+                        name="primary-service"
+                        value={option.value}
+                        checked={checked}
+                        onChange={() => {
+                          const primaryType = option.value;
+                          setData((current) => ({
+                            ...current,
+                            project: {
+                              ...current.project,
+                              primaryType,
+                              scope: { size: "", complexity: "" },
+                              types: [
+                                primaryLabel(primaryType),
+                                ...additionalNeeds,
+                              ],
+                              pages: "Not sure yet",
+                              features: ["Not sure yet"],
+                            },
+                            package: {
+                              ...current.package,
+                              preferred: "",
+                            },
+                          }));
+                        }}
+                      />
+                      <span aria-hidden="true">{checked ? "✓" : "+"}</span>
+                      <strong>{option.label}</strong>
+                      <small>{option.description}</small>
+                    </label>
+                  );
+                })}
+              </div>
+              {errors.primaryType ? (
+                <p id="primary-service-error" className="quote-field-error">
+                  {errors.primaryType}
+                </p>
+              ) : null}
+            </fieldset>
+
+            <div>
+              <p className="quote-field-label">Additional needs (optional)</p>
+              <p className="mb-3 text-sm text-[var(--color-text-muted)]">
+                These do not change your primary package family. We use them to
+                understand add-ons or related work that may need separate scope.
+              </p>
+              <ChoiceGrid
+                legend="Additional needs"
+                values={additionalNeedOptions}
+                selected={additionalNeeds}
+                onChange={(needs) =>
+                  setData((current) => ({
+                    ...current,
+                    project: {
+                      ...current.project,
+                      types: current.project.primaryType
+                        ? [
+                            primaryLabel(current.project.primaryType),
+                            ...needs,
+                          ]
+                        : needs,
+                    },
+                  }))
+                }
+              />
+            </div>
+          </div>
         ) : null}
 
         {step === 2 ? (
           <div className="quote-stage-fields">
-            <div className="quote-field-grid">
-              <Field
-                id="pages"
-                label="Estimated number of pages"
-                required
-                error={errors.pages}
-              >
-                <select
-                  id="pages"
-                  className={inputClass}
-                  value={data.project.pages}
-                  onChange={(event) =>
+            {activeScopeQuestions ? (
+              <>
+                <div className="quote-field-grid">
+                  <Field
+                    id="scope-size"
+                    label={activeScopeQuestions.sizeLabel}
+                    required
+                    error={errors.scope}
+                  >
+                    <select
+                      id="scope-size"
+                      className={inputClass}
+                      value={data.project.scope.size}
+                      onChange={(event) => {
+                        const size = event.target.value;
+                        setData((current) => ({
+                          ...current,
+                          project: {
+                            ...current.project,
+                            scope: { ...current.project.scope, size },
+                            pages: legacyPageValue(
+                              current.project.primaryType,
+                              size,
+                            ),
+                          },
+                        }));
+                      }}
+                    >
+                      <option value="">Select</option>
+                      {activeScopeQuestions.sizeOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
+                  <Field
+                    id="scope-complexity"
+                    label={activeScopeQuestions.complexityLabel}
+                    required
+                    error={errors.scope}
+                  >
+                    <select
+                      id="scope-complexity"
+                      className={inputClass}
+                      value={data.project.scope.complexity}
+                      onChange={(event) =>
+                        setData((current) => ({
+                          ...current,
+                          project: {
+                            ...current.project,
+                            scope: {
+                              ...current.project.scope,
+                              complexity: event.target.value,
+                            },
+                          },
+                        }))
+                      }
+                    >
+                      <option value="">Select</option>
+                      {activeScopeQuestions.complexityOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </Field>
+                </div>
+                {errors.scope ? (
+                  <p className="quote-field-error">{errors.scope}</p>
+                ) : null}
+              </>
+            ) : (
+              <div className="rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-section-alt)] p-4">
+                <strong className="block">We’ll help route the project.</strong>
+                <p className="mt-1 text-sm text-[var(--color-text-muted)]">
+                  Because you selected Not Sure Yet, we will not force you into a
+                  package. Share the business goal and context below and our team
+                  will review the right starting point.
+                </p>
+              </div>
+            )}
+
+            <Field id="goal" label="Main business goal" required error={errors.goal}>
+              <input
+                id="goal"
+                className={inputClass}
+                placeholder="For example, generate enquiries, launch a store, or improve visibility"
+                value={data.project.goal}
+                onChange={(event) =>
+                  setData((current) => ({
+                    ...current,
+                    project: { ...current.project, goal: event.target.value },
+                  }))
+                }
+              />
+            </Field>
+
+            {showFeatureQuestions ? (
+              <div>
+                <p className="quote-field-label">
+                  Additional functionality (optional)
+                </p>
+                <ChoiceGrid
+                  legend="Additional functionality"
+                  values={features}
+                  selected={data.project.features}
+                  onChange={(selectedFeatures) =>
                     setData((current) => ({
                       ...current,
-                      project: { ...current.project, pages: event.target.value },
-                    }))
-                  }
-                >
-                  <option value="">Select</option>
-                  <option>1–5 pages</option>
-                  <option>6–10 pages</option>
-                  <option>11–15 pages</option>
-                  <option>More than 15 pages</option>
-                  <option>Not sure yet</option>
-                </select>
-              </Field>
-              <Field id="goal" label="Main business goal" required error={errors.goal}>
-                <input
-                  id="goal"
-                  className={inputClass}
-                  placeholder="For example, generate enquiries"
-                  value={data.project.goal}
-                  onChange={(event) =>
-                    setData((current) => ({
-                      ...current,
-                      project: { ...current.project, goal: event.target.value },
+                      project: {
+                        ...current.project,
+                        features:
+                          selectedFeatures.length > 0
+                            ? selectedFeatures
+                            : ["Not sure yet"],
+                      },
                     }))
                   }
                 />
-              </Field>
-            </div>
-
-            <div>
-              <p className="quote-field-label">Features required *</p>
-              <ChoiceGrid
-                legend="Features required"
-                values={features}
-                selected={data.project.features}
-                onChange={(selectedFeatures) =>
-                  setData((current) => ({
-                    ...current,
-                    project: { ...current.project, features: selectedFeatures },
-                  }))
-                }
-                error={errors.features}
-              />
-            </div>
+              </div>
+            ) : null}
 
             <div className="quote-field-grid">
               <Field
@@ -947,7 +1103,10 @@ export function QuoteForm({
                   onChange={(event) =>
                     setData((current) => ({
                       ...current,
-                      project: { ...current.project, contentStatus: event.target.value },
+                      project: {
+                        ...current.project,
+                        contentStatus: event.target.value,
+                      },
                     }))
                   }
                 >
@@ -971,7 +1130,10 @@ export function QuoteForm({
                   onChange={(event) =>
                     setData((current) => ({
                       ...current,
-                      project: { ...current.project, brandingStatus: event.target.value },
+                      project: {
+                        ...current.project,
+                        brandingStatus: event.target.value,
+                      },
                     }))
                   }
                 >
@@ -983,25 +1145,34 @@ export function QuoteForm({
                 </select>
               </Field>
             </div>
-            <Field id="platform" label="Existing or preferred platform" hint="Choose Help me choose if platform selection is part of the project.">
-              <select
+
+            {showPlatformQuestion ? (
+              <Field
                 id="platform"
-                className={inputClass}
-                value={data.project.existingPlatform}
-                onChange={(event) =>
-                  setData((current) => ({
-                    ...current,
-                    project: {
-                      ...current.project,
-                      existingPlatform: event.target.value,
-                    },
-                  }))
-                }
+                label="Existing or preferred platform"
+                hint="Choose Help me choose if platform selection is part of the project."
               >
-                <option value="">Select (optional)</option>
-                {platformPreferenceOptions.map((platform) => <option key={platform}>{platform}</option>)}
-              </select>
-            </Field>
+                <select
+                  id="platform"
+                  className={inputClass}
+                  value={data.project.existingPlatform}
+                  onChange={(event) =>
+                    setData((current) => ({
+                      ...current,
+                      project: {
+                        ...current.project,
+                        existingPlatform: event.target.value,
+                      },
+                    }))
+                  }
+                >
+                  <option value="">Select (optional)</option>
+                  {platformPreferenceOptions.map((platform) => (
+                    <option key={platform}>{platform}</option>
+                  ))}
+                </select>
+              </Field>
+            ) : null}
           </div>
         ) : null}
 
@@ -1015,10 +1186,13 @@ export function QuoteForm({
               </div>
               <b>Recommended</b>
               <small>
-                {recommendation.option.detail} This is an early guide based on your
-                answers, not a final scope or quote. You can choose a different
-                starting point below.
+                {recommendation.option.detail} This recommendation is matched against
+                WDD’s published package limits for the primary service you selected.
+                It is still a starting point, not a final quote.
               </small>
+              <div className="mt-3">
+                <LiveChatButton label="Questions about this recommendation? Start live chat" />
+              </div>
             </div>
 
             <fieldset className="quote-package-fieldset" aria-invalid={errors.preferred ? true : undefined} aria-describedby={errors.preferred ? "preferred-package-error" : undefined}>
@@ -1129,7 +1303,7 @@ export function QuoteForm({
             </Field>
             <Field
               id="accomplish"
-              label="What should the new website help accomplish?"
+              label="What should this project help accomplish?"
               required
               error={errors.accomplish}
             >
