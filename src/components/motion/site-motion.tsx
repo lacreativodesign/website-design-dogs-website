@@ -23,6 +23,13 @@ const revealSelectors = [
   ".coverage-panel__steps li",
   ".compact-cta-strip__inner",
   ".platform-decision-cta__panel",
+  ".offer-section__heading",
+  ".offer-service-card",
+  ".offer-portfolio-card",
+  ".offer-package-card",
+  ".offer-benefit-card",
+  ".offer-faq",
+  ".offer-final-cta__inner",
 ].join(",");
 
 const revealAttributeSelector = '[data-reveal="true"]';
