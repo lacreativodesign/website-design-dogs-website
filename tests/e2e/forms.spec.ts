@@ -276,6 +276,72 @@ test("package query does not complicate the quote request and privacy link works
   await expect(page).toHaveURL(/privacy-policy/);
 });
 
+test("quote project-type cards stay compact and usable across responsive widths", async ({ page }) => {
+  test.setTimeout(120_000);
+
+  const viewports = [
+    { width: 1440, height: 1000 },
+    { width: 820, height: 1000 },
+    { width: 390, height: 844 },
+    { width: 320, height: 740 },
+  ];
+
+  for (const viewport of viewports) {
+    await page.setViewportSize(viewport);
+    await page.goto("/get-started");
+
+    await page.getByLabel("Full name").fill("Responsive Test");
+    await page.getByLabel("Business name").fill("WDD QA");
+    await page.getByLabel("Email").fill("responsive@example.test");
+    await page.getByLabel("Phone number").fill("(415) 900-2374");
+    await page.getByLabel("Industry").selectOption({ label: "Home Services" });
+    await page.getByRole("button", { name: "Next" }).click();
+
+    await expect(page.getByRole("heading", { name: "Project Type" })).toBeVisible();
+    const cards = page.locator(".quote-choice-card");
+    await expect(cards).toHaveCount(16);
+
+    const layout = await page.evaluate(() => {
+      const cardMetrics = [...document.querySelectorAll<HTMLElement>(".quote-choice-card")].map((card) => {
+        const label = card.querySelector<HTMLElement>("strong");
+        const rect = card.getBoundingClientRect();
+        const labelRect = label?.getBoundingClientRect();
+        const labelStyle = label ? getComputedStyle(label) : null;
+        return {
+          width: rect.width,
+          height: rect.height,
+          labelWidth: labelRect?.width ?? 0,
+          wordBreak: labelStyle?.wordBreak ?? "",
+        };
+      });
+      const progress = document.querySelector<HTMLElement>(".quote-progress__steps");
+      const builder = document.querySelector<HTMLElement>(".quote-builder");
+      const summary = document.querySelector<HTMLElement>(".quote-summary");
+      const builderRect = builder?.getBoundingClientRect();
+      const summaryRect = summary?.getBoundingClientRect();
+
+      return {
+        viewportWidth: document.documentElement.clientWidth,
+        documentWidth: document.documentElement.scrollWidth,
+        progressColumns: progress
+          ? getComputedStyle(progress).gridTemplateColumns.split(/\s+/).filter(Boolean).length
+          : 0,
+        builderRight: builderRect?.right ?? 0,
+        summaryRight: summaryRect?.right ?? 0,
+        cards: cardMetrics,
+      };
+    });
+
+    expect(layout.documentWidth).toBeLessThanOrEqual(layout.viewportWidth + 1);
+    expect(layout.progressColumns).toBe(4);
+    expect(layout.builderRight).toBeLessThanOrEqual(layout.viewportWidth + 1);
+    expect(layout.summaryRight).toBeLessThanOrEqual(layout.viewportWidth + 1);
+    expect(layout.cards.every((card) => card.height <= 96)).toBe(true);
+    expect(layout.cards.every((card) => card.labelWidth >= 120)).toBe(true);
+    expect(layout.cards.every((card) => card.wordBreak === "normal")).toBe(true);
+  }
+});
+
 test("industry query pre-fills the guided project brief", async ({ page }) => {
   await page.goto("/get-started?industry=home-services");
   await expect(page.getByLabel("Industry")).toHaveValue("Home Services");
