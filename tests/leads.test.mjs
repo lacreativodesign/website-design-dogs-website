@@ -37,7 +37,8 @@ const leadEnvelope = {
   contact: {
     fullName: 'Jane Smith',
     email: 'jane@example.com',
-    phone: '+1 555 0100',
+    phone: '+14159002374',
+    phoneCountry: 'US',
   },
   business: {
     name: 'Acme Ltd',
@@ -148,7 +149,7 @@ test('Bizosto payload preserves enquiry details, attribution, and checked consen
 
   assert.equal(payload.lead.name, 'Jane Smith');
   assert.equal(payload.lead.email, 'jane@example.com');
-  assert.equal(payload.lead.phone, '+1 555 0100');
+  assert.equal(payload.lead.phone, '+14159002374');
   assert.equal(payload.lead.company, 'Acme Ltd');
   assert.equal(payload.lead.source, 'website');
   assert.match(payload.lead.message, /Preferred package: Starter/);

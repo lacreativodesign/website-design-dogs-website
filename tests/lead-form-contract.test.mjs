@@ -92,22 +92,47 @@ test('get-started uses one primary submit action and renders a dedicated confirm
   assert.doesNotMatch(source, /setStep\(0\)/);
 });
 
-test('phone number remains mandatory across every WDD website lead form', () => {
+test('phone number remains mandatory and country-aware across every WDD website lead form', () => {
   const contact = fs.readFileSync('src/components/forms/contact-form.tsx', 'utf8');
   const quote = fs.readFileSync('src/components/forms/quote-form.tsx', 'utf8');
   const campaign = fs.readFileSync('src/components/campaigns/campaign-lead-form.tsx', 'utf8');
   const submission = fs.readFileSync('src/components/forms/submission.ts', 'utf8');
   const validation = fs.readFileSync('src/lib/leads/validation.ts', 'utf8');
+  const phone = fs.readFileSync('src/lib/leads/phone.ts', 'utf8');
 
   for (const source of [contact, quote, campaign]) {
-    assert.match(source, /nextErrors\.phone\s*=\s*"Enter your phone number\."/);
-    assert.match(source, /label="Phone number"[\s\S]{0,100}required/);
-    assert.match(source, /aria-invalid=\{Boolean\(errors\.phone\)\}/);
+    assert.match(source, /normalizePhoneNumber/);
+    assert.match(source, /Enter a valid phone number for the selected country/);
+    assert.match(source, /label="Phone number"[\s\S]{0,160}required/);
+    assert.match(source, /InternationalPhoneInput/);
   }
 
-  assert.match(validation, /req\(p\.contact\?\.phone, "phone", 7, 40, errs\)/);
-  assert.match(validation, /contact: \{ fullName, email: mail, phone \}/);
+  assert.match(phone, /code: "US"/);
+  assert.match(phone, /name: "United States"/);
+  assert.match(phone, /code: "INTL"/);
+  assert.match(phone, /Other international/);
+  assert.match(phone, /return isE164Phone\(normalized\)/);
+  assert.match(validation, /isE164Phone\(phone\)/);
+  assert.match(validation, /isPhoneCountryCode\(rawPhoneCountry\)/);
+  assert.match(validation, /phoneCountry/);
+  assert.match(validation, /normalizePhoneNumber\(phoneCountry, phone\) !== phone/);
   assert.doesNotMatch(submission, /phone\?: string/);
+});
+
+test('get-started uses a structured industry selector with a required Other path', () => {
+  const quote = fs.readFileSync('src/components/forms/quote-form.tsx', 'utf8');
+  const industries = fs.readFileSync('src/content/lead-industries.ts', 'utf8');
+  const validation = fs.readFileSync('src/lib/leads/validation.ts', 'utf8');
+
+  assert.match(quote, /Select your industry/);
+  assert.match(quote, /leadIndustryOptions\.map/);
+  assert.match(quote, /industryChoice === "Other"/);
+  assert.match(quote, /Please specify your industry/);
+  assert.match(quote, /Tell us your industry/);
+  assert.match(industries, /Home Services/);
+  assert.match(industries, /Technology \/ SaaS/);
+  assert.match(industries, /Other/);
+  assert.match(validation, /if \(!industry \|\| industry === "Other"\) errs\.industry/);
 });
 
 test('successful lead UX tells customers to check their inbox when confirmation email is sent', () => {

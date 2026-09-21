@@ -1,3 +1,5 @@
+import type { PhoneCountryCode } from "./phone";
+
 export type FormType = "contact" | "quote" | "campaign";
 
 export type LeadResponseCode =
@@ -59,6 +61,7 @@ export type LeadSubmissionEnvelope = {
     fullName: string;
     email: string;
     phone: string;
+    phoneCountry: PhoneCountryCode;
   };
   business: {
     name: string;
@@ -116,6 +119,7 @@ export type ClientLeadPayload = {
     fullName?: string;
     email?: string;
     phone?: string;
+    phoneCountry?: string;
   };
   business?: {
     name?: string;

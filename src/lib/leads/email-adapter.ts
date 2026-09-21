@@ -2,6 +2,7 @@ import { setTimeout as delay } from "timers/promises";
 import { LeadError } from "./errors";
 import type { LeadConfig } from "./request-security";
 import type { LeadSubmissionEnvelope } from "./types";
+import { phoneCountryName } from "./phone";
 
 export type EmailDeliveryResult = {
   upstreamStatus: number;
@@ -64,6 +65,7 @@ function customerRows(envelope: LeadSubmissionEnvelope) {
     ["Name", envelope.contact.fullName],
     ["Email", envelope.contact.email],
     ["Phone", envelope.contact.phone],
+    ["Phone country", phoneCountryName(envelope.contact.phoneCountry)],
     ["Business", envelope.business.name],
     ["Website", envelope.business.website],
     ["Industry", envelope.business.industry],
@@ -129,6 +131,7 @@ export function toLeadEmailText(envelope: LeadSubmissionEnvelope) {
     `Name: ${inline(envelope.contact.fullName)}`,
     `Email: ${inline(envelope.contact.email)}`,
     ...optionalLine("Phone", envelope.contact.phone),
+    ...optionalLine("Phone country", phoneCountryName(envelope.contact.phoneCountry)),
     "",
     "BUSINESS",
     `Business: ${inline(envelope.business.name)}`,

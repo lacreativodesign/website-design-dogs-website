@@ -5,9 +5,14 @@ import { useCallback, useRef, useState } from "react";
 import { campaignEvent } from "@/components/forms/analytics-events";
 import { getAttribution } from "@/components/forms/attribution";
 import { Field, inputClass } from "@/components/forms/form-field";
+import { InternationalPhoneInput } from "@/components/forms/international-phone-input";
 import { submitLead } from "@/components/forms/submission";
 import { TurnstileWidget } from "@/components/forms/turnstile-widget";
 import { Button } from "@/components/ui/button";
+import {
+  normalizePhoneNumber,
+  type PhoneCountryCode,
+} from "@/lib/leads/phone";
 import { Card } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
@@ -26,6 +31,7 @@ type Fields = {
   businessName: string;
   email: string;
   phone: string;
+  phoneCountry: PhoneCountryCode;
   website: string;
   projectType: string;
   note: string;
@@ -38,6 +44,7 @@ const initial: Fields = {
   businessName: "",
   email: "",
   phone: "",
+  phoneCountry: "US",
   website: "",
   projectType: "New Website",
   note: "",
@@ -105,8 +112,8 @@ export function CampaignLeadForm({ campaignSlug }: Props) {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(values.email)) {
       nextErrors.email = "Enter a valid email address.";
     }
-    if (!values.phone.trim()) {
-      nextErrors.phone = "Enter your phone number.";
+    if (!normalizePhoneNumber(values.phoneCountry, values.phone)) {
+      nextErrors.phone = "Enter a valid phone number for the selected country.";
     }
     if (hasInvalidUrl(values.website)) {
       nextErrors.website = "Enter a valid public URL.";
@@ -138,7 +145,8 @@ export function CampaignLeadForm({ campaignSlug }: Props) {
         contact: {
           fullName: values.fullName,
           email: values.email,
-          phone: values.phone,
+          phone: normalizePhoneNumber(values.phoneCountry, values.phone)!,
+          phoneCountry: values.phoneCountry,
         },
         business: {
           name: values.businessName,
@@ -296,15 +304,15 @@ export function CampaignLeadForm({ campaignSlug }: Props) {
                 label="Phone number"
                 required
                 error={errors.phone}
+                hint="United States (+1) is selected by default. Change the country for international numbers."
               >
-                <input
+                <InternationalPhoneInput
                   id="phone"
-                  type="tel"
-                  autoComplete="tel"
-                  className={inputClass}
-                  value={values.phone}
-                  onChange={(event) => update("phone", event.target.value)}
-                  aria-invalid={Boolean(errors.phone)}
+                  country={values.phoneCountry}
+                  number={values.phone}
+                  onCountryChange={(country) => update("phoneCountry", country)}
+                  onNumberChange={(number) => update("phone", number)}
+                  invalid={Boolean(errors.phone)}
                 />
               </Field>
             </div>
