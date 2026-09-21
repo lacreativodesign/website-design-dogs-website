@@ -1,14 +1,19 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { PortfolioConcept } from "@/content/portfolio";
+
+type PortfolioGalleryVariant = "live" | "thumbnail";
 
 export function PortfolioGallery({
   concepts,
   className = "",
+  variant = "live",
 }: {
   concepts: readonly PortfolioConcept[];
   className?: string;
+  variant?: PortfolioGalleryVariant;
 }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -80,12 +85,15 @@ export function PortfolioGallery({
 
   return (
     <>
-      <div className={`portfolio-image-grid ${className}`}>
+      <div
+        className={`portfolio-image-grid ${className}`}
+        data-gallery-variant={variant}
+      >
         {concepts.map((concept, index) => (
           <button
             key={concept.id}
             type="button"
-            className="portfolio-thumbnail"
+            className={`portfolio-thumbnail${variant === "thumbnail" ? " portfolio-thumbnail--image" : ""}`}
             data-concept-id={concept.id}
             aria-label={`Open live ${concept.title}`}
             onClick={(event) => {
@@ -93,17 +101,38 @@ export function PortfolioGallery({
               setActiveIndex(index);
             }}
           >
-            <span className="portfolio-thumbnail__preview" aria-hidden="true">
-              <iframe
-                src={concept.liveUrl}
-                title={`${concept.brand} preview`}
-                tabIndex={-1}
-                loading="lazy"
-                className="portfolio-thumbnail__preview-frame"
-              />
-            </span>
+            {variant === "thumbnail" ? (
+              <span className="portfolio-thumbnail__image-wrap" aria-hidden="true">
+                <Image
+                  src={concept.thumbnail}
+                  alt=""
+                  fill
+                  sizes="(max-width: 599px) 92vw, (max-width: 899px) 45vw, 24vw"
+                  className="portfolio-thumbnail__image"
+                />
+              </span>
+            ) : (
+              <span className="portfolio-thumbnail__preview" aria-hidden="true">
+                <iframe
+                  src={concept.liveUrl}
+                  title={`${concept.brand} preview`}
+                  tabIndex={-1}
+                  loading="lazy"
+                  className="portfolio-thumbnail__preview-frame"
+                />
+              </span>
+            )}
             <span aria-hidden="true" className="portfolio-thumbnail__overlay" />
             <span className="portfolio-thumbnail__label">Concept Design</span>
+            {variant === "thumbnail" ? (
+              <span className="portfolio-thumbnail__meta" aria-hidden="true">
+                <span>
+                  <strong>{concept.brand}</strong>
+                  <small>{concept.industries[0]}</small>
+                </span>
+                <b>↗</b>
+              </span>
+            ) : null}
           </button>
         ))}
       </div>
