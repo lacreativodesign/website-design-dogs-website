@@ -381,6 +381,7 @@ export function QuoteForm({
   const [formStartedAt] = useState(() => new Date().toISOString());
   const [reference, setReference] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [confirmationEmailSent, setConfirmationEmailSent] = useState(false);
   const [verifying, setVerifying] = useState(false);
   const [verificationExecuteKey, setVerificationExecuteKey] = useState(0);
   const [attribution] = useState(getAttribution);
@@ -597,6 +598,7 @@ export function QuoteForm({
         pagePath: location.pathname,
       });
       setReference(response.referenceId || "");
+      setConfirmationEmailSent(response.confirmationEmailSent === true);
       setErrors({});
       setSubmitted(true);
     } else {
@@ -642,6 +644,19 @@ export function QuoteForm({
           respond using the contact information you provided. You do not need to
           submit it again.
         </p>
+        {confirmationEmailSent ? (
+          <p className="mx-auto mt-4 max-w-2xl rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-accent-soft)] p-4 text-sm font-bold text-[var(--color-text)]">
+            Check your inbox at {data.contact.email}. We sent you a confirmation
+            email with a complete copy of your submitted brief and selected package
+            for your records. If you do not see it within a few minutes, check your
+            spam or junk folder.
+          </p>
+        ) : (
+          <p className="mx-auto mt-4 max-w-2xl text-sm text-[var(--color-text-muted)]">
+            Your request is safely recorded. We could not confirm delivery of the
+            receipt email, but our team still has your submission.
+          </p>
+        )}
         <div className="mx-auto mt-7 grid max-w-2xl gap-3 text-left sm:grid-cols-2">
           <div className="rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-section-alt)] p-4">
             <strong className="block">What happens next</strong>
