@@ -150,11 +150,12 @@ test('successful lead UX tells customers to check their inbox when confirmation 
   assert.match(email, /This email is your record of the information you submitted/);
 });
 
-test('phone country control stays compact without redundant helper copy', () => {
+test('phone country control stays compact, readable, and responsive for long dial codes', () => {
   const phone = fs.readFileSync(
     'src/components/forms/international-phone-input.tsx',
     'utf8',
   );
+  const countries = fs.readFileSync('src/lib/leads/phone.ts', 'utf8');
   const forms = [
     fs.readFileSync('src/components/forms/contact-form.tsx', 'utf8'),
     fs.readFileSync('src/components/forms/quote-form.tsx', 'utf8'),
@@ -162,10 +163,17 @@ test('phone country control stays compact without redundant helper copy', () => 
   ];
 
   assert.match(phone, /country === "INTL" \? "INTL" : country/);
-  assert.match(phone, /selected\?\.dialCode/);
+  assert.match(phone, /\+\{selected\.dialCode\}/);
+  assert.match(phone, /whitespace-nowrap/);
+  assert.match(phone, /min-w-0/);
+  assert.match(phone, /min-\[360px\]:grid-cols-\[8\.25rem_minmax\(0,1fr\)\]/);
+  assert.doesNotMatch(phone, /truncate/);
   assert.match(phone, /option\.name/);
   assert.match(phone, /opacity-0/);
   assert.match(phone, /Phone country/);
+  assert.match(countries, /dialCode: "965"/);
+  assert.match(countries, /dialCode: "966"/);
+  assert.match(countries, /dialCode: "971"/);
 
   for (const source of forms) {
     assert.doesNotMatch(
