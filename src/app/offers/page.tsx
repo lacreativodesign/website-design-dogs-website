@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRightIcon, BrandIcon } from "@/components/ui/icon";
 import { PlatformLogo } from "@/components/platforms/platform-glyph";
+import { PortfolioGallery } from "@/components/portfolio/portfolio-gallery";
 import { mascotDesigner } from "@/content/illustrations";
 import {
   featuredOfferPortfolioIds,
@@ -102,10 +103,10 @@ export default function OffersPage() {
             </div>
 
             <div className={styles.heroSignals} aria-label="Offer commitments">
-              <span>October booking window</span>
-              <span>Eligible website services</span>
-              <span>Scope confirmed first</span>
-              <span>Third-party costs separated</span>
+              <span>Limited October booking window</span>
+              <span>Qualifying website services</span>
+              <span>No surprise WDD service fees</span>
+              <span>Real people, real support</span>
             </div>
           </div>
 
@@ -151,8 +152,8 @@ export default function OffersPage() {
       <section className={styles.platformStrip} aria-label="Website platforms supported by Website Design Dogs">
         <div className={styles.platformStripInner}>
           <div className={styles.platformIntro}>
-            <small>BUILT AROUND YOUR BUSINESS</small>
-            <strong>Platform fit, not platform bias.</strong>
+            <small>WE BUILD ON LEADING WEBSITE PLATFORMS</small>
+            <strong>Choose the right platform for the job.</strong>
           </div>
           <div className={styles.platformGrid}>
             {visiblePlatforms.map((platform) => (
@@ -198,12 +199,12 @@ export default function OffersPage() {
       <section className={[styles.section, styles.portfolioSection].join(" ")}>
         <div className={[styles.sectionHeading, "offer-section__heading"].join(" ")}>
           <div>
-            <p className={styles.eyebrow}>Featured portfolio</p>
-            <h2>Distinct concepts. Serious design direction.</h2>
+            <p className={styles.eyebrow}>Featured website concepts</p>
+            <h2>See the design quality before you book.</h2>
           </div>
           <div className={styles.sectionAside}>
             <p>
-              Open any concept to explore the complete responsive experience. Every item remains clearly labeled as concept design—not completed client work.
+              These are clearly labeled WDD concept designs, not completed client projects. Select a thumbnail to open the full interactive website in a lightbox.
             </p>
             <Link className={styles.outlineLink} href="/portfolio">
               View Full Portfolio <ArrowRightIcon />
@@ -211,29 +212,11 @@ export default function OffersPage() {
           </div>
         </div>
 
-        <div className={styles.portfolioGrid}>
-          {featuredConcepts.map((concept) => (
-            <Link key={concept.id} href={concept.liveUrl} className={[styles.portfolioCard, "offer-portfolio-card"].join(" ")}>
-              <div className={styles.portfolioImage}>
-                <Image
-                  src={concept.thumbnail}
-                  alt={concept.title}
-                  width={960}
-                  height={600}
-                  sizes="(max-width: 640px) 92vw, (max-width: 1024px) 44vw, 22vw"
-                />
-                <span>Concept Design</span>
-              </div>
-              <div className={styles.portfolioMeta}>
-                <div>
-                  <h3>{concept.brand}</h3>
-                  <p>{concept.industries[0]}</p>
-                </div>
-                <b aria-hidden="true">↗</b>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <PortfolioGallery
+          concepts={featuredConcepts}
+          variant="thumbnail"
+          className={styles.offerPortfolioGallery}
+        />
       </section>
 
       <section id="offer-pricing" className={[styles.section, styles.pricingSection].join(" ")}>
@@ -369,7 +352,7 @@ export default function OffersPage() {
             <h2>Real process. Clear responsibilities.</h2>
           </div>
           <p>
-            We do not use fabricated testimonials, ratings, or performance claims. The proof on this page is the work, the scope discipline, and the process you can inspect before booking.
+            Know what happens before, during, and after the build. These commitments stay visible from scope approval through responsive QA, launch preparation, and handoff.
           </p>
         </div>
         <div className={styles.proofGrid}>

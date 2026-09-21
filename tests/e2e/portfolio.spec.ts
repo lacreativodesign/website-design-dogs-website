@@ -1,11 +1,11 @@
 import { expect, test } from "@playwright/test";
 import { expectNoOverflow } from "./helpers";
 
-test("Portfolio presents twelve live, labelled design concepts", async ({ page }) => {
+test("Portfolio presents twenty live, labelled design concepts", async ({ page }) => {
   await page.goto("/portfolio");
-  await expect(page.locator("[data-concept-id]")).toHaveCount(12);
-  await expect(page.locator(".portfolio-thumbnail")).toHaveCount(12);
-  await expect(page.locator(".portfolio-thumbnail__label")).toHaveCount(12);
+  await expect(page.locator("[data-concept-id]")).toHaveCount(20);
+  await expect(page.locator(".portfolio-thumbnail")).toHaveCount(20);
+  await expect(page.locator(".portfolio-thumbnail__label")).toHaveCount(20);
   await expect(page.locator(".portfolio-thumbnail__label").first()).toHaveText(
     "Concept Design",
   );
@@ -13,6 +13,8 @@ test("Portfolio presents twelve live, labelled design concepts", async ({ page }
     "src",
     /\/portfolio\/live\?concept=roofing/,
   );
+  await expect(page.locator('[data-concept-id="saas-launch"]')).toHaveCount(1);
+  await expect(page.locator('[data-concept-id="client-portal"]')).toHaveCount(1);
   await expect(page.locator(".portfolio-thumbnail").first()).toHaveCSS(
     "border-top-width",
     "0px",
@@ -36,7 +38,7 @@ test("Portfolio opens a full interactive website without a caption box", async (
   const dialog = page.locator(".portfolio-lightbox");
   await expect(dialog).toBeVisible();
   await expect(dialog.locator("figcaption")).toHaveCount(0);
-  await expect(dialog.locator(".portfolio-lightbox__status")).toContainText("1 of 12");
+  await expect(dialog.locator(".portfolio-lightbox__status")).toContainText("1 of 20");
 
   const conceptFrame = page.frameLocator(".portfolio-lightbox__site");
   await expect(conceptFrame.locator("#top")).toBeVisible();
@@ -49,9 +51,9 @@ test("Portfolio opens a full interactive website without a caption box", async (
     .toBe(true);
 
   await page.keyboard.press("ArrowLeft");
-  await expect(dialog.locator(".portfolio-lightbox__status")).toContainText("12 of 12");
+  await expect(dialog.locator(".portfolio-lightbox__status")).toContainText("20 of 20");
   await page.keyboard.press("ArrowRight");
-  await expect(dialog.locator(".portfolio-lightbox__status")).toContainText("1 of 12");
+  await expect(dialog.locator(".portfolio-lightbox__status")).toContainText("1 of 20");
   await page.keyboard.press("Escape");
   await expect(dialog).not.toBeVisible();
   await expect(first).toBeFocused();
@@ -77,7 +79,7 @@ test("Portfolio supports keyboard-operable industry and website-type filtering",
   });
   await healthAndWellness.click();
   await expect(healthAndWellness).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("[data-concept-id]")).toHaveCount(3);
+  await expect(page.locator("[data-concept-id]")).toHaveCount(4);
   await expect(page.locator("[data-browse-mode='industry']")).toHaveAttribute(
     "data-active-filter",
     "Health, Wellness & Beauty",
