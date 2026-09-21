@@ -115,6 +115,7 @@ test('phone number remains mandatory and country-aware across every WDD website 
   assert.match(validation, /isE164Phone\(phone\)/);
   assert.match(validation, /isPhoneCountryCode\(rawPhoneCountry\)/);
   assert.match(validation, /phoneCountry/);
+  assert.match(validation, /normalizePhoneNumber\(phoneCountry, phone\) !== phone/);
   assert.doesNotMatch(submission, /phone\?: string/);
 });
 
@@ -131,7 +132,7 @@ test('get-started uses a structured industry selector with a required Other path
   assert.match(industries, /Home Services/);
   assert.match(industries, /Technology \/ SaaS/);
   assert.match(industries, /Other/);
-  assert.match(validation, /if \(!industry\) errs\.industry/);
+  assert.match(validation, /if \(!industry \|\| industry === "Other"\) errs\.industry/);
 });
 
 test('successful lead UX tells customers to check their inbox when confirmation email is sent', () => {
