@@ -85,7 +85,6 @@ export type LeadSubmissionEnvelope = {
     details?: string;
   };
   package?: {
-    preferred?: string;
     budget: string;
     timing: string;
   };
@@ -145,7 +144,6 @@ export type ClientLeadPayload = {
     note?: string;
   };
   package?: {
-    preferred?: string;
     budget?: string;
     timing?: string;
   };
