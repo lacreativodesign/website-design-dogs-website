@@ -33,7 +33,8 @@ export const currentSeasonalOffer: SeasonalOffer = {
   endsAt: "2026-10-31",
   endsLabel: "Offer ends October 31, 2026",
   ctaLabel: "Get Started",
-  ctaHref: "/get-started?offer=october-2026-40-off",
+  ctaHref:
+    "/get-started?service=website-design&utm_source=website&utm_medium=offer-page&utm_campaign=october-2026-40-off&utm_content=hero",
   secondaryCtaLabel: "View Packages",
   secondaryCtaHref: "#offer-pricing",
   featuredPackageSlugs: ["starter", "business", "commerce-launch"],
@@ -65,4 +66,23 @@ export function getFeaturedOfferPackages(offer = currentSeasonalOffer) {
   return offer.featuredPackageSlugs
     .map((slug) => packageBySlug.get(slug))
     .filter((item): item is NonNullable<typeof item> => Boolean(item));
+}
+
+export function getOfferQuoteHref({
+  offer = currentSeasonalOffer,
+  serviceSlug,
+  content,
+}: {
+  offer?: SeasonalOffer;
+  serviceSlug: string;
+  content: string;
+}) {
+  const params = new URLSearchParams({
+    service: serviceSlug,
+    utm_source: "website",
+    utm_medium: "offer-page",
+    utm_campaign: offer.id,
+    utm_content: content,
+  });
+  return `/get-started?${params.toString()}`;
 }
