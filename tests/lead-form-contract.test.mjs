@@ -150,3 +150,28 @@ test('successful lead UX tells customers to check their inbox when confirmation 
   assert.match(email, /This email is your record of the information you submitted/);
 });
 
+test('phone country control stays compact without redundant helper copy', () => {
+  const phone = fs.readFileSync(
+    'src/components/forms/international-phone-input.tsx',
+    'utf8',
+  );
+  const forms = [
+    fs.readFileSync('src/components/forms/contact-form.tsx', 'utf8'),
+    fs.readFileSync('src/components/forms/quote-form.tsx', 'utf8'),
+    fs.readFileSync('src/components/campaigns/campaign-lead-form.tsx', 'utf8'),
+  ];
+
+  assert.match(phone, /country === "INTL" \? "INTL" : country/);
+  assert.match(phone, /selected\?\.dialCode/);
+  assert.match(phone, /option\.name/);
+  assert.match(phone, /opacity-0/);
+  assert.match(phone, /Phone country/);
+
+  for (const source of forms) {
+    assert.doesNotMatch(
+      source,
+      /United States \(\+1\) is selected by default\. Change the country for international numbers\./,
+    );
+  }
+});
+

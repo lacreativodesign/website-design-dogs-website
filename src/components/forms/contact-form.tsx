@@ -305,7 +305,6 @@ export function ContactForm() {
           label="Phone number"
           required
           error={errors.phone}
-          hint="United States (+1) is selected by default. Change the country for international numbers."
         >
           <InternationalPhoneInput
             id="phone"
