@@ -1,0 +1,49 @@
+import { expect, test } from "@playwright/test";
+import { expectNoOverflow } from "./helpers";
+
+test("Offers presents featured concepts as image thumbnails with a lightbox", async ({ page }) => {
+  await page.goto("/offers");
+
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("NO TRICKS.");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("JUST 40% OFF.");
+
+  const gallery = page.locator('[data-gallery-variant="thumbnail"]');
+  await expect(gallery).toBeVisible();
+  await expect(gallery.locator(".portfolio-thumbnail")).toHaveCount(4);
+  await expect(gallery.locator(".portfolio-thumbnail__image")).toHaveCount(4);
+  await expect(gallery.locator(".portfolio-thumbnail__preview-frame")).toHaveCount(0);
+  await expect(gallery.locator(".portfolio-thumbnail__label")).toHaveCount(4);
+  await expect(gallery.locator(".portfolio-thumbnail__label").first()).toHaveText(
+    "Concept Design",
+  );
+
+  const first = gallery.locator(".portfolio-thumbnail").first();
+  await first.click();
+
+  const dialog = page.locator(".portfolio-lightbox");
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator(".portfolio-lightbox__status")).toContainText("1 of 4");
+  await expect(dialog.locator(".portfolio-lightbox__site")).toHaveAttribute(
+    "src",
+    /\/portfolio\/live\?concept=roofing/,
+  );
+
+  await page.keyboard.press("ArrowRight");
+  await expect(dialog.locator(".portfolio-lightbox__status")).toContainText("2 of 4");
+  await page.keyboard.press("Escape");
+  await expect(dialog).not.toBeVisible();
+  await expect(first).toBeFocused();
+
+  await expectNoOverflow(page);
+});
+
+test("Offers keeps truthful pricing and campaign attribution", async ({ page }) => {
+  await page.goto("/offers");
+
+  await expect(page.locator(".offer-package-card")).toHaveCount(4);
+  await expect(page.getByText("$299.40", { exact: true }).first()).toBeVisible();
+
+  const offerLinks = page.locator('a[href*="utm_campaign=october-2026-40-off"]');
+  await expect(offerLinks.first()).toBeVisible();
+  expect(await offerLinks.count()).toBeGreaterThanOrEqual(4);
+});
