@@ -101,6 +101,14 @@ function customerRows(envelope: LeadSubmissionEnvelope) {
     );
   }
 
+  rows.push(
+    ["Contact consent", envelope.consent.contact ? "Yes" : "No"],
+    [
+      "Privacy policy acknowledgement",
+      envelope.consent.privacyPolicy ? "Yes" : "No",
+    ],
+  );
+
   return rows.filter(([, value]) => inline(value).length > 0);
 }
 
