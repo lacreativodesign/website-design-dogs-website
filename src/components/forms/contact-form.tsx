@@ -12,8 +12,10 @@ import { packageBySlug } from "@/content/packages";
 import { serviceBySlug } from "@/content/services";
 import { SERVICES } from "@/lib/leads/constants";
 import { leadEvent } from "./analytics-events";
+import { normalizePhoneNumber } from "@/lib/leads/phone";
 import { getAttribution } from "./attribution";
 import { Field, inputClass } from "./form-field";
+import { InternationalPhoneInput } from "./international-phone-input";
 import {
   submitLead,
   type ContactRequestPayload,
@@ -25,6 +27,7 @@ const empty: ContactRequestPayload = {
   businessName: "",
   email: "",
   phone: "",
+  phoneCountry: "US",
   website: "",
   service: "",
   summary: "",
@@ -136,8 +139,8 @@ export function ContactForm() {
     if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
       nextErrors.email = "Enter a valid email address.";
     }
-    if (!formData.phone?.trim()) {
-      nextErrors.phone = "Enter your phone number.";
+    if (!normalizePhoneNumber(formData.phoneCountry, formData.phone)) {
+      nextErrors.phone = "Enter a valid phone number for the selected country.";
     }
     if (formData.website && !validUrl(formData.website)) {
       nextErrors.website = "Enter a full URL, including https://.";
@@ -185,7 +188,14 @@ export function ContactForm() {
       pagePath: location.pathname,
     });
 
-    const result = await submitLead(formData, {
+    const normalizedPhone = normalizePhoneNumber(
+      formData.phoneCountry,
+      formData.phone,
+    )!;
+
+    const result = await submitLead(
+      { ...formData, phone: normalizedPhone },
+      {
       submissionId,
       formStartedAt,
       turnstileToken: turnstile,
@@ -193,7 +203,8 @@ export function ContactForm() {
         .get("company-url")
         ?.toString(),
       attribution: getAttribution(),
-    });
+      },
+    );
 
     setSubmitting(false);
     setStatus(result.message);
@@ -294,15 +305,15 @@ export function ContactForm() {
           label="Phone number"
           required
           error={errors.phone}
+          hint="United States (+1) is selected by default. Change the country for international numbers."
         >
-          <input
+          <InternationalPhoneInput
             id="phone"
-            type="tel"
-            autoComplete="tel"
-            className={inputClass}
-            value={formData.phone}
-            onChange={(event) => set("phone", event.target.value)}
-            aria-invalid={Boolean(errors.phone)}
+            country={formData.phoneCountry}
+            number={formData.phone}
+            onCountryChange={(country) => set("phoneCountry", country)}
+            onNumberChange={(number) => set("phone", number)}
+            invalid={Boolean(errors.phone)}
           />
         </Field>
       </div>
