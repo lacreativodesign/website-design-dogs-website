@@ -478,7 +478,6 @@ export function QuoteForm({
     const nextStep = Math.min(4, step + 1);
 
     if (step === 2) {
-      const nextOptions = packageOptionsFor(data);
       const nextRecommendation = recommendationFor(data);
       setData((current) => ({
         ...current,
