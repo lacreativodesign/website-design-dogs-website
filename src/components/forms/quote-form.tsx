@@ -342,7 +342,14 @@ export function QuoteForm({
   const stageHeadingRef = useRef<HTMLHeadingElement>(null);
   const statusRef = useRef<HTMLParagraphElement>(null);
   const packageOptions = packageOptionsFor(data);
-  const recommendation = recommendationFor(data, packageOptions, requestedPackage);
+  const recommendation = recommendationFor(data);
+  const activeScopeQuestions =
+    data.project.primaryType && data.project.primaryType !== "not-sure"
+      ? scopeQuestions[data.project.primaryType]
+      : null;
+  const additionalNeeds = data.project.types.filter(
+    (type) => !primaryLabels.has(type),
+  );
   const onToken = useCallback((token: string) => {
     turnstileTokenRef.current = token;
     setTurnstileToken(token);
@@ -392,16 +399,19 @@ export function QuoteForm({
       }
     }
 
-    if (targetStep === 1 && data.project.types.length === 0) {
-      nextErrors.types = "Select at least one project type.";
+    if (targetStep === 1 && !data.project.primaryType) {
+      nextErrors.primaryType = "Choose the primary service you need.";
     }
 
     if (targetStep === 2) {
-      if (!data.project.pages) nextErrors.pages = "Choose an estimated page count.";
-      if (!data.project.goal.trim()) nextErrors.goal = "Enter the main business goal.";
-      if (data.project.features.length === 0) {
-        nextErrors.features = "Select at least one feature or Not sure yet.";
+      if (
+        data.project.primaryType &&
+        data.project.primaryType !== "not-sure" &&
+        (!data.project.scope.size || !data.project.scope.complexity)
+      ) {
+        nextErrors.scope = "Answer both package-fit questions.";
       }
+      if (!data.project.goal.trim()) nextErrors.goal = "Enter the main business goal.";
       if (!data.project.contentStatus) {
         nextErrors.contentStatus = "Choose a content status.";
       }
@@ -423,7 +433,7 @@ export function QuoteForm({
         nextErrors.notWorking = "Share what is not working today.";
       }
       if (data.project.accomplish.trim().length < 10) {
-        nextErrors.accomplish = "Share what the new website should accomplish.";
+        nextErrors.accomplish = "Share what this project should accomplish.";
       }
       if (!data.consent) nextErrors.consent = "Confirm consent to be contacted.";
     }
@@ -459,16 +469,12 @@ export function QuoteForm({
 
     if (step === 2) {
       const nextOptions = packageOptionsFor(data);
-      const nextRecommendation = recommendationFor(
-        data,
-        nextOptions,
-        requestedPackage,
-      );
+      const nextRecommendation = recommendationFor(data);
       const currentChoiceIsValid = nextOptions.some(
         ({ value }) => value === data.package.preferred,
       );
 
-      if (!currentChoiceIsValid) {
+      if (!requestedPackage || !currentChoiceIsValid) {
         setData((current) => ({
           ...current,
           package: {
@@ -583,10 +589,9 @@ export function QuoteForm({
     requestAnimationFrame(() => statusRef.current?.focus());
   }
 
-  const summaryProject =
-    data.project.types.length > 0
-      ? data.project.types.slice(0, 2).join(", ")
-      : "Not chosen yet";
+  const summaryProject = data.project.primaryType
+    ? primaryLabel(data.project.primaryType)
+    : "Not chosen yet";
   const summaryPackage = data.package.preferred || "Not chosen yet";
 
   if (submitted) {
