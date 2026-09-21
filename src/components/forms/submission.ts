@@ -60,7 +60,7 @@ export type QuoteRequestPayload = {
     industry: string;
   };
   project: {
-    primaryType: PrimaryProjectType;
+    primaryType: PrimaryProjectType | "";
     scope: RecommendationScope;
     types: string[];
     pages: string;
