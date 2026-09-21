@@ -67,6 +67,10 @@ test('server Turnstile action map covers every approved lead form', () => {
 test('get-started stays a simple four-step quote request with no package recommendation', () => {
   const source = fs.readFileSync('src/components/forms/quote-form.tsx', 'utf8');
   const validation = fs.readFileSync('src/lib/leads/validation.ts', 'utf8');
+  const types = fs.readFileSync('src/lib/leads/types.ts', 'utf8');
+  const constants = fs.readFileSync('src/lib/leads/constants.ts', 'utf8');
+  const styles = fs.readFileSync('src/app/globals.css', 'utf8');
+  const privacy = fs.readFileSync('src/app/privacy-policy/page.tsx', 'utf8');
 
   assert.match(source, /Step \{step \+ 1\} of 4/);
   assert.match(source, /Project Type/);
@@ -81,6 +85,21 @@ test('get-started stays a simple four-step quote request with no package recomme
   assert.doesNotMatch(validation, /package-fit/);
   assert.doesNotMatch(validation, /primaryType/);
   assert.doesNotMatch(validation, /scopeInput/);
+  assert.doesNotMatch(types, /preferred\?: string/);
+  assert.doesNotMatch(constants, /export const PACKAGES/);
+  assert.doesNotMatch(styles, /\.quote-recommendation/);
+  assert.doesNotMatch(styles, /\.quote-package-option/);
+  assert.doesNotMatch(styles, /\.quote-package-fieldset/);
+  assert.match(
+    styles,
+    /\.quote-progress__steps\s*\{[\s\S]{0,180}grid-template-columns:\s*repeat\(4,/,
+  );
+  assert.match(
+    styles,
+    /\.quote-choice-card\s*\{[\s\S]{0,180}min-width:\s*0/,
+  );
+  assert.doesNotMatch(privacy, /optional phone number/);
+  assert.doesNotMatch(privacy, /package preference/);
 });
 
 test('get-started uses one primary submit action and renders a dedicated confirmation state', () => {
