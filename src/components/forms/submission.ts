@@ -4,6 +4,10 @@ import type {
 } from "@/lib/leads/types";
 import { getMetaTrackingContext } from "@/lib/tracking/meta-browser";
 import type { PhoneCountryCode } from "@/lib/leads/phone";
+import type {
+  PrimaryProjectType,
+  RecommendationScope,
+} from "@/lib/leads/package-recommendation";
 
 export type ContactRequestPayload = {
   fullName: string;
@@ -56,6 +60,8 @@ export type QuoteRequestPayload = {
     industry: string;
   };
   project: {
+    primaryType: PrimaryProjectType;
+    scope: RecommendationScope;
     types: string[];
     pages: string;
     goal: string;
