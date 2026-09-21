@@ -42,10 +42,10 @@ This checklist tracks the approved dark and light mockup rebuild across the cont
 
 ## `/portfolio`
 
-- [x] Desktop dark: wide scenic hero, compact filters, twelve design concept cards.
-- [x] Desktop light: portfolio scene and cards switch to light treatment.
-- [x] Mobile dark: filters wrap and card grid stacks.
-- [x] Mobile light: labels and categories remain legible.
+- [x] Desktop dark: wide scenic hero, expanded filters, twenty clearly labelled interactive design concepts.
+- [x] Desktop dark: original twelve directions remain intact; eight additional concepts use distinct art direction and layout systems.
+- [x] Mobile dark: filters wrap, concept grid stacks, and interactive lightbox remains keyboard/touch usable.
+- [x] Public launch remains dark-theme only; no light-theme portfolio surface is exposed.
 - [x] Header: compact global shell.
 - [x] Hero: no generic PageHero card.
 - [x] Main content: concept cards show `DESIGN CONCEPT` and no fake client/result/live-site claims.

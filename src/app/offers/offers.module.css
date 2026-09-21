@@ -228,6 +228,7 @@
   border-radius: 0;
   background:
     linear-gradient(180deg, rgb(0 0 0 / 0.02), rgb(0 0 0 / 0.3)),
+    url("/campaigns/october-2026/hero-environment.svg") center / cover no-repeat,
     radial-gradient(circle at 74% 20%, rgb(255 189 116 / 0.34), transparent 7rem),
     radial-gradient(circle at 88% 56%, rgb(255 101 0 / 0.12), transparent 16rem),
     linear-gradient(140deg, rgb(17 40 58 / 0.45) 0%, rgb(32 50 65 / 0.5) 37%, rgb(92 47 20 / 0.5) 72%, rgb(33 19 13 / 0.48) 100%);
@@ -1179,10 +1180,22 @@
   box-shadow: 0 24px 54px rgb(0 0 0 / 0.25);
 }
 
+.visualPanel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: url("/campaigns/october-2026/why-environment.svg") center / cover no-repeat;
+  opacity: 0.24;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
 .visualPanel::after {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 1;
   background:
     linear-gradient(180deg, rgb(2 11 24 / 0.03), rgb(2 11 24 / 0.62) 100%),
     linear-gradient(90deg, rgb(2 11 24 / 0.2), transparent 50%);
@@ -1403,10 +1416,22 @@
   background: #07182c;
 }
 
+.faqArt::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: url("/campaigns/october-2026/faq-environment.svg") center / cover no-repeat;
+  opacity: 0.28;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
 .faqArt::after {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 1;
   background: linear-gradient(180deg, transparent 50%, rgb(2 11 24 / 0.45) 100%);
 }
 
@@ -1554,6 +1579,16 @@
   object-fit: cover;
   object-position: center;
   opacity: 0.84;
+}
+
+.finalCta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url("/campaigns/october-2026/cta-environment.svg") center / cover no-repeat;
+  opacity: 0.38;
+  pointer-events: none;
 }
 
 .finalCtaOverlay {

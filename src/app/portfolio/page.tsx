@@ -15,7 +15,7 @@ import { pageMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = pageMetadata({
   title: "Interactive Website Design Portfolio Concepts",
-  description: "Explore twelve original, interactive Website Design Dogs concepts with distinct industries, art direction, content, and responsive layouts.",
+  description: "Explore twenty original, interactive Website Design Dogs concepts with distinct industries, art direction, content, and responsive layouts.",
   path: "/portfolio",
 });
 
@@ -29,8 +29,8 @@ const portfolioStrategyIcons: BrandIconName[] = [
 const portfolioProcessIcons: BrandIconName[] = ["search", "pen-tool", "rocket"];
 const portfolioProof: ProofItem[] = [
   {
-    title: "12 live design concepts",
-    body: "Twelve complete directions with distinct brands, layouts, art direction, and content.",
+    title: "20 live design concepts",
+    body: "Twenty complete directions with distinct brands, layouts, art direction, and content.",
     icon: "palette",
   },
   {
@@ -62,7 +62,7 @@ export default function PortfolioPage() {
       <WebPageJsonLd
         type="CollectionPage"
         name="Interactive Website Design Portfolio Concepts"
-        description="Explore twelve original Website Design Dogs concepts with distinct industries, art direction, content, and responsive layouts."
+        description="Explore twenty original Website Design Dogs concepts with distinct industries, art direction, content, and responsive layouts."
         path="/portfolio"
       />
       <TopLevelHero
@@ -70,7 +70,7 @@ export default function PortfolioPage() {
         eyebrow="Interactive design concepts"
         title={
           <>
-            Twelve directions.
+            Twenty directions.
             <br />
             <em>No repeated formula.</em>
           </>
@@ -102,7 +102,7 @@ export default function PortfolioPage() {
                     Explore the Whole Site.
                   </>
                 }
-                description="Explore layout direction through twelve concepts, each with its own brand system, page architecture, original copy, responsive behavior, and coordinated AI-generated imagery."
+                description="Explore layout direction through twenty concepts, each with its own brand system, page architecture, original copy, responsive behavior, and custom visual direction."
               />
             }
           />
