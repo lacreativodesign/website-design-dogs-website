@@ -12,9 +12,7 @@ import {
 } from "@/content/lead-industries";
 import {
   allPackages,
-  packageBySlug,
   packageCategoryBySlug,
-  type PackageCategorySlug,
 } from "@/content/packages";
 import { platformPreferenceOptions } from "@/content/platforms";
 import { services } from "@/content/services";
@@ -25,29 +23,15 @@ import { submitLead, type QuoteRequestPayload } from "./submission";
 import { TurnstileWidget } from "./turnstile-widget";
 import { InternationalPhoneInput } from "./international-phone-input";
 import { normalizePhoneNumber } from "@/lib/leads/phone";
-
-const projectTypes = [
-  "New Website",
-  "Website Redesign",
-  "E-Commerce Solutions",
-  "Campaign Landing Page",
-  "Website Care",
-  "SEO & Local Optimization",
-  "Social Media Marketing",
-  "Mobile App Development",
-  "AI or Workflow Integration",
-  "Custom Website Design",
-  "Website Development",
-  "Conversion Optimization",
-  "Content & Copywriting",
-  "Website Care, Hosting & Security",
-  "Analytics & Reporting",
-  "Not Sure Yet",
-] as const;
-
-const serviceProjectTypes: Record<string, string> = Object.fromEntries(
-  services.map((service) => [service.slug, service.title]),
-);
+import {
+  additionalNeedOptions,
+  primaryLabel,
+  primaryProjectOptions,
+  recommendPackage,
+  scopeQuestions,
+  type PrimaryProjectType,
+} from "@/lib/leads/package-recommendation";
+import { LiveChatButton } from "./live-chat-button";
 
 const features = [
   "Contact or quote form",
@@ -64,7 +48,13 @@ const features = [
   "Not sure yet",
 ] as const;
 
-type PackageOption = { value: string; slug: string; title: string; price: string; detail: string };
+type PackageOption = {
+  value: string;
+  slug: string;
+  title: string;
+  price: string;
+  detail: string;
+};
 
 const catalogPackageOptions: PackageOption[] = allPackages.map((item) => ({
   value: `${item.name} — ${item.price} ${item.priceSuffix}`,
@@ -80,14 +70,14 @@ const flexiblePackageOptions: PackageOption[] = [
     slug: "custom",
     title: "Custom",
     price: "Scoped",
-    detail: "For requirements outside the package foundations.",
+    detail: "For requirements outside the published package limits.",
   },
   {
     value: "Not Sure Yet",
     slug: "not-sure",
     title: "Not sure",
     price: "We’ll help",
-    detail: "Share the details and we’ll recommend a starting point.",
+    detail: "Share the details and we’ll help identify the right starting point.",
   },
 ];
 
@@ -114,76 +104,61 @@ const timings = [
 
 const stageDetails = [
   ["Your Business", "Start with the essentials so we know who the project is for."],
-  ["Project Type", "Choose everything that applies. You can adjust the details later."],
-  ["Website Shape", "Give us a useful first picture of the content and functionality."],
-  ["Starting Point", "Compare the practical package foundations and share your timing."],
+  ["Primary Service", "Choose the main service first, then add anything else you may need."],
+  ["Scope & Fit", "Answer only the questions that matter for the service you selected."],
+  ["Starting Point", "Review the package that best matches the published scope limits."],
   ["Final Details", "Add the context that will make our review more useful."],
 ] as const;
 
 const guideReactions = [
   "First, a quick introduction.",
-  "Now we’re mapping the kind of work.",
-  "The website shape is taking form.",
-  "Here’s a practical starting point.",
+  "Choose the main thing you need help with.",
+  "Now we can size the work against the actual package limits.",
+  "Here’s the closest published starting point.",
   "Last step—add the context that matters.",
 ] as const;
 
+const primaryLabels = new Set(
+  primaryProjectOptions.map((option) => option.label),
+);
+
 function initialPackage(requestedPackage: string) {
-  return catalogPackageOptions.find(({ slug }) => slug === requestedPackage)?.value ?? "";
+  return (
+    catalogPackageOptions.find(({ slug }) => slug === requestedPackage)?.value ??
+    ""
+  );
 }
 
-function projectCategories(data: QuoteRequestPayload): PackageCategorySlug[] {
-  const categories = new Set<PackageCategorySlug>();
-  const types = data.project.types;
-
-  if (types.includes("Mobile App Development")) categories.add("mobile-apps");
-  if (types.includes("Social Media Marketing")) categories.add("social-media");
-  if (types.includes("SEO & Local Optimization")) categories.add("seo-local");
-  if (
-    types.includes("Website Care") ||
-    types.includes("Website Care, Hosting & Security")
-  ) {
-    categories.add("website-care");
-  }
-  if (
-    types.includes("E-Commerce Solutions") ||
-    data.project.features.includes("E-commerce") ||
-    data.project.features.includes("Payment integration")
-  ) {
-    categories.add("e-commerce");
-  }
-
-  const websiteSignals = [
-    "New Website",
-    "Website Redesign",
-    "Campaign Landing Page",
-    "Custom Website Design",
-    "Website Development",
-    "Conversion Optimization",
-    "Content & Copywriting",
-    "Analytics & Reporting",
-    "AI or Workflow Integration",
-  ];
-  if (websiteSignals.some((type) => types.includes(type))) {
-    categories.add("website-design");
-  }
-
-  if (categories.size === 0) categories.add("website-design");
-  return [...categories];
+function requestedPrimaryType(serviceSlug: string): PrimaryProjectType | "" {
+  return services.find((service) => service.slug === serviceSlug)?.packageCategory ?? "";
 }
 
-function categoryForProject(
-  data: QuoteRequestPayload,
-): PackageCategorySlug | null {
-  const categories = projectCategories(data);
-  return categories.length === 1 ? categories[0] : null;
+function requestedAdditionalNeeds(
+  serviceSlug: string,
+  primaryType: PrimaryProjectType | "",
+) {
+  if (!serviceSlug || !primaryType) return [];
+  const service = services.find((item) => item.slug === serviceSlug);
+  const primaryServiceSlug =
+    primaryType === "not-sure"
+      ? undefined
+      : packageCategoryBySlug.get(primaryType)?.serviceSlug;
+
+  if (!service || service.slug === primaryServiceSlug) return [];
+  return additionalNeedOptions.includes(
+    service.title as (typeof additionalNeedOptions)[number],
+  )
+    ? [service.title]
+    : [];
 }
 
 function packageOptionsFor(data: QuoteRequestPayload) {
-  const categorySlug = categoryForProject(data);
-  if (!categorySlug) return flexiblePackageOptions;
+  const primaryType = data.project.primaryType;
+  if (!primaryType || primaryType === "not-sure") {
+    return flexiblePackageOptions;
+  }
 
-  const category = packageCategoryBySlug.get(categorySlug);
+  const category = packageCategoryBySlug.get(primaryType);
   const scopedOptions = (category?.packages ?? [])
     .map((item) => catalogPackageOptions.find(({ slug }) => slug === item.slug))
     .filter((item): item is PackageOption => Boolean(item));
@@ -196,14 +171,21 @@ function empty(
   service = "",
   industry = "",
 ): QuoteRequestPayload {
+  const primaryType = requestedPrimaryType(service);
+  const extraNeeds = requestedAdditionalNeeds(service, primaryType);
+
   return {
     contact: { fullName: "", email: "", phone: "", phoneCountry: "US" },
     business: { name: "", website: "", industry },
     project: {
-      types: serviceProjectTypes[service] ? [serviceProjectTypes[service]] : [],
-      pages: "",
+      primaryType,
+      scope: { size: "", complexity: "" },
+      types: primaryType
+        ? [primaryLabel(primaryType), ...extraNeeds]
+        : extraNeeds,
+      pages: "Not sure yet",
       goal: "",
-      features: [],
+      features: ["Not sure yet"],
       contentStatus: "",
       brandingStatus: "",
       existingPlatform: "",
@@ -230,92 +212,40 @@ function toggleValue(values: string[], value: string) {
     : [...knownValues, value];
 }
 
-function recommendationFor(
-  data: QuoteRequestPayload,
-  options: PackageOption[],
-  requestedPackage: string,
-) {
-  if (
-    data.project.types.length === 1 &&
-    data.project.types.includes("Not Sure Yet")
-  ) {
-    return {
-      option: flexiblePackageOptions[1]!,
-      reason:
-        "You marked the project type as not sure yet, so we’ll review the brief before steering you into a package.",
-    };
+function legacyPageValue(primaryType: PrimaryProjectType | "", size: string) {
+  if (primaryType === "website-design") {
+    if (size === "web-pages-1-5") return "1–5 pages";
+    if (size === "web-pages-6-7" || size === "web-pages-8-10") return "6–10 pages";
+    if (size === "web-pages-11-15") return "11–15 pages";
+    if (size === "web-pages-16-20" || size === "web-pages-21-30" || size === "web-pages-30-plus") {
+      return "More than 15 pages";
+    }
   }
-
-  const requested = options.find(({ slug }) => slug === requestedPackage);
-  if (requested) {
-    return {
-      option: requested,
-      reason:
-        "You arrived with this package selected. We’ll use it as the starting point and confirm fit after reviewing the full brief.",
-    };
+  if (primaryType === "seo-local") {
+    if (size === "seo-pages-5") return "1–5 pages";
+    if (size === "seo-pages-10") return "6–10 pages";
+    if (size === "seo-pages-20" || size === "seo-pages-20-plus") return "More than 15 pages";
   }
+  return "Not sure yet";
+}
 
-  const scoped = options.filter(
-    ({ slug }) => slug !== "custom" && slug !== "not-sure",
-  );
+function recommendationFor(data: QuoteRequestPayload) {
+  const primaryType = data.project.primaryType || "not-sure";
+  const result = recommendPackage({
+    primaryType,
+    scope: data.project.scope,
+    platform: data.project.existingPlatform,
+  });
 
-  if (scoped.length === 0) {
-    return {
-      option: flexiblePackageOptions[0]!,
-      reason:
-        "Your brief spans multiple service areas, so a custom scope is safer than forcing the project into one package.",
-    };
-  }
+  const option =
+    result.custom
+      ? flexiblePackageOptions[0]!
+      : result.packageSlug === "not-sure"
+        ? flexiblePackageOptions[1]!
+        : catalogPackageOptions.find(({ slug }) => slug === result.packageSlug) ??
+          flexiblePackageOptions[1]!;
 
-  const category =
-    packageBySlug.get(scoped[0].slug)?.categorySlug ?? "website-design";
-  const featureCount = data.project.features.filter(
-    (feature) => feature !== "Not sure yet",
-  ).length;
-  const breadth = data.project.types.filter(
-    (type) => type !== "Not Sure Yet",
-  ).length + featureCount;
-
-  let index = 0;
-  let reason = "This is the closest starting point based on the scope you entered.";
-
-  if (category === "website-design") {
-    if (data.project.pages === "More than 15 pages") index = Math.min(4, scoped.length - 1);
-    else if (data.project.pages === "11–15 pages") index = Math.min(3, scoped.length - 1);
-    else if (data.project.pages === "6–10 pages") index = Math.min(2, scoped.length - 1);
-    else if (featureCount >= 4) index = Math.min(1, scoped.length - 1);
-
-    reason =
-      data.project.pages === "1–5 pages"
-        ? "Your page count and requested functionality point to a focused website starting point."
-        : "Your page count and requested functionality call for more room than the entry website scope.";
-  } else if (category === "e-commerce") {
-    index =
-      breadth >= 7
-        ? Math.min(2, scoped.length - 1)
-        : breadth >= 4
-          ? Math.min(1, scoped.length - 1)
-          : 0;
-    reason =
-      "Your commerce or payment requirements make an e-commerce package the responsible starting point.";
-  } else if (category === "mobile-apps") {
-    index = breadth >= 6 ? Math.min(1, scoped.length - 1) : 0;
-    reason =
-      index === 0
-        ? "A blueprint is the responsible first step before committing to a coded app build."
-        : "The breadth of the app requirements suggests moving beyond discovery into an MVP starting point.";
-  } else {
-    index =
-      breadth >= 7
-        ? Math.min(2, scoped.length - 1)
-        : breadth >= 4
-          ? Math.min(1, scoped.length - 1)
-          : 0;
-    reason =
-      "The number of selected needs places this brief at this service tier as a starting point.";
-  }
-
-  return { option: scoped[index] ?? scoped[0]!, reason };
+  return { option, reason: result.reason };
 }
 
 function ChoiceGrid({
