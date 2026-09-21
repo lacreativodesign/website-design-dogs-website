@@ -151,11 +151,15 @@ export async function POST(request: Request) {
       });
     }
 
+    const successMessage = delivery.customerConfirmationSent
+      ? `Thanks — your request was received successfully. We’ve sent a confirmation email with a copy of your submission to ${envelope.contact.email}. Please check your inbox, including spam or junk if needed.`
+      : "Thanks — your request was received successfully. We’ll review the details and respond using the contact information you provided.";
+
     return json(
       {
         ok: true,
-        message:
-          "Thanks — your request was received successfully. We’ll review the details and respond using the contact information you provided.",
+        message: successMessage,
+        confirmationEmailSent: delivery.customerConfirmationSent,
         ...(delivery.referenceId ? { referenceId: delivery.referenceId } : {}),
         ...(delivery.duplicate ? { duplicate: true } : {}),
       },
