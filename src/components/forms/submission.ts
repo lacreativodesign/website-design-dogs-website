@@ -3,12 +3,14 @@ import type {
   LeadSubmissionResponse,
 } from "@/lib/leads/types";
 import { getMetaTrackingContext } from "@/lib/tracking/meta-browser";
+import type { PhoneCountryCode } from "@/lib/leads/phone";
 
 export type ContactRequestPayload = {
   fullName: string;
   businessName: string;
   email: string;
   phone: string;
+  phoneCountry: PhoneCountryCode;
   website?: string;
   service: string;
   summary: string;
@@ -27,6 +29,7 @@ export type CampaignRequestPayload = {
     fullName: string;
     email: string;
     phone: string;
+    phoneCountry: PhoneCountryCode;
   };
   business: {
     name: string;
@@ -45,6 +48,7 @@ export type QuoteRequestPayload = {
     fullName: string;
     email: string;
     phone: string;
+    phoneCountry: PhoneCountryCode;
   };
   business: {
     name: string;
@@ -122,6 +126,7 @@ export async function submitLead(
             fullName: payload.fullName,
             email: payload.email,
             phone: payload.phone,
+            phoneCountry: payload.phoneCountry,
           },
           business: {
             name: payload.businessName,
