@@ -10,10 +10,10 @@ import { illustrationScenes } from "@/content/illustrations";
 import { DEFAULT_SERVICE_SLUG, serviceBySlug } from "@/content/services";
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = pageMetadata({ title: "Get a Free Website Quote", description: "Tell Website Design Dogs about your business, current website, goals, scope, preferred package, budget, and timeline.", path: "/get-started" });
+export const metadata: Metadata = pageMetadata({ title: "Get a Free Project Quote", description: "Tell Website Design Dogs about your business, primary service, scope, package preference, budget, and timeline.", path: "/get-started" });
 
 const projectBriefProof: ProofItem[] = [
-  { title: "Five focused steps", body: "Business, project, website shape, starting point, and final context.", icon: "clipboard-check" },
+  { title: "Five focused steps", body: "Business, primary service, package-fit scope, starting point, and final context.", icon: "clipboard-check" },
   { title: "Nothing sent early", body: "Your details stay in the form until you explicitly submit the brief.", icon: "shield-check" },
   { title: "Preferences preserved", body: "Selected service, package, industry, and campaign context follow you here.", icon: "mouse-pointer-click" },
   { title: "Reviewed before scope", body: "A selection is a starting point—not an automatic final quote or commitment.", icon: "heart-handshake" },
@@ -53,8 +53,8 @@ export default async function Page({ searchParams }: PageProps) {
   return (
     <>
       <WebPageJsonLd
-        name="Get a Free Website Quote"
-        description="Tell Website Design Dogs about your business, current website, goals, scope, preferred package, budget, and timeline."
+        name="Get a Free Project Quote"
+        description="Tell Website Design Dogs about your business, primary service, package-fit scope, preferred package, budget, and timeline."
         path="/get-started"
       />
       <TopLevelHero
@@ -64,7 +64,7 @@ export default async function Page({ searchParams }: PageProps) {
         title={<>Build your <em>project brief.</em></>}
         body="Five focused steps turn the essentials into a useful starting point—without pretending the scope is final before we review it."
         scene={illustrationScenes.getStarted}
-        alt="Border collie designer mapping a new website project at a studio planning board"
+        alt="Border collie designer mapping a digital project at a studio planning board"
         primaryCta={{ label: "Start the Brief", href: "#project-brief" }}
         secondaryCta={{ label: "Compare Packages", href: "/packages" }}
       />

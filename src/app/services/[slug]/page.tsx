@@ -11,6 +11,7 @@ import { ServiceJsonLd } from "@/components/seo/service-json-ld";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Button } from "@/components/ui/button";
+import { LiveChatButton } from "@/components/forms/live-chat-button";
 import { HeroBreadcrumb } from "@/components/ui/breadcrumb";
 import { Container } from "@/components/ui/container";
 import { ArrowRightIcon, BrandIcon, type BrandIconName } from "@/components/ui/icon";
@@ -82,6 +83,10 @@ export default async function ServiceDetailPage({ params }: Props) {
               <Button href={quoteHref} icon={<ArrowRightIcon />} testId="service-primary-quote">Get a Free Quote</Button>
               <Button href="/packages" variant="outline">View Packages</Button>
             </div>
+            <p className="mt-3 text-sm text-[var(--color-text-muted)]">
+              Have a question before you choose?{" "}
+              <LiveChatButton label="Start a live chat" />
+            </p>
             <ul className="service-detail-hero__proof" aria-label="Project foundations">
               {["Clear scope", "Responsive execution", "Practical handoff"].map((item) => (
                 <li key={item}><BrandIcon name="clipboard-check" />{item}</li>

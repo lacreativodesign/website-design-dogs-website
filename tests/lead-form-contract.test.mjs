@@ -64,16 +64,29 @@ test('server Turnstile action map covers every approved lead form', () => {
   for (const { action } of forms) assert.match(route, new RegExp(action));
 });
 
-test('get-started recommendation handles mixed scopes and applies the safe starting point automatically', () => {
+test('get-started recommendation is primary-service driven and only customizes outside package limits', () => {
   const source = fs.readFileSync('src/components/forms/quote-form.tsx', 'utf8');
+  const engine = fs.readFileSync(
+    'src/lib/leads/package-recommendation.ts',
+    'utf8',
+  );
 
-  assert.match(source, /function projectCategories/);
-  assert.match(source, /categories\.length === 1 \? categories\[0\] : null/);
-  assert.match(source, /return flexiblePackageOptions/);
-  assert.match(source, /Your brief spans multiple service areas/);
+  assert.match(source, /Primary service \*/);
+  assert.match(source, /Additional needs \(optional\)/);
+  assert.match(source, /scopeQuestions\[data\.project\.primaryType\]/);
+  assert.match(source, /recommendPackage\(/);
   assert.match(source, /preferred: nextRecommendation\.option\.value/);
-  assert.match(source, /new Set\(\["Not Sure Yet", "Not sure yet"\]\)/);
-  assert.doesNotMatch(source, /Use recommendation/);
+  assert.match(engine, /commerce-products-15/);
+  assert.match(engine, /commerce-products-50/);
+  assert.match(engine, /commerce-products-100/);
+  assert.match(engine, /platform === "Headless \/ custom commerce"/);
+  assert.match(engine, /websiteTiers/);
+  assert.match(engine, /seo-launch/);
+  assert.match(engine, /social-foundation/);
+  assert.match(engine, /care-essential/);
+  assert.match(engine, /app-blueprint/);
+  assert.doesNotMatch(source, /function projectCategories/);
+  assert.doesNotMatch(source, /Your brief spans multiple service areas/);
 });
 
 test('get-started uses one primary submit action and renders a dedicated confirmation state', () => {
@@ -183,3 +196,17 @@ test('phone country control stays compact, readable, and responsive for long dia
   }
 });
 
+
+
+test('get-started exposes Tawk-ready live chat help throughout the guided brief', () => {
+  const quote = fs.readFileSync('src/components/forms/quote-form.tsx', 'utf8');
+  const chat = fs.readFileSync('src/components/forms/live-chat-button.tsx', 'utf8');
+
+  assert.match(quote, /Not sure about an answer\?/);
+  assert.match(quote, /Start a live chat/);
+  assert.match(quote, /Questions about this recommendation\? Start live chat/);
+  assert.match(chat, /Tawk_API/);
+  assert.match(chat, /maximize/);
+  assert.match(chat, /toggle/);
+  assert.match(chat, /\/contact\?intent=live-chat/);
+});

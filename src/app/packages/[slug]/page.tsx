@@ -9,6 +9,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { WebPageJsonLd } from "@/components/seo/web-page-json-ld";
 import { ThemeScene } from "@/components/theme/theme-scene";
 import { Button } from "@/components/ui/button";
+import { LiveChatButton } from "@/components/forms/live-chat-button";
 import { HeroBreadcrumb } from "@/components/ui/breadcrumb";
 import { Container } from "@/components/ui/container";
 import { ArrowRightIcon, BrandIcon, type BrandIconName } from "@/components/ui/icon";
@@ -122,6 +123,10 @@ export default async function PackageDetailPage({ params }: Props) {
               <Button href={item.quoteHref} size="large" icon={<ArrowRightIcon />}>Start with {item.name}</Button>
               <Button href={`/packages#package-options`} variant="outline" size="large">Compare Packages</Button>
             </div>
+            <p className="mt-3 text-sm text-[var(--color-text-muted)]">
+              Unsure whether this tier fits?{" "}
+              <LiveChatButton label="Start a live chat" />
+            </p>
           </div>
         </Container>
       </section>

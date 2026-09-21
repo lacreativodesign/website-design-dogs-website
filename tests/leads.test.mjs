@@ -50,7 +50,12 @@ const leadEnvelope = {
     summary: 'We need a website that creates qualified enquiries.',
   },
   project: {
-    types: ['New Website'],
+    primaryType: 'website-design',
+    scope: {
+      size: 'web-pages-1-5',
+      complexity: 'web-integrations-1',
+    },
+    types: ['Website Design & Development'],
     pages: '1–5 pages',
     goal: 'Generate qualified enquiries',
     features: ['Contact or quote form'],
@@ -154,6 +159,8 @@ test('Bizosto payload preserves enquiry details, attribution, and checked consen
   assert.equal(payload.lead.source, 'website');
   assert.match(payload.lead.message, /Preferred package: Starter/);
   assert.match(payload.lead.message, /Generate qualified enquiries/);
+  assert.match(payload.lead.message, /Primary service: Website Design & Development/);
+  assert.match(payload.lead.message, /Approximate website size: 1–5 pages/);
   assert.deepEqual(payload.attribution.utm, {
     source: 'google',
     medium: 'cpc',

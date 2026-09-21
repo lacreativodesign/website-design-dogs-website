@@ -1,5 +1,10 @@
 import { expect, test, type Page } from "@playwright/test";
 import { services } from "../../src/content/services";
+import {
+  additionalNeedOptions,
+  primaryLabel,
+} from "../../src/lib/leads/package-recommendation";
+import { packageCategoryBySlug } from "../../src/content/packages";
 
 test("service routes, links, metadata, schema, and quote preselection", async ({ page, request }) => {
   test.setTimeout(120_000);
@@ -25,14 +30,32 @@ test("service routes, links, metadata, schema, and quote preselection", async ({
     expect(quoteUrl.pathname).toBe("/get-started");
     expect(quoteUrl.searchParams.get("service")).toBe(service.slug);
     await openProjectTypeStep(page);
-    await expect(page.getByRole("checkbox", { name: service.title })).toBeChecked();
+    await expect(
+      page.getByRole("radio", {
+        name: new RegExp(primaryLabel(service.packageCategory), "i"),
+      }),
+    ).toBeChecked();
+
+    const coreServiceSlug = packageCategoryBySlug.get(service.packageCategory)?.serviceSlug;
+    if (
+      service.slug !== coreServiceSlug &&
+      additionalNeedOptions.includes(
+        service.title as (typeof additionalNeedOptions)[number],
+      )
+    ) {
+      await expect(
+        page.getByRole("checkbox", { name: service.title }),
+      ).toBeChecked();
+    }
   }
 
   await page.goto("/get-started?service=unknown-service");
   await page.waitForURL((url) => url.pathname === "/get-started" && url.searchParams.get("service") === "custom-website-design");
   await expect(page).toHaveURL(/\/get-started\?service=custom-website-design$/);
   await openProjectTypeStep(page);
-  await expect(page.getByRole("checkbox", { name: serviceProjectType("custom-website-design") })).toBeChecked();
+  await expect(
+    page.getByRole("radio", { name: /Website Design & Development/i }),
+  ).toBeChecked();
 
   await page.goto("/get-started?service=unknown-service&utm_source=search&utm_medium=cpc&utm_campaign=summer&gclid=test-gclid&fbclid=test-fbclid");
   await page.waitForURL((url) => url.pathname === "/get-started" && url.searchParams.get("service") === "custom-website-design");
@@ -43,20 +66,24 @@ test("service routes, links, metadata, schema, and quote preselection", async ({
   expect(canonicalUrl.searchParams.get("gclid")).toBe("test-gclid");
   expect(canonicalUrl.searchParams.get("fbclid")).toBe("test-fbclid");
   await openProjectTypeStep(page);
-  await expect(page.getByRole("checkbox", { name: serviceProjectType("custom-website-design") })).toBeChecked();
+  await expect(
+    page.getByRole("radio", { name: /Website Design & Development/i }),
+  ).toBeChecked();
 
   await page.goto("/get-started?service=");
   await openProjectTypeStep(page);
-  await expect(page.getByRole("checkbox", { checked: true })).toHaveCount(0);
+  await expect(page.getByRole("radio", { checked: true })).toHaveCount(0);
 
   await page.goto("/get-started?service=%F0");
   await page.waitForURL((url) => url.pathname === "/get-started" && url.searchParams.get("service") === "custom-website-design");
   await openProjectTypeStep(page);
-  await expect(page.getByRole("checkbox", { name: serviceProjectType("custom-website-design") })).toBeChecked();
+  await expect(
+    page.getByRole("radio", { name: /Website Design & Development/i }),
+  ).toBeChecked();
 
   await page.goto("/get-started");
   await openProjectTypeStep(page);
-  await expect(page.getByRole("checkbox", { checked: true })).toHaveCount(0);
+  await expect(page.getByRole("radio", { checked: true })).toHaveCount(0);
 
   await page.goto("/services");
   for (const service of services) await expect(page.getByRole("link", { name: `Explore ${service.title}` })).toHaveAttribute("href", `/services/${service.slug}`);
@@ -69,11 +96,10 @@ async function openProjectTypeStep(page: Page) {
   await page.getByRole("textbox", { name: /^Full name/ }).fill("Website Design Dogs QA");
   await page.getByRole("textbox", { name: /^Business name/ }).fill("QA Business");
   await page.getByRole("textbox", { name: /^Email/ }).fill("qa@example.com");
-  await page.getByRole("textbox", { name: /^Industry/ }).fill("Professional Services");
+  await page.getByRole("textbox", { name: /^Phone number/ }).fill("(415) 900-2374");
+  await page.getByRole("combobox", { name: /^Industry/ }).selectOption({
+    label: "Professional Services",
+  });
   await page.getByRole("button", { name: "Next", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Project Type" })).toBeVisible();
-}
-
-function serviceProjectType(slug: string) {
-  return services.find((service) => service.slug === slug)?.title ?? "Custom Website Design";
+  await expect(page.getByRole("heading", { name: "Primary Service" })).toBeVisible();
 }
