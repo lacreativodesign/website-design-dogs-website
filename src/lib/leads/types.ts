@@ -1,8 +1,4 @@
 import type { PhoneCountryCode } from "./phone";
-import type {
-  PrimaryProjectType,
-  RecommendationScope,
-} from "./package-recommendation";
 
 export type FormType = "contact" | "quote" | "campaign";
 
@@ -77,8 +73,6 @@ export type LeadSubmissionEnvelope = {
     summary?: string;
   };
   project?: {
-    primaryType?: PrimaryProjectType;
-    scope?: RecommendationScope;
     types: string[];
     pages: string;
     goal: string;
@@ -91,7 +85,7 @@ export type LeadSubmissionEnvelope = {
     details?: string;
   };
   package?: {
-    preferred: string;
+    preferred?: string;
     budget: string;
     timing: string;
   };
@@ -137,11 +131,6 @@ export type ClientLeadPayload = {
     summary?: string;
   };
   project?: {
-    primaryType?: string;
-    scope?: {
-      size?: string;
-      complexity?: string;
-    };
     types?: string[];
     pages?: string;
     goal?: string;
