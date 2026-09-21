@@ -1,4 +1,4 @@
-import { BRANDING_STATUSES, BUDGETS, CONTENT_STATUSES, FEATURES, MAX_FORM_AGE_MS, MIN_FORM_AGE_MS, PACKAGES, PAGES, PROJECT_TYPES, SERVICES, TIMINGS } from "./constants";
+import { BRANDING_STATUSES, BUDGETS, CONTENT_STATUSES, FEATURES, MAX_FORM_AGE_MS, MIN_FORM_AGE_MS, PAGES, PROJECT_TYPES, SERVICES, TIMINGS } from "./constants";
 import { LeadError } from "./errors";
 import {
   isE164Phone,
@@ -6,11 +6,6 @@ import {
   normalizePhoneNumber,
 } from "./phone";
 import type { Attribution, ClientLeadPayload, LeadSubmissionEnvelope } from "./types";
-import {
-  isPrimaryProjectType,
-  isRecommendationScopeValid,
-  type RecommendationScope,
-} from "./package-recommendation";
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const email = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const clean = (v: unknown, max: number) => typeof v === "string" ? v.replace(/\0/g, "").replace(/[\u0001-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "").trim().replace(/[ \t]{2,}/g, " ").slice(0, max + 1) : "";
@@ -26,41 +21,7 @@ export function validateLeadPayload(input: unknown): LeadSubmissionEnvelope { co
  const submittedAt = new Date().toISOString();
  const envelope: LeadSubmissionEnvelope = { schemaVersion: "1.0", submissionId: String(p.submissionId), formType: p.formType === "quote" ? "quote" : p.formType === "campaign" ? "campaign" : "contact", brand: "Website Design Dogs", brandSlug: "website-design-dogs", submittedAt, source: "website", contact: { fullName, email: mail, phone, phoneCountry }, business: { name, ...(site ? { website: site } : {}), ...(industry ? { industry } : {}) }, enquiry: {}, attribution: normalizeAttribution(p.attribution), consent: { contact: p.consent === true, privacyPolicy: p.consent === true, agreedAt: submittedAt } };
  if (p.formType === "contact") { const service = enumValue(p.enquiry?.service, "service", SERVICES, errs); const summary = req(p.enquiry?.summary, "summary", 20, 5000, errs); envelope.enquiry = { service, summary }; }
- if (p.formType === "quote") {
-  if (!industry || industry === "Other") errs.industry = "Select your industry or specify Other.";
-  const rawPrimaryType = clean(p.project?.primaryType, 40);
-  if (!isPrimaryProjectType(rawPrimaryType)) errs.primaryType = "Choose the primary service you need.";
-  const primaryType = isPrimaryProjectType(rawPrimaryType) ? rawPrimaryType : "not-sure";
-  const scopeInput = (p.project?.scope && typeof p.project.scope === "object" ? p.project.scope : {}) as { size?: unknown; complexity?: unknown };
-  const scope: RecommendationScope = {
-    size: clean(scopeInput.size, 120),
-    complexity: clean(scopeInput.complexity, 120),
-  };
-  if (!isRecommendationScopeValid(primaryType, scope)) {
-    errs.scope = primaryType === "not-sure"
-      ? "Invalid scope."
-      : "Complete the package-fit questions for the selected primary service.";
-  }
-  envelope.project = {
-    primaryType,
-    scope,
-    types: listValue(p.project?.types, "types", PROJECT_TYPES, errs),
-    pages: enumValue(p.project?.pages, "pages", PAGES, errs),
-    goal: req(p.project?.goal, "goal", 1, 1000, errs),
-    features: listValue(p.project?.features, "features", FEATURES, errs),
-    contentStatus: enumValue(p.project?.contentStatus, "contentStatus", CONTENT_STATUSES, errs),
-    brandingStatus: enumValue(p.project?.brandingStatus, "brandingStatus", BRANDING_STATUSES, errs),
-    ...(opt(p.project?.existingPlatform, 5000) ? { existingPlatform: opt(p.project?.existingPlatform, 5000) } : {}),
-    notWorking: req(p.project?.notWorking, "notWorking", 10, 5000, errs),
-    accomplish: req(p.project?.accomplish, "accomplish", 10, 5000, errs),
-    ...(opt(p.project?.details, 8000) ? { details: opt(p.project?.details, 8000) } : {}),
-  };
-  envelope.package = {
-    preferred: enumValue(p.package?.preferred, "preferred", PACKAGES, errs),
-    budget: enumValue(p.package?.budget, "budget", BUDGETS, errs),
-    timing: enumValue(p.package?.timing, "timing", TIMINGS, errs),
-  };
- }
+ if (p.formType === "quote") { if (!industry || industry === "Other") errs.industry = "Select your industry or specify Other."; envelope.project = { types: listValue(p.project?.types, "types", PROJECT_TYPES, errs), pages: enumValue(p.project?.pages, "pages", PAGES, errs), goal: req(p.project?.goal, "goal", 1, 1000, errs), features: listValue(p.project?.features, "features", FEATURES, errs), contentStatus: enumValue(p.project?.contentStatus, "contentStatus", CONTENT_STATUSES, errs), brandingStatus: enumValue(p.project?.brandingStatus, "brandingStatus", BRANDING_STATUSES, errs), ...(opt(p.project?.existingPlatform, 5000) ? { existingPlatform: opt(p.project?.existingPlatform, 5000) } : {}), notWorking: req(p.project?.notWorking, "notWorking", 10, 5000, errs), accomplish: req(p.project?.accomplish, "accomplish", 10, 5000, errs), ...(opt(p.project?.details, 8000) ? { details: opt(p.project?.details, 8000) } : {}) }; envelope.package = { budget: enumValue(p.package?.budget, "budget", BUDGETS, errs), timing: enumValue(p.package?.timing, "timing", TIMINGS, errs) }; }
 
  if (p.formType === "campaign") {
   const campaignMap: Record<string, string> = { cleaning: "Cleaning Companies", roofing: "Roofing Contractors", landscaping: "Landscaping Businesses", "home-services": "Home-Service Businesses" };
