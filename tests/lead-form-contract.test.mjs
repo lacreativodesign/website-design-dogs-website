@@ -64,29 +64,23 @@ test('server Turnstile action map covers every approved lead form', () => {
   for (const { action } of forms) assert.match(route, new RegExp(action));
 });
 
-test('get-started recommendation is primary-service driven and only customizes outside package limits', () => {
+test('get-started stays a simple four-step quote request with no package recommendation', () => {
   const source = fs.readFileSync('src/components/forms/quote-form.tsx', 'utf8');
-  const engine = fs.readFileSync(
-    'src/lib/leads/package-recommendation.ts',
-    'utf8',
-  );
+  const validation = fs.readFileSync('src/lib/leads/validation.ts', 'utf8');
 
-  assert.match(source, /Primary service \*/);
-  assert.match(source, /Additional needs \(optional\)/);
-  assert.match(source, /scopeQuestions\[data\.project\.primaryType\]/);
-  assert.match(source, /recommendPackage\(/);
-  assert.match(source, /preferred: nextRecommendation\.option\.value/);
-  assert.match(engine, /commerce-products-15/);
-  assert.match(engine, /commerce-products-50/);
-  assert.match(engine, /commerce-products-100/);
-  assert.match(engine, /platform === "Headless \/ custom commerce"/);
-  assert.match(engine, /websiteTiers/);
-  assert.match(engine, /seo-launch/);
-  assert.match(engine, /social-foundation/);
-  assert.match(engine, /care-essential/);
-  assert.match(engine, /app-blueprint/);
-  assert.doesNotMatch(source, /function projectCategories/);
-  assert.doesNotMatch(source, /Your brief spans multiple service areas/);
+  assert.match(source, /Step \{step \+ 1\} of 4/);
+  assert.match(source, /Project Type/);
+  assert.match(source, /Project Details/);
+  assert.match(source, /Final Details/);
+  assert.match(source, /Budget range/);
+  assert.match(source, /Preferred start timing/);
+  assert.doesNotMatch(source, /Recommended starting point/);
+  assert.doesNotMatch(source, /Preferred package/);
+  assert.doesNotMatch(source, /recommendPackage/);
+  assert.doesNotMatch(source, /packageOptionsFor/);
+  assert.doesNotMatch(validation, /package-fit/);
+  assert.doesNotMatch(validation, /primaryType/);
+  assert.doesNotMatch(validation, /scopeInput/);
 });
 
 test('get-started uses one primary submit action and renders a dedicated confirmation state', () => {
@@ -156,7 +150,7 @@ test('successful lead UX tells customers to check their inbox when confirmation 
   assert.match(route, /confirmationEmailSent: delivery\.customerConfirmationSent/);
   assert.match(route, /Please check your inbox, including spam or junk if needed/);
   assert.match(quote, /Check your inbox at \{data\.contact\.email\}/);
-  assert.match(quote, /complete copy of your submitted brief and selected package/);
+  assert.match(quote, /complete copy of your submitted brief for your records/);
   assert.match(email, /sendCustomerConfirmationEmail/);
   assert.match(email, /wdd-confirmation\/\$\{envelope\.submissionId\}/);
   assert.match(email, /Your Website Design Dogs project brief/);
@@ -198,13 +192,13 @@ test('phone country control stays compact, readable, and responsive for long dia
 
 
 
-test('get-started exposes Tawk-ready live chat help throughout the guided brief', () => {
+test('get-started keeps one simple Tawk-ready help route without recommendation copy', () => {
   const quote = fs.readFileSync('src/components/forms/quote-form.tsx', 'utf8');
   const chat = fs.readFileSync('src/components/forms/live-chat-button.tsx', 'utf8');
 
-  assert.match(quote, /Not sure about an answer\?/);
+  assert.match(quote, /Have a question\?/);
   assert.match(quote, /Start a live chat/);
-  assert.match(quote, /Questions about this recommendation\? Start live chat/);
+  assert.doesNotMatch(quote, /Questions about this recommendation/);
   assert.match(chat, /Tawk_API/);
   assert.match(chat, /maximize/);
   assert.match(chat, /toggle/);
