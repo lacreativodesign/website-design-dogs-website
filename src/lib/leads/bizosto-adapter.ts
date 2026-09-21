@@ -2,6 +2,7 @@ import { setTimeout as delay } from "timers/promises";
 import { LeadError } from "./errors";
 import type { LeadConfig } from "./request-security";
 import type { Attribution, LeadSubmissionEnvelope } from "./types";
+import { phoneCountryName } from "./phone";
 
 export type BizostoResult = {
   referenceId?: string;
@@ -55,6 +56,7 @@ function leadMessage(envelope: LeadSubmissionEnvelope) {
     ...optionalValue("Service", envelope.enquiry.service),
     ...optionalValue("Project summary", envelope.enquiry.summary),
     ...optionalValue("Business website", envelope.business.website),
+    ...optionalValue("Phone country", phoneCountryName(envelope.contact.phoneCountry)),
     ...optionalValue("Industry", envelope.business.industry),
     ...(project
       ? [
