@@ -10,13 +10,13 @@ import { illustrationScenes } from "@/content/illustrations";
 import { DEFAULT_SERVICE_SLUG, serviceBySlug } from "@/content/services";
 import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = pageMetadata({ title: "Get a Free Project Quote", description: "Tell Website Design Dogs about your business, primary service, scope, package preference, budget, and timeline.", path: "/get-started" });
+export const metadata: Metadata = pageMetadata({ title: "Get a Free Project Quote", description: "Tell Website Design Dogs about your business, project needs, budget, timing, and goals.", path: "/get-started" });
 
 const projectBriefProof: ProofItem[] = [
   { title: "Four focused steps", body: "Business, project type, practical project details, and final context.", icon: "clipboard-check" },
   { title: "Nothing sent early", body: "Your details stay in the form until you explicitly submit the brief.", icon: "shield-check" },
   { title: "Preferences preserved", body: "Selected service, industry, and campaign context follow you here.", icon: "mouse-pointer-click" },
-  { title: "Reviewed before scope", body: "A selection is a starting point—not an automatic final quote or commitment.", icon: "heart-handshake" },
+  { title: "Reviewed by our team", body: "Your request is reviewed before any scope, price, or commitment is confirmed.", icon: "heart-handshake" },
 ];
 
 type SearchParams = Record<string, string | string[] | undefined>;
@@ -53,7 +53,7 @@ export default async function Page({ searchParams }: PageProps) {
     <>
       <WebPageJsonLd
         name="Get a Free Project Quote"
-        description="Tell Website Design Dogs about your business, primary service, package-fit scope, preferred package, budget, and timeline."
+        description="Tell Website Design Dogs about your business, project needs, budget, timing, and goals."
         path="/get-started"
       />
       <TopLevelHero
@@ -65,7 +65,7 @@ export default async function Page({ searchParams }: PageProps) {
         scene={illustrationScenes.getStarted}
         alt="Border collie designer mapping a digital project at a studio planning board"
         primaryCta={{ label: "Start the Brief", href: "#project-brief" }}
-        secondaryCta={{ label: "Compare Packages", href: "/packages" }}
+        secondaryCta={{ label: "Explore Services", href: "/services" }}
       />
       <ProofStrip label="Project brief expectations" items={projectBriefProof} />
       <Section alternate className="get-started-section" id="project-brief">
