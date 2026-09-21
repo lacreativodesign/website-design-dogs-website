@@ -75,17 +75,31 @@ function customerRows(envelope: LeadSubmissionEnvelope) {
   ];
 
   if (envelope.project) {
-    if (envelope.project.primaryType) {
-      rows.push(["Primary service", primaryLabel(envelope.project.primaryType)]);
+    const primary = envelope.project.primaryType
+      ? primaryLabel(envelope.project.primaryType)
+      : undefined;
+    const additionalNeeds = envelope.project.primaryType
+      ? envelope.project.types.filter((type) => type !== primary)
+      : envelope.project.types;
+
+    if (primary) {
+      rows.push(["Primary service", primary]);
       if (envelope.project.scope) {
-        rows.push(...scopeLabels(envelope.project.primaryType, envelope.project.scope));
+        rows.push(...scopeLabels(envelope.project.primaryType!, envelope.project.scope));
       }
     }
     rows.push(
-      ["Additional needs / project types", envelope.project.types.join(", ")],
-      ["Estimated pages", envelope.project.pages],
+      ...(additionalNeeds.length
+        ? [["Additional needs", additionalNeeds.join(", ")] as [string, string]]
+        : []),
+      ...(envelope.project.pages && envelope.project.pages !== "Not sure yet"
+        ? [["Estimated pages", envelope.project.pages] as [string, string]]
+        : []),
       ["Business goal", envelope.project.goal],
-      ["Requested features", envelope.project.features.join(", ")],
+      ...(envelope.project.features.length &&
+      !(envelope.project.features.length === 1 && envelope.project.features[0] === "Not sure yet")
+        ? [["Requested features", envelope.project.features.join(", ")] as [string, string]]
+        : []),
       ["Content status", envelope.project.contentStatus],
       ["Branding status", envelope.project.brandingStatus],
       ["Existing platform", envelope.project.existingPlatform],
@@ -160,10 +174,21 @@ export function toLeadEmailText(envelope: LeadSubmissionEnvelope) {
                   : []),
               ]
             : []),
-          ...optionalLine("Additional needs / project types", project.types.join(", ")),
-          ...optionalLine("Estimated pages", project.pages),
+          ...optionalLine(
+            "Additional needs",
+            project.primaryType
+              ? project.types
+                  .filter((type) => type !== primaryLabel(project.primaryType!))
+                  .join(", ")
+              : project.types.join(", "),
+          ),
+          ...(project.pages !== "Not sure yet"
+            ? optionalLine("Estimated pages", project.pages)
+            : []),
           ...optionalLine("Business goal", project.goal),
-          ...optionalLine("Requested features", project.features.join(", ")),
+          ...((project.features.length === 1 && project.features[0] === "Not sure yet")
+            ? []
+            : optionalLine("Requested features", project.features.join(", "))),
           ...optionalLine("Content status", project.contentStatus),
           ...optionalLine("Branding status", project.brandingStatus),
           ...optionalLine("Existing platform", project.existingPlatform),
