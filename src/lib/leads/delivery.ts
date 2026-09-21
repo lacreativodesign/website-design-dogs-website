@@ -1,10 +1,13 @@
 import { sendToBizosto } from "./bizosto-adapter";
-import { sendLeadEmail } from "./email-adapter";
+import {
+  sendCustomerConfirmationEmail,
+  sendLeadEmail,
+} from "./email-adapter";
 import { LeadError } from "./errors";
 import type { LeadConfig } from "./request-security";
 import type { LeadSubmissionEnvelope } from "./types";
 
-export type DeliveryChannel = "bizosto" | "email";
+export type DeliveryChannel = "bizosto" | "email" | "customer-email";
 
 export type DeliveryChannelResult = {
   channel: DeliveryChannel;
@@ -20,6 +23,7 @@ export type LeadDeliveryResult = {
   channels: DeliveryChannelResult[];
   referenceId?: string;
   duplicate?: boolean;
+  customerConfirmationSent: boolean;
 };
 
 const unavailableMessage =
@@ -75,6 +79,7 @@ export async function deliverLead(
   if (config.emailEnabled) {
     if (!config.emailApiKey || !config.emailFrom || !config.emailTo) {
       attempts.push(Promise.resolve(misconfiguredChannel("email")));
+      attempts.push(Promise.resolve(misconfiguredChannel("customer-email")));
     } else {
       attempts.push(
         sendLeadEmail(envelope, config)
@@ -85,6 +90,15 @@ export async function deliverLead(
           }))
           .catch((error) => failedChannel("email", error)),
       );
+      attempts.push(
+        sendCustomerConfirmationEmail(envelope, config)
+          .then((result) => ({
+            channel: "customer-email" as const,
+            ok: true,
+            upstreamStatus: result.upstreamStatus,
+          }))
+          .catch((error) => failedChannel("customer-email", error)),
+      );
     }
   }
 
@@ -93,9 +107,11 @@ export async function deliverLead(
   }
 
   const channels = await Promise.all(attempts);
-  const successful = channels.filter((channel) => channel.ok);
+  const successfulDurable = channels.filter(
+    (channel) => channel.ok && channel.channel !== "customer-email",
+  );
 
-  if (!successful.length) {
+  if (!successfulDurable.length) {
     const misconfigured = channels.find(
       (channel) => channel.error?.code === "INTEGRATION_MISCONFIGURED",
     );
@@ -112,6 +128,9 @@ export async function deliverLead(
   return {
     accepted: true,
     channels,
+    customerConfirmationSent: channels.some(
+      (channel) => channel.channel === "customer-email" && channel.ok,
+    ),
     ...(bizosto?.referenceId ? { referenceId: bizosto.referenceId } : {}),
     ...(bizosto?.duplicate ? { duplicate: true } : {}),
   };
