@@ -53,6 +53,18 @@ const envelope = {
     service: 'Website Design',
     summary: 'Need a lead-generating website.',
   },
+  project: {
+    types: ['New Website'],
+    pages: '6–10 pages',
+    goal: 'Generate qualified leads',
+    features: ['Contact or quote form', 'Analytics & reporting'],
+    contentStatus: 'Needs copywriting',
+    brandingStatus: 'Some materials ready',
+    existingPlatform: 'WordPress',
+    notWorking: 'The current website is dated and does not convert.',
+    accomplish: 'Generate qualified leads and present the business professionally.',
+    details: 'Prioritize mobile performance and clear calls to action.',
+  },
   package: {
     preferred: 'Starter',
     budget: '$500–$999',
@@ -120,6 +132,50 @@ test('email adapter sends the complete lead to the permanent WDD safety inbox', 
   }
 });
 
+test('customer receives a branded transactional confirmation with the complete quote brief', async () => {
+  const {
+    sendCustomerConfirmationEmail,
+    toCustomerConfirmationHtml,
+    toCustomerConfirmationText,
+  } = loadTypeScriptModule('../src/lib/leads/email-adapter.ts');
+  const originalFetch = globalThis.fetch;
+  const requests = [];
+
+  globalThis.fetch = async (url, options) => {
+    requests.push({ url, options });
+    return Response.json({ id: 'customer-confirmation-id' }, { status: 200 });
+  };
+
+  try {
+    const result = await sendCustomerConfirmationEmail(envelope, config);
+    assert.equal(result.providerMessageId, 'customer-confirmation-id');
+    assert.equal(requests.length, 1);
+    assert.equal(
+      requests[0].options.headers['Idempotency-Key'],
+      `wdd-confirmation/${envelope.submissionId}`,
+    );
+
+    const body = JSON.parse(requests[0].options.body);
+    assert.deepEqual(body.to, [envelope.contact.email]);
+    assert.equal(body.reply_to, 'leads@websitedesigndogs.com');
+    assert.match(body.subject, /project brief/i);
+    assert.match(body.text, /Preferred package: Starter/);
+    assert.match(body.text, /Budget: \$500–\$999/);
+    assert.match(body.text, /Project types: New Website/);
+    assert.match(body.text, /Requested features: Contact or quote form, Analytics & reporting/);
+    assert.match(body.text, /Current challenges: The current website is dated and does not convert/);
+    assert.match(body.text, /Submission reference:/);
+    assert.match(body.html, /WEBSITE DESIGN/);
+    assert.match(body.html, /DOGS/);
+    assert.match(body.html, /Loyal to the Game/);
+    assert.match(body.html, /Visit Website Design Dogs/);
+    assert.match(toCustomerConfirmationText(envelope), /complete the project brief/i);
+    assert.match(toCustomerConfirmationHtml(envelope), /Your submission/);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
 test('email remains successful when Bizosto rejects the lead', async () => {
   const { deliverLead } = loadTypeScriptModule('../src/lib/leads/delivery.ts');
   const originalFetch = globalThis.fetch;
@@ -150,6 +206,40 @@ test('email remains successful when Bizosto rejects the lead', async () => {
   }
 });
 
+test('customer confirmation failure never loses an otherwise captured lead', async () => {
+  const { deliverLead } = loadTypeScriptModule('../src/lib/leads/delivery.ts');
+  const originalFetch = globalThis.fetch;
+  const emailOnly = {
+    ...config,
+    bizostoEnabled: false,
+    apiKey: undefined,
+  };
+
+  globalThis.fetch = async (_url, options) => {
+    const body = JSON.parse(options.body);
+    if (body.to?.[0] === envelope.contact.email) {
+      return Response.json({ message: 'Temporary provider failure.' }, { status: 503 });
+    }
+    return Response.json({ id: 'safe-internal-copy' }, { status: 200 });
+  };
+
+  try {
+    const result = await deliverLead(envelope, emailOnly);
+    assert.equal(result.accepted, true);
+    assert.equal(result.customerConfirmationSent, false);
+    assert.equal(
+      result.channels.find((channel) => channel.channel === 'email')?.ok,
+      true,
+    );
+    assert.equal(
+      result.channels.find((channel) => channel.channel === 'customer-email')?.ok,
+      false,
+    );
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
 test('email-only mode accepts a lead without a Bizosto credential', async () => {
   const { deliverLead } = loadTypeScriptModule('../src/lib/leads/delivery.ts');
   const originalFetch = globalThis.fetch;
@@ -167,7 +257,7 @@ test('email-only mode accepts a lead without a Bizosto credential', async () => 
     assert.equal(result.accepted, true);
     assert.deepEqual(
       result.channels.map((channel) => channel.channel),
-      ['email'],
+      ['email', 'customer-email'],
     );
   } finally {
     globalThis.fetch = originalFetch;

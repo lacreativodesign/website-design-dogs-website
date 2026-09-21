@@ -13,17 +13,17 @@ function loadModule(path, dependencies, globals = {}) {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
     fileName: path,
   }).outputText;
-  const module = { exports: {} };
+  const moduleShim = { exports: {} };
   vm.runInNewContext(compiled, {
-    module,
-    exports: module.exports,
+    module: moduleShim,
+    exports: moduleShim.exports,
     require: (name) => {
       if (!(name in dependencies)) throw new Error(`Unexpected import: ${name}`);
       return dependencies[name];
     },
     ...globals,
   }, { filename: path });
-  return module.exports;
+  return moduleShim.exports;
 }
 
 function makeWindow() {

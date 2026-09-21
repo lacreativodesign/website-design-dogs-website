@@ -8,7 +8,7 @@ export type ContactRequestPayload = {
   fullName: string;
   businessName: string;
   email: string;
-  phone?: string;
+  phone: string;
   website?: string;
   service: string;
   summary: string;
@@ -26,7 +26,7 @@ export type CampaignRequestPayload = {
   contact: {
     fullName: string;
     email: string;
-    phone?: string;
+    phone: string;
   };
   business: {
     name: string;
@@ -44,7 +44,7 @@ export type QuoteRequestPayload = {
   contact: {
     fullName: string;
     email: string;
-    phone?: string;
+    phone: string;
   };
   business: {
     name: string;

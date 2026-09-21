@@ -63,3 +63,65 @@ test('server Turnstile action map covers every approved lead form', () => {
   const route = fs.readFileSync('src/app/api/leads/route.ts', 'utf8');
   for (const { action } of forms) assert.match(route, new RegExp(action));
 });
+
+test('get-started recommendation handles mixed scopes and applies the safe starting point automatically', () => {
+  const source = fs.readFileSync('src/components/forms/quote-form.tsx', 'utf8');
+
+  assert.match(source, /function projectCategories/);
+  assert.match(source, /categories\.length === 1 \? categories\[0\] : null/);
+  assert.match(source, /return flexiblePackageOptions/);
+  assert.match(source, /Your brief spans multiple service areas/);
+  assert.match(source, /preferred: nextRecommendation\.option\.value/);
+  assert.match(source, /new Set\(\["Not Sure Yet", "Not sure yet"\]\)/);
+  assert.doesNotMatch(source, /Use recommendation/);
+});
+
+test('get-started uses one primary submit action and renders a dedicated confirmation state', () => {
+  const source = fs.readFileSync('src/components/forms/quote-form.tsx', 'utf8');
+  const turnstile = fs.readFileSync(
+    'src/components/forms/turnstile-widget.tsx',
+    'utf8',
+  );
+
+  assert.match(source, /execution="execute"/);
+  assert.match(source, /executeKey=\{verificationExecuteKey\}/);
+  assert.match(source, /formRef\.current\?\.requestSubmit\(\)/);
+  assert.match(turnstile, /window\.turnstile\.execute/);
+  assert.match(source, /setSubmitted\(true\)/);
+  assert.match(source, /Thanks — your project brief is in\./);
+  assert.doesNotMatch(source, /setStep\(0\)/);
+});
+
+test('phone number remains mandatory across every WDD website lead form', () => {
+  const contact = fs.readFileSync('src/components/forms/contact-form.tsx', 'utf8');
+  const quote = fs.readFileSync('src/components/forms/quote-form.tsx', 'utf8');
+  const campaign = fs.readFileSync('src/components/campaigns/campaign-lead-form.tsx', 'utf8');
+  const submission = fs.readFileSync('src/components/forms/submission.ts', 'utf8');
+  const validation = fs.readFileSync('src/lib/leads/validation.ts', 'utf8');
+
+  for (const source of [contact, quote, campaign]) {
+    assert.match(source, /nextErrors\.phone\s*=\s*"Enter your phone number\."/);
+    assert.match(source, /label="Phone number"[\s\S]{0,100}required/);
+    assert.match(source, /aria-invalid=\{Boolean\(errors\.phone\)\}/);
+  }
+
+  assert.match(validation, /req\(p\.contact\?\.phone, "phone", 7, 40, errs\)/);
+  assert.match(validation, /contact: \{ fullName, email: mail, phone \}/);
+  assert.doesNotMatch(submission, /phone\?: string/);
+});
+
+test('successful lead UX tells customers to check their inbox when confirmation email is sent', () => {
+  const route = fs.readFileSync('src/app/api/leads/route.ts', 'utf8');
+  const quote = fs.readFileSync('src/components/forms/quote-form.tsx', 'utf8');
+  const email = fs.readFileSync('src/lib/leads/email-adapter.ts', 'utf8');
+
+  assert.match(route, /confirmationEmailSent: delivery\.customerConfirmationSent/);
+  assert.match(route, /Please check your inbox, including spam or junk if needed/);
+  assert.match(quote, /Check your inbox at \{data\.contact\.email\}/);
+  assert.match(quote, /complete copy of your submitted brief and selected package/);
+  assert.match(email, /sendCustomerConfirmationEmail/);
+  assert.match(email, /wdd-confirmation\/\$\{envelope\.submissionId\}/);
+  assert.match(email, /Your Website Design Dogs project brief/);
+  assert.match(email, /This email is your record of the information you submitted/);
+});
+

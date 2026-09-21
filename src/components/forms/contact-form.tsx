@@ -136,6 +136,9 @@ export function ContactForm() {
     if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
       nextErrors.email = "Enter a valid email address.";
     }
+    if (!formData.phone?.trim()) {
+      nextErrors.phone = "Enter your phone number.";
+    }
     if (formData.website && !validUrl(formData.website)) {
       nextErrors.website = "Enter a full URL, including https://.";
     }
@@ -286,7 +289,12 @@ export function ContactForm() {
             aria-invalid={Boolean(errors.email)}
           />
         </Field>
-        <Field id="phone" label="Phone optional">
+        <Field
+          id="phone"
+          label="Phone number"
+          required
+          error={errors.phone}
+        >
           <input
             id="phone"
             type="tel"
@@ -294,6 +302,7 @@ export function ContactForm() {
             className={inputClass}
             value={formData.phone}
             onChange={(event) => set("phone", event.target.value)}
+            aria-invalid={Boolean(errors.phone)}
           />
         </Field>
       </div>
