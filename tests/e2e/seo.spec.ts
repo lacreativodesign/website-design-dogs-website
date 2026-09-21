@@ -97,6 +97,7 @@ test("structured data parses, exposes verified contacts, and avoids fake local p
   expect(organization).toBeDefined();
   expect(organization?.sameAs).toEqual([
     "https://www.facebook.com/WebsiteDesignDogs",
+    "https://www.instagram.com/websitedesigndogs/",
   ]);
   expect(organization?.address).toEqual({
     "@type": "PostalAddress",

@@ -6,7 +6,10 @@ test("contact and footer expose hours plus Facebook, Instagram, and WhatsApp", a
   await expect(page.locator(".contact-availability")).toContainText("Monday–Friday");
   await expect(page.locator(".contact-availability")).toContainText("8:00 AM–5:00 PM CT");
   await expect(page.locator(".contact-socials").getByLabel("Facebook")).toHaveCount(1);
-  await expect(page.locator(".contact-socials").getByLabel("Instagram profile link pending")).toHaveCount(1);
+  await expect(page.locator(".contact-socials").getByLabel("Instagram")).toHaveAttribute(
+    "href",
+    "https://www.instagram.com/websitedesigndogs/",
+  );
   await expect(page.locator(".contact-socials").getByLabel("WhatsApp")).toHaveAttribute(
     "href",
     /wa\.me\/15127647834/,

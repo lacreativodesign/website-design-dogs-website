@@ -11,26 +11,13 @@ export const SERVICES = [
 ] as const;
 
 export const PROJECT_TYPES = [
-  "Website Design & Development",
-  "E-Commerce",
-  "SEO & Local Optimization",
-  "Social Media Marketing",
-  "Website Care",
-  "Mobile App Development",
-  "Campaign Landing Page",
-  "Website Development",
-  "Custom Website Design",
-  "Content & Copywriting",
-  "Conversion Optimization",
-  "Analytics & Reporting",
-  "AI or Workflow Integration",
-  "Email Automation",
-  "CRM Integration",
-  "Online Booking",
-  "Not Sure Yet",
   "New Website",
   "Website Redesign",
+  "Campaign Landing Page",
+  "Website Care",
+  "AI or Workflow Integration",
   ...services.map((service) => service.title),
+  "Not Sure Yet",
 ] as const;
 
 export const FEATURES = [

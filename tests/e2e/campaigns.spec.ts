@@ -88,6 +88,7 @@ test("campaign form submits checked consent and first-touch attribution", async 
   await form.getByLabel("Full name").fill("Jane Smith");
   await form.getByLabel("Business name").fill("Acme Cleaning");
   await form.getByLabel("Email address").fill("jane@example.com");
+  await form.getByLabel("Phone number").fill("(415) 900-2374");
   await form.getByRole("checkbox", { name: /I consent/i }).check();
   await form
     .getByRole("button", { name: "Request a Starter Website Quote" })

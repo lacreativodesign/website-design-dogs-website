@@ -50,12 +50,7 @@ const leadEnvelope = {
     summary: 'We need a website that creates qualified enquiries.',
   },
   project: {
-    primaryType: 'website-design',
-    scope: {
-      size: 'web-pages-1-5',
-      complexity: 'web-integrations-1',
-    },
-    types: ['Website Design & Development'],
+    types: ['New Website'],
     pages: '1–5 pages',
     goal: 'Generate qualified enquiries',
     features: ['Contact or quote form'],
@@ -66,7 +61,6 @@ const leadEnvelope = {
     details: 'Add a prominent booking call to action.',
   },
   package: {
-    preferred: 'Starter',
     budget: '$500–$999',
     timing: 'Within 30 days',
   },
@@ -157,10 +151,9 @@ test('Bizosto payload preserves enquiry details, attribution, and checked consen
   assert.equal(payload.lead.phone, '+14159002374');
   assert.equal(payload.lead.company, 'Acme Ltd');
   assert.equal(payload.lead.source, 'website');
-  assert.match(payload.lead.message, /Preferred package: Starter/);
   assert.match(payload.lead.message, /Generate qualified enquiries/);
-  assert.match(payload.lead.message, /Primary service: Website Design & Development/);
-  assert.match(payload.lead.message, /Approximate website size: 1–5 pages/);
+  assert.match(payload.lead.message, /Budget: \$500–\$999/);
+  assert.match(payload.lead.message, /Preferred timing: Within 30 days/);
   assert.deepEqual(payload.attribution.utm, {
     source: 'google',
     medium: 'cpc',
