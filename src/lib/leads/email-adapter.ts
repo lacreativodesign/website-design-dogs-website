@@ -3,7 +3,6 @@ import { LeadError } from "./errors";
 import type { LeadConfig } from "./request-security";
 import type { LeadSubmissionEnvelope } from "./types";
 import { phoneCountryName } from "./phone";
-import { primaryLabel, scopeLabels } from "./package-recommendation";
 
 export type EmailDeliveryResult = {
   upstreamStatus: number;
@@ -53,7 +52,7 @@ function customerHeading(envelope: LeadSubmissionEnvelope) {
 
 function customerIntro(envelope: LeadSubmissionEnvelope) {
   if (envelope.formType === "quote") {
-    return "Thanks for taking the time to complete the project brief. This email is your record of the information you submitted, including the package starting point you selected.";
+    return "Thanks for taking the time to complete the project brief. This email is your record of the information you submitted.";
   }
   if (envelope.formType === "campaign") {
     return "Thanks for requesting a Starter Website review. This email is your record of the information you submitted.";
@@ -75,35 +74,11 @@ function customerRows(envelope: LeadSubmissionEnvelope) {
   ];
 
   if (envelope.project) {
-    const primary = envelope.project.primaryType
-      ? primaryLabel(envelope.project.primaryType)
-      : undefined;
-    const additionalNeeds = envelope.project.primaryType
-      ? envelope.project.types.filter((type) => type !== primary)
-      : envelope.project.types;
-
-    if (primary) {
-      rows.push(["Primary service", primary]);
-      if (envelope.project.scope) {
-        rows.push(
-          ...scopeLabels(envelope.project.primaryType!, envelope.project.scope).map(
-            ([label, value]) => [label, value] as [string, string],
-          ),
-        );
-      }
-    }
     rows.push(
-      ...(additionalNeeds.length
-        ? [["Additional needs", additionalNeeds.join(", ")] as [string, string]]
-        : []),
-      ...(envelope.project.pages && envelope.project.pages !== "Not sure yet"
-        ? [["Estimated pages", envelope.project.pages] as [string, string]]
-        : []),
+      ["Project types", envelope.project.types.join(", ")],
+      ["Estimated pages", envelope.project.pages],
       ["Business goal", envelope.project.goal],
-      ...(envelope.project.features.length &&
-      !(envelope.project.features.length === 1 && envelope.project.features[0] === "Not sure yet")
-        ? [["Requested features", envelope.project.features.join(", ")] as [string, string]]
-        : []),
+      ["Requested features", envelope.project.features.join(", ")],
       ["Content status", envelope.project.contentStatus],
       ["Branding status", envelope.project.brandingStatus],
       ["Existing platform", envelope.project.existingPlatform],
@@ -115,7 +90,6 @@ function customerRows(envelope: LeadSubmissionEnvelope) {
 
   if (envelope.package) {
     rows.push(
-      ["Preferred package", envelope.package.preferred],
       ["Budget", envelope.package.budget],
       ["Preferred timing", envelope.package.timing],
     );
@@ -168,31 +142,10 @@ export function toLeadEmailText(envelope: LeadSubmissionEnvelope) {
     ...optionalLine("Project summary", envelope.enquiry.summary),
     ...(project
       ? [
-          ...(project.primaryType
-            ? [
-                ...optionalLine("Primary service", primaryLabel(project.primaryType)),
-                ...(project.scope
-                  ? scopeLabels(project.primaryType, project.scope).flatMap(([label, value]) =>
-                      optionalLine(label, value),
-                    )
-                  : []),
-              ]
-            : []),
-          ...optionalLine(
-            "Additional needs",
-            project.primaryType
-              ? project.types
-                  .filter((type) => type !== primaryLabel(project.primaryType!))
-                  .join(", ")
-              : project.types.join(", "),
-          ),
-          ...(project.pages !== "Not sure yet"
-            ? optionalLine("Estimated pages", project.pages)
-            : []),
+          ...optionalLine("Project types", project.types.join(", ")),
+          ...optionalLine("Estimated pages", project.pages),
           ...optionalLine("Business goal", project.goal),
-          ...((project.features.length === 1 && project.features[0] === "Not sure yet")
-            ? []
-            : optionalLine("Requested features", project.features.join(", "))),
+          ...optionalLine("Requested features", project.features.join(", ")),
           ...optionalLine("Content status", project.contentStatus),
           ...optionalLine("Branding status", project.brandingStatus),
           ...optionalLine("Existing platform", project.existingPlatform),
@@ -203,7 +156,6 @@ export function toLeadEmailText(envelope: LeadSubmissionEnvelope) {
       : []),
     ...(selectedPackage
       ? [
-          ...optionalLine("Preferred package", selectedPackage.preferred),
           ...optionalLine("Budget", selectedPackage.budget),
           ...optionalLine("Preferred timing", selectedPackage.timing),
         ]
@@ -246,7 +198,7 @@ export function toCustomerConfirmationText(envelope: LeadSubmissionEnvelope) {
     customerIntro(envelope),
     "",
     "WHAT HAPPENS NEXT",
-    "Our team will review your submission carefully and respond using the contact information you provided. A package selection is a starting point until scope, timing, and requirements are confirmed.",
+    "Our team will review your submission carefully and respond using the contact information you provided. We’ll review your requirements, budget, timing, and any questions before preparing the next step.",
     "",
     "YOUR SUBMISSION",
     ...lines,
@@ -300,7 +252,7 @@ export function toCustomerConfirmationHtml(envelope: LeadSubmissionEnvelope) {
                   <tr>
                     <td style="padding:18px 20px;">
                       <div style="font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#ff6a00;">What happens next</div>
-                      <div style="margin-top:7px;color:#4f6074;font-size:14px;line-height:1.65;">Our team will review your submission carefully and respond using the contact information you provided. A package selection is a starting point until scope, timing, and requirements are confirmed.</div>
+                      <div style="margin-top:7px;color:#4f6074;font-size:14px;line-height:1.65;">Our team will review your submission carefully and respond using the contact information you provided. We’ll review your requirements, budget, timing, and any questions before preparing the next step.</div>
                     </td>
                   </tr>
                 </table>
