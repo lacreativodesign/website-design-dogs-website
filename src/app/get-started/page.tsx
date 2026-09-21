@@ -13,9 +13,9 @@ import { pageMetadata } from "@/lib/seo";
 export const metadata: Metadata = pageMetadata({ title: "Get a Free Project Quote", description: "Tell Website Design Dogs about your business, primary service, scope, package preference, budget, and timeline.", path: "/get-started" });
 
 const projectBriefProof: ProofItem[] = [
-  { title: "Five focused steps", body: "Business, primary service, package-fit scope, starting point, and final context.", icon: "clipboard-check" },
+  { title: "Four focused steps", body: "Business, project type, practical project details, and final context.", icon: "clipboard-check" },
   { title: "Nothing sent early", body: "Your details stay in the form until you explicitly submit the brief.", icon: "shield-check" },
-  { title: "Preferences preserved", body: "Selected service, package, industry, and campaign context follow you here.", icon: "mouse-pointer-click" },
+  { title: "Preferences preserved", body: "Selected service, industry, and campaign context follow you here.", icon: "mouse-pointer-click" },
   { title: "Reviewed before scope", body: "A selection is a starting point—not an automatic final quote or commitment.", icon: "heart-handshake" },
 ];
 
@@ -43,7 +43,6 @@ export default async function Page({ searchParams }: PageProps) {
     canonicalParams.set("service", DEFAULT_SERVICE_SLUG);
     redirect(`/get-started?${canonicalParams.toString()}`);
   }
-  const requestedPackage = typeof params.package === "string" ? params.package : "";
   const requestedService = typeof params.service === "string" ? params.service : "";
   const requestedIndustry =
     typeof params.industry === "string"
@@ -62,7 +61,7 @@ export default async function Page({ searchParams }: PageProps) {
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Get Started" }]}
         eyebrow="START YOUR PROJECT"
         title={<>Build your <em>project brief.</em></>}
-        body="Five focused steps turn the essentials into a useful starting point—without pretending the scope is final before we review it."
+        body="Four simple steps collect the essentials we need to understand your request and prepare the right follow-up."
         scene={illustrationScenes.getStarted}
         alt="Border collie designer mapping a digital project at a studio planning board"
         primaryCta={{ label: "Start the Brief", href: "#project-brief" }}
@@ -73,14 +72,13 @@ export default async function Page({ searchParams }: PageProps) {
         <Container>
           <div className="get-started-intro">
             <p className="home-eyebrow">Free project review</p>
-            <h2>One clear decision at a time.</h2>
+            <h2>Simple, clear, and easy to complete.</h2>
             <p>
-              Add only what you know. Your answers remain visible as you go, and no
-              details are submitted until you explicitly send the brief.
+              Tell us what you need, what you already have, your timing, and your
+              budget. Nothing is submitted until you explicitly send the request.
             </p>
           </div>
           <QuoteForm
-            requestedPackage={requestedPackage}
             requestedService={requestedService}
             requestedIndustry={requestedIndustry}
           />
