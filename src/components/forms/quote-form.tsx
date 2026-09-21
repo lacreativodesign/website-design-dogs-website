@@ -480,19 +480,13 @@ export function QuoteForm({
     if (step === 2) {
       const nextOptions = packageOptionsFor(data);
       const nextRecommendation = recommendationFor(data);
-      const currentChoiceIsValid = nextOptions.some(
-        ({ value }) => value === data.package.preferred,
-      );
-
-      if (!requestedPackage || !currentChoiceIsValid) {
-        setData((current) => ({
-          ...current,
-          package: {
-            ...current.package,
-            preferred: nextRecommendation.option.value,
-          },
-        }));
-      }
+      setData((current) => ({
+        ...current,
+        package: {
+          ...current.package,
+          preferred: nextRecommendation.option.value,
+        },
+      }));
     }
 
     setStep(nextStep);
