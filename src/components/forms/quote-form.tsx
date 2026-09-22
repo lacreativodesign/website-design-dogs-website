@@ -471,7 +471,7 @@ export function QuoteForm({
                   Confirmation sent
                 </span>
                 <strong className="mt-2 block text-base text-[var(--color-foreground)]">
-                  Check {data.contact.email}
+                  Check your inbox at {data.contact.email}
                 </strong>
                 <p className="mt-2 text-sm leading-6 text-[var(--color-text-muted)]">
                   We sent a professional confirmation email with a complete copy of
