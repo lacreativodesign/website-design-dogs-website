@@ -325,25 +325,23 @@ export function OfferLeadForm({
           </Field>
         </div>
 
-        {!compact ? (
-          <Field
+        <Field
+          id={id("website")}
+          label="Current website"
+          error={errors.website}
+          hint="Optional. Just type your domain — https:// is not required."
+        >
+          <input
             id={id("website")}
-            label="Current website"
-            error={errors.website}
-            hint="Optional. Just type your domain — https:// is not required."
-          >
-            <input
-              id={id("website")}
-              type="text"
-              inputMode="url"
-              autoComplete="url"
-              className={inputClass}
-              value={values.website}
-              onChange={(event) => update("website", event.target.value)}
-              placeholder="example.com"
-            />
-          </Field>
-        ) : null}
+            type="text"
+            inputMode="url"
+            autoComplete="url"
+            className={inputClass}
+            value={values.website}
+            onChange={(event) => update("website", event.target.value)}
+            placeholder="example.com"
+          />
+        </Field>
 
         <Field id={id("projectType")} label="Project type" required error={errors.projectType}>
           <select
