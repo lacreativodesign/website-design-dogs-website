@@ -19,6 +19,7 @@ import { submitLead, type QuoteRequestPayload } from "./submission";
 import { TurnstileWidget } from "./turnstile-widget";
 import { InternationalPhoneInput } from "./international-phone-input";
 import { normalizePhoneNumber } from "@/lib/leads/phone";
+import { normalizeWebsiteInput } from "@/lib/leads/website";
 import { LiveChatButton } from "./live-chat-button";
 
 const projectTypes = [
@@ -263,6 +264,9 @@ export function QuoteForm({
       if (!normalizePhoneNumber(data.contact.phoneCountry, data.contact.phone)) {
         nextErrors.phone = "Enter a valid phone number for the selected country.";
       }
+      if (data.business.website && !normalizeWebsiteInput(data.business.website)) {
+        nextErrors.website = "Enter a valid website address.";
+      }
       if (!data.business.name.trim()) nextErrors.business = "Enter your business name.";
       if (!industryChoice) nextErrors.industry = "Select your industry.";
       if (industryChoice === "Other" && !otherIndustry.trim()) {
@@ -389,6 +393,10 @@ export function QuoteForm({
           ...data.contact,
           phone: normalizedPhone,
         },
+        business: {
+          ...data.business,
+          website: normalizeWebsiteInput(data.business.website),
+        },
       },
       {
       submissionId,
@@ -437,65 +445,119 @@ export function QuoteForm({
 
   if (submitted) {
     return (
-      <section
-        className="mx-auto max-w-4xl rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 text-center shadow-[var(--shadow-md)] sm:p-10"
-      >
-        <p
-          ref={statusRef}
-          tabIndex={-1}
-          role="status"
-          aria-live="polite"
-          className="home-eyebrow"
-        >
-          Request received
-        </p>
-        <h2 className="mt-3 text-3xl font-black tracking-[-0.02em] sm:text-4xl">
-          Thanks — your project brief is in.
-        </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-[var(--color-text-muted)]">
-          We received your details successfully. Our team will review the brief and
-          respond using the contact information you provided. You do not need to
-          submit it again.
-        </p>
-        {confirmationEmailSent ? (
-          <p className="mx-auto mt-4 max-w-2xl rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-accent-soft)] p-4 text-sm font-bold text-[var(--color-text)]">
-            Check your inbox at {data.contact.email}. We sent you a confirmation
-            email with a complete copy of your submitted brief for your records. If you do not see it within a few minutes, check your
-            spam or junk folder.
-          </p>
-        ) : (
-          <p className="mx-auto mt-4 max-w-2xl text-sm text-[var(--color-text-muted)]">
-            Your request is safely recorded. We could not confirm delivery of the
-            receipt email, but our team still has your submission.
-          </p>
-        )}
-        <div className="mx-auto mt-7 grid max-w-2xl gap-3 text-left sm:grid-cols-2">
-          <div className="rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-section-alt)] p-4">
-            <strong className="block">What happens next</strong>
-            <span className="mt-1 block text-sm text-[var(--color-text-muted)]">
-              We’ll review your requirements, budget, timing, and any questions in your brief.
-            </span>
+      <section className="mx-auto max-w-6xl overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-lg)]">
+        <div className="grid lg:grid-cols-[minmax(0,1.35fr)_minmax(19rem,.65fr)]">
+          <div className="p-6 sm:p-9 lg:p-11">
+            <p
+              ref={statusRef}
+              tabIndex={-1}
+              role="status"
+              aria-live="polite"
+              className="home-eyebrow"
+            >
+              Request received
+            </p>
+            <h2 className="mt-3 max-w-3xl text-3xl font-black tracking-[-0.035em] sm:text-4xl lg:text-5xl">
+              Thanks — your project brief is safely in.
+            </h2>
+            <p className="mt-4 max-w-2xl text-[var(--color-text-muted)]">
+              We have your details. Our team will review the brief and respond using
+              the contact information you provided. There is no need to submit it again.
+            </p>
+
+            {confirmationEmailSent ? (
+              <div className="mt-6 max-w-3xl rounded-[var(--radius-md)] border border-[rgb(255_106_0_/_0.42)] bg-[rgb(255_106_0_/_0.08)] p-4 sm:p-5">
+                <span className="block text-xs font-black uppercase tracking-[0.12em] text-[var(--color-primary-orange)]">
+                  Confirmation sent
+                </span>
+                <strong className="mt-2 block text-base text-[var(--color-foreground)]">
+                  Check {data.contact.email}
+                </strong>
+                <p className="mt-2 text-sm leading-6 text-[var(--color-text-muted)]">
+                  We sent a professional confirmation email with a complete copy of
+                  your submitted brief. If it does not appear within a few minutes,
+                  please check spam or junk.
+                </p>
+              </div>
+            ) : (
+              <div className="mt-6 max-w-3xl rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-section-alt)] p-4 sm:p-5">
+                <strong className="block">Your request is safely recorded</strong>
+                <p className="mt-2 text-sm leading-6 text-[var(--color-text-muted)]">
+                  We could not confirm delivery of the receipt email, but Website
+                  Design Dogs still has your submission for review.
+                </p>
+              </div>
+            )}
+
+            <div className="mt-6 grid max-w-3xl gap-3 sm:grid-cols-2">
+              <div className="rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-section-alt)] p-4">
+                <span className="text-xs font-black uppercase tracking-[0.1em] text-[var(--color-primary-orange)]">
+                  01 · Review
+                </span>
+                <strong className="mt-2 block">We review the complete brief</strong>
+                <p className="mt-1 text-sm leading-6 text-[var(--color-text-muted)]">
+                  Requirements, budget, timing, goals, and project context are reviewed together.
+                </p>
+              </div>
+              <div className="rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-section-alt)] p-4">
+                <span className="text-xs font-black uppercase tracking-[0.1em] text-[var(--color-primary-orange)]">
+                  02 · Follow-up
+                </span>
+                <strong className="mt-2 block">We prepare the practical next step</strong>
+                <p className="mt-1 text-sm leading-6 text-[var(--color-text-muted)]">
+                  Our team will contact you if clarification is needed before scope or pricing is confirmed.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link className="btn btn-primary btn-medium" href="/">
+                Back to Home
+              </Link>
+              <Link className="btn btn-outline btn-medium" href="/services">
+                Explore Services
+              </Link>
+            </div>
+
+            {reference ? (
+              <div className="mt-6 inline-flex max-w-full items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-section-alt)] px-3 py-2 text-xs text-[var(--color-text-subtle)]">
+                <span className="font-black uppercase tracking-[0.08em]">Reference</span>
+                <code className="overflow-hidden text-ellipsis">{reference}</code>
+              </div>
+            ) : null}
           </div>
-          <div className="rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-section-alt)] p-4">
-            <strong className="block">Your request is safely recorded</strong>
-            <span className="mt-1 block text-sm text-[var(--color-text-muted)]">
-              Your submission has already been delivered to Website Design Dogs for review.
-            </span>
+
+          <div className="relative min-h-[20rem] overflow-hidden border-t border-[var(--color-border)] bg-[#061426] lg:min-h-full lg:border-l lg:border-t-0">
+            <div
+              className="absolute inset-0"
+              aria-hidden="true"
+              style={{
+                background:
+                  "radial-gradient(circle at 50% 32%, rgba(255,106,0,.22), transparent 34%), linear-gradient(180deg, rgba(7,24,44,.2), #061426)",
+              }}
+            />
+            <div className="relative flex h-full min-h-[20rem] flex-col justify-between p-6 sm:p-8">
+              <div className="max-w-xs rounded-[var(--radius-md)] border border-[rgb(255_106_0_/_0.35)] bg-[rgb(5_20_38_/_0.88)] p-4">
+                <span className="text-xs font-black uppercase tracking-[0.12em] text-[var(--color-primary-orange)]">
+                  Project received
+                </span>
+                <p className="mt-2 text-sm font-bold leading-6 text-[var(--color-foreground)]">
+                  Your brief is now with the Website Design Dogs team.
+                </p>
+              </div>
+              <picture className="mt-4 flex flex-1 items-end justify-center">
+                <source type="image/avif" srcSet={mascotDesigner.avif} />
+                <Image
+                  src={mascotDesigner.webp}
+                  width={900}
+                  height={900}
+                  alt="Website Design Dogs project specialist ready to review the submitted brief"
+                  className="max-h-[22rem] w-auto max-w-full object-contain drop-shadow-2xl"
+                />
+              </picture>
+            </div>
           </div>
         </div>
-        <div className="mt-7 flex flex-wrap justify-center gap-3">
-          <Link className="btn btn-primary btn-medium" href="/">
-            Back to Home
-          </Link>
-          <Link className="btn btn-outline btn-medium" href="/services">
-            Explore Services
-          </Link>
-        </div>
-        {reference ? (
-          <p className="mt-5 text-xs text-[var(--color-text-subtle)]">
-            Submission reference: {reference}
-          </p>
-        ) : null}
       </section>
     );
   }
@@ -629,12 +691,19 @@ export function QuoteForm({
                 />
               </Field>
             </div>
-            <Field id="q-website" label="Current website">
+            <Field
+              id="q-website"
+              label="Current website"
+              error={errors.website}
+              hint="Optional. You can enter your domain without https://."
+            >
               <input
                 id="q-website"
-                type="url"
+                type="text"
+                inputMode="url"
                 autoComplete="url"
-                placeholder="https://"
+                placeholder="example.com"
+                aria-invalid={Boolean(errors.website)}
                 className={inputClass}
                 value={data.business.website}
                 onChange={(event) =>
