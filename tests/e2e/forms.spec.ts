@@ -166,6 +166,7 @@ test("guided quote submits the project brief with checked consent", async ({
         formType: string;
         consent: boolean;
         contact: { email: string };
+        business: { website?: string };
         project: { goal: string };
       }
     | undefined;
@@ -178,6 +179,7 @@ test("guided quote submits the project brief with checked consent", async ({
       body: JSON.stringify({
         ...successfulResponse,
         referenceId: "BIZOSTO-QUOTE-TEST",
+        confirmationEmailSent: true,
       }),
     });
   });
@@ -186,6 +188,7 @@ test("guided quote submits the project brief with checked consent", async ({
   await page.getByLabel("Business name").fill("Acme Ltd");
   await page.getByLabel("Email").fill("jane@example.com");
   await page.getByLabel("Phone number").fill("(415) 900-2374");
+  await page.getByLabel("Current website").fill("bizosto.com");
   await page.getByLabel("Industry").selectOption({ label: "Home Services" });
   await page.getByRole("button", { name: "Next" }).click();
   await page.getByLabel("New Website").check();
@@ -208,10 +211,17 @@ test("guided quote submits the project brief with checked consent", async ({
   await page.getByRole("button", { name: "Send Quote Request" }).click();
 
   await expect(page.getByText(/BIZOSTO-QUOTE-TEST/)).toBeVisible();
+  await expect(page.getByText("Confirmation sent")).toBeVisible();
+  await expect(
+    page.getByAltText(
+      "Website Design Dogs project specialist ready to review the submitted brief",
+    ),
+  ).toBeVisible();
   expect(submitted).toMatchObject({
     formType: "quote",
     consent: true,
     contact: { email: "jane@example.com" },
+    business: { website: "https://bizosto.com/" },
     project: { goal: "Generate qualified leads" },
   });
 });
