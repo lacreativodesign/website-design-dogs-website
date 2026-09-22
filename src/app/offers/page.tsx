@@ -4,6 +4,7 @@ import Link from "next/link";
 import { ArrowRightIcon, BrandIcon } from "@/components/ui/icon";
 import { PlatformLogo } from "@/components/platforms/platform-glyph";
 import { PortfolioGallery } from "@/components/portfolio/portfolio-gallery";
+import { OfferLeadForm } from "@/components/offers/offer-lead-form";
 import { mascotDesigner } from "@/content/illustrations";
 import {
   featuredOfferPortfolioIds,
@@ -57,6 +58,37 @@ function percentLabel(discount: number) {
   return String(discount) + "% OFF";
 }
 
+const offerChoices = [
+  {
+    kicker: "Launch",
+    title: "New Website",
+    body: "Start with a polished, mobile-ready website built around trust, clarity, and action.",
+    serviceSlug: "website-design",
+    content: "offer-new-website",
+  },
+  {
+    kicker: "Refresh",
+    title: "Website Redesign",
+    body: "Replace an outdated experience with a sharper brand presence and clearer conversion path.",
+    serviceSlug: "website-design",
+    content: "offer-redesign",
+  },
+  {
+    kicker: "Sell",
+    title: "E-Commerce",
+    body: "Create a stronger storefront for products, collections, payments, and customer confidence.",
+    serviceSlug: "e-commerce",
+    content: "offer-ecommerce",
+  },
+  {
+    kicker: "Convert",
+    title: "Landing Page",
+    body: "Build a focused campaign page designed to turn paid traffic into qualified enquiries.",
+    serviceSlug: "website-design",
+    content: "offer-landing-page",
+  },
+] as const;
+
 export default function OffersPage() {
   const offer = currentSeasonalOffer;
   const featuredPackages = getFeaturedOfferPackages(offer);
@@ -89,61 +121,72 @@ export default function OffersPage() {
               <span>{offer.accentHeadline}</span>
             </h1>
             <p className={styles.heroLead}>
-              Professional website design for businesses that are serious about what&apos;s next.
+              Turn this October into the moment your business finally looks as serious online as it is in real life.
             </p>
             <p className={styles.heroBody}>{offer.body}</p>
 
             <div className={styles.heroActions}>
-              <Link className={styles.primaryButton} href={offer.ctaHref}>
-                {offer.ctaLabel} <ArrowRightIcon />
-              </Link>
-              <Link className={styles.secondaryButton} href={offer.secondaryCtaHref}>
-                {offer.secondaryCtaLabel}
-              </Link>
+              <a className={styles.primaryButton} href="#offer-hero-form">
+                Get My 40% Off Quote <ArrowRightIcon />
+              </a>
+              <a className={styles.secondaryButton} href="#offer-options">
+                See Eligible Projects
+              </a>
             </div>
 
             <div className={styles.heroSignals} aria-label="Offer commitments">
-              <span>Limited October booking window</span>
-              <span>Qualifying website services</span>
-              <span>No surprise WDD service fees</span>
-              <span>Real people, real support</span>
+              <span>October 1–31 only</span>
+              <span>Qualifying new projects</span>
+              <span>Clear written scope</span>
+              <span>Real WDD support</span>
+            </div>
+
+            <div className={styles.heroMicroProof}>
+              <strong>One request. One clear next step.</strong>
+              <span>No package guessing. No surprise commitment. We review the project before anything is booked.</span>
             </div>
           </div>
 
-          <div className={styles.heroVisual} aria-label="Website Design Dogs October campaign artwork">
-            <div className={styles.windowGlow} aria-hidden="true" />
-            <div className={styles.pumpkinCluster} aria-hidden="true">
-              <span />
-              <span />
-              <span />
+          <div className={styles.heroConversion}>
+            <div className={styles.heroVisual} aria-label="Website Design Dogs October campaign artwork">
+              <div className={styles.windowGlow} aria-hidden="true" />
+              <div className={styles.pumpkinCluster} aria-hidden="true">
+                <span />
+                <span />
+                <span />
+              </div>
+              <div className={styles.chalkboard}>
+                <small>SAME GREAT DESIGN.</small>
+                <strong>
+                  GREAT WEBSITES
+                  <br />
+                  SCARE AWAY
+                  <br />
+                  BAD COMPETITION.
+                </strong>
+                <em>A better tomorrow.</em>
+              </div>
+              <picture className={styles.heroMascot}>
+                <source type="image/avif" srcSet={mascotDesigner.avif} />
+                <Image
+                  src={mascotDesigner.webp}
+                  width={900}
+                  height={900}
+                  priority
+                  alt="Website Design Dogs mascot ready to plan an October website project"
+                />
+              </picture>
+              <div
+                className={styles.discountSeal}
+                aria-label={String(offer.discountPercent) + "% off this October"}
+              >
+                <strong>{offer.discountPercent}%</strong>
+                <span>OFF THIS OCTOBER</span>
+              </div>
             </div>
-            <div className={styles.chalkboard}>
-              <small>SAME GREAT DESIGN.</small>
-              <strong>
-                GREAT WEBSITES
-                <br />
-                SCARE AWAY
-                <br />
-                BAD COMPETITION.
-              </strong>
-              <em>A better tomorrow.</em>
-            </div>
-            <picture className={styles.heroMascot}>
-              <source type="image/avif" srcSet={mascotDesigner.avif} />
-              <Image
-                src={mascotDesigner.webp}
-                width={900}
-                height={900}
-                priority
-                alt="Website Design Dogs mascot ready to plan an October website project"
-              />
-            </picture>
-            <div
-              className={styles.discountSeal}
-              aria-label={String(offer.discountPercent) + "% off this October"}
-            >
-              <strong>{offer.discountPercent}%</strong>
-              <span>OFF THIS OCTOBER</span>
+
+            <div id="offer-hero-form" className={styles.heroForm}>
+              <OfferLeadForm placement="hero" compact />
             </div>
           </div>
         </div>
@@ -163,6 +206,36 @@ export default function OffersPage() {
               </span>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section id="offer-options" className={[styles.section, styles.offerChoiceSection].join(" ")}>
+        <div className={styles.offerChoiceIntro}>
+          <div>
+            <p className={styles.eyebrow}>Choose your move</p>
+            <h2>A stronger website. A better October price. Pick the project that moves your business forward.</h2>
+          </div>
+          <p>
+            The promotion applies to qualifying WDD website design and development service fees. We confirm eligibility and the regular service-fee value before the discount is applied.
+          </p>
+        </div>
+        <div className={styles.offerChoiceGrid}>
+          {offerChoices.map((choice, index) => (
+            <article key={choice.title} className={styles.offerChoiceCard}>
+              <span className={styles.offerChoiceNumber}>0{index + 1}</span>
+              <small>{choice.kicker}</small>
+              <h3>{choice.title}</h3>
+              <p>{choice.body}</p>
+              <Link
+                href={getOfferQuoteHref({
+                  serviceSlug: choice.serviceSlug,
+                  content: choice.content,
+                })}
+              >
+                Claim This Offer <ArrowRightIcon />
+              </Link>
+            </article>
+          ))}
         </div>
       </section>
 
@@ -217,6 +290,34 @@ export default function OffersPage() {
           variant="thumbnail"
           className={styles.offerPortfolioGallery}
         />
+      </section>
+
+      <section className={styles.midConversion} aria-labelledby="mid-offer-title">
+        <div className={styles.midConversionArt}>
+          <Image
+            src={offerArt.clientProof}
+            alt="Website Design Dogs team turning a website idea into a stronger online presence"
+            fill
+            sizes="(max-width: 900px) 100vw, 46vw"
+          />
+          <div className={styles.midConversionOverlay} aria-hidden="true" />
+          <div className={styles.midConversionCopy}>
+            <p className={styles.eyebrow}>Don’t just browse the offer</p>
+            <h2 id="mid-offer-title">Put your project in front of the team while the October window is open.</h2>
+            <p>
+              You do not need a perfect brief. Give us the essentials now, then add deeper project details later if you want.
+            </p>
+            <div>
+              <span>Fast first step</span>
+              <span>Required phone</span>
+              <span>Confirmation email</span>
+              <span>No obligation</span>
+            </div>
+          </div>
+        </div>
+        <div className={styles.midConversionForm}>
+          <OfferLeadForm placement="mid" />
+        </div>
       </section>
 
       <section id="offer-pricing" className={[styles.section, styles.pricingSection].join(" ")}>
@@ -437,25 +538,40 @@ export default function OffersPage() {
           aria-hidden="true"
         />
         <div className={styles.finalCtaOverlay} aria-hidden="true" />
-        <div className={[styles.finalCtaInner, "offer-final-cta__inner"].join(" ")}>
-          <div>
+        <div className={styles.finalConversionGrid}>
+          <div className={styles.finalCtaCopy}>
             <p className={styles.eyebrow}>October special</p>
             <h2>
-              Ready to give your business a <span>stronger online presence?</span>
+              Stop putting the website off. <span>Make this the month you move.</span>
             </h2>
-            <p>Secure the October website-design discount before the promotional window closes.</p>
+            <p>
+              If your business needs a stronger first impression, more leads, better online sales, or a cleaner customer journey, start the conversation while the 40% promotion is available.
+            </p>
+            <ul>
+              <li>40% off qualifying WDD website design/development service fees</li>
+              <li>Written scope and eligibility confirmation before work begins</li>
+              <li>Customer confirmation plus permanent WDD lead-safety delivery</li>
+            </ul>
+            <div className={styles.finalQuickActions}>
+              <Link
+                className={styles.secondaryButton}
+                href={getOfferQuoteHref({ serviceSlug: "website-design", content: "final-full-brief" })}
+              >
+                Complete Full Project Brief
+              </Link>
+              <small>{offer.endsLabel}</small>
+            </div>
           </div>
-          <div className={styles.finalCtaAction}>
-            <Link
-              className={styles.primaryButton}
-              href={getOfferQuoteHref({ serviceSlug: "website-design", content: "final-cta" })}
-            >
-              Get Started <ArrowRightIcon />
-            </Link>
-            <small>{offer.endsLabel}</small>
+          <div className={styles.finalOfferForm}>
+            <OfferLeadForm placement="final" />
           </div>
         </div>
       </section>
+
+      <a className={styles.mobileStickyCta} href="#offer-hero-form">
+        Get My 40% Off Quote
+      </a>
+
     </div>
   );
 }
