@@ -193,7 +193,7 @@ test('successful lead UX tells customers to check their inbox when confirmation 
   assert.match(route, /confirmationEmailSent: delivery\.customerConfirmationSent/);
   assert.match(route, /Please check your inbox, including spam or junk if needed/);
   assert.match(quote, /Check your inbox at \{data\.contact\.email\}/);
-  assert.match(quote, /complete copy of your submitted brief for your records/);
+  assert.match(quote, /complete copy of\s+your submitted brief for your records/);
   assert.match(email, /sendCustomerConfirmationEmail/);
   assert.match(email, /wdd-confirmation\/\$\{envelope\.submissionId\}/);
   assert.match(email, /Your Website Design Dogs project brief/);
