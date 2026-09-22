@@ -214,8 +214,9 @@ export function toCustomerConfirmationText(envelope: LeadSubmissionEnvelope) {
   ].join("\n");
 }
 
-export function toCustomerConfirmationHtml(envelope: LeadSubmissionEnvelope) {
-  const rows = customerRows(envelope)
+function renderEmailRows(rows: Array<[string, string | undefined]>) {
+  return rows
+    .filter(([, value]) => inline(value).length > 0)
     .map(
       ([label, value]) => `
         <tr>
@@ -224,6 +225,10 @@ export function toCustomerConfirmationHtml(envelope: LeadSubmissionEnvelope) {
         </tr>`,
     )
     .join("");
+}
+
+export function toCustomerConfirmationHtml(envelope: LeadSubmissionEnvelope) {
+  const rows = renderEmailRows(customerRows(envelope));
 
   return `<!doctype html>
 <html>
@@ -283,6 +288,98 @@ export function toCustomerConfirmationHtml(envelope: LeadSubmissionEnvelope) {
             <tr>
               <td style="background:#f7f9fb;border-top:1px solid #e8edf2;padding:20px 28px;color:#738196;font-size:12px;line-height:1.6;">
                 This is a transactional confirmation of a request you submitted at Website Design Dogs. Keep it for your records.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`;
+}
+
+
+export function toLeadEmailHtml(envelope: LeadSubmissionEnvelope) {
+  const attribution = envelope.attribution;
+  const rows = renderEmailRows([
+    ["Form", envelope.formType],
+    ...customerRows(envelope),
+    ["Landing page", attribution.landingPage],
+    ["Current page", attribution.currentPage],
+    ["Referrer", attribution.referrer],
+    ["UTM source", attribution.utmSource],
+    ["UTM medium", attribution.utmMedium],
+    ["UTM campaign", attribution.utmCampaign],
+    ["UTM term", attribution.utmTerm],
+    ["UTM content", attribution.utmContent],
+    ["Google click ID", attribution.gclid],
+    ["Meta click ID", attribution.fbclid],
+  ]);
+
+  const leadLabel =
+    envelope.formType === "quote"
+      ? "Project brief"
+      : envelope.formType === "campaign"
+        ? "Campaign enquiry"
+        : "Website enquiry";
+  const leadName = inline(envelope.business.name) || inline(envelope.contact.fullName);
+
+  return `<!doctype html>
+<html>
+  <body style="margin:0;padding:0;background:#eef2f5;font-family:Arial,Helvetica,sans-serif;color:#0b1d33;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#eef2f5;padding:28px 12px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:680px;background:#ffffff;border-radius:18px;overflow:hidden;box-shadow:0 14px 40px rgba(11,29,51,.10);">
+            <tr>
+              <td style="background:#081a2f;padding:24px 28px;border-bottom:5px solid #ff6a00;">
+                <div style="font-size:20px;line-height:1;font-weight:900;letter-spacing:.6px;color:#ffffff;">WEBSITE DESIGN <span style="color:#ff6a00;">DOGS</span></div>
+                <div style="margin-top:8px;color:#aeb9c8;font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;">Loyal to the Game.</div>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:34px 28px 12px;">
+                <div style="display:inline-block;background:#fff1e7;color:#c94f00;border-radius:999px;padding:7px 11px;font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;">New lead received</div>
+                <h1 style="margin:18px 0 10px;font-size:30px;line-height:1.15;color:#081a2f;">${escapeHtml(leadLabel)} — ${escapeHtml(leadName)}</h1>
+                <p style="margin:0;color:#4f6074;font-size:15px;line-height:1.7;">A new Website Design Dogs lead has been safely captured. The complete submitted information is below for review and follow-up.</p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:18px 28px;">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f7f9fb;border:1px solid #e4eaf0;border-radius:14px;">
+                  <tr>
+                    <td style="padding:18px 20px;">
+                      <div style="font-size:12px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#ff6a00;">Follow-up</div>
+                      <div style="margin-top:7px;color:#4f6074;font-size:14px;line-height:1.65;">Reply directly to this email to respond to ${escapeHtml(inline(envelope.contact.fullName))}. The Reply-To address is already set to the customer’s submitted email.</div>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:10px 28px 8px;">
+                <h2 style="margin:0 0 12px;font-size:19px;color:#081a2f;">Lead details</h2>
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border:1px solid #e8edf2;border-radius:12px;border-collapse:separate;border-spacing:0;overflow:hidden;">
+                  ${rows}
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:22px 28px 30px;">
+                <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#081a2f;border-radius:14px;">
+                  <tr>
+                    <td style="padding:18px 20px;color:#ffffff;">
+                      <div style="font-size:12px;color:#ff9a55;font-weight:800;text-transform:uppercase;letter-spacing:.8px;">Submission record</div>
+                      <div style="margin-top:7px;font-size:13px;line-height:1.6;color:#d9e1ea;">Reference: ${escapeHtml(envelope.submissionId)}<br>Submitted: ${escapeHtml(envelope.submittedAt)}</div>
+                    </td>
+                  </tr>
+                </table>
+                <p style="margin:22px 0 0;"><a href="mailto:${escapeHtml(inline(envelope.contact.email))}" style="display:inline-block;background:#ff6a00;color:#ffffff;text-decoration:none;font-size:14px;font-weight:800;padding:13px 18px;border-radius:9px;">Reply to Customer</a></p>
+              </td>
+            </tr>
+            <tr>
+              <td style="background:#f7f9fb;border-top:1px solid #e8edf2;padding:20px 28px;color:#738196;font-size:12px;line-height:1.6;">
+                Permanent WDD lead-safety copy. Keep this message for the Website Design Dogs lead record.
               </td>
             </tr>
           </table>
@@ -400,6 +497,7 @@ export function sendLeadEmail(
       replyTo: envelope.contact.email,
       subject: `WDD ${envelope.formType} lead — ${inline(envelope.business.name) || inline(envelope.contact.fullName)}`,
       text: toLeadEmailText(envelope),
+      html: toLeadEmailHtml(envelope),
     }),
   );
 }
