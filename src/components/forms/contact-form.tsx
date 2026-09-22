@@ -13,6 +13,7 @@ import { serviceBySlug } from "@/content/services";
 import { SERVICES } from "@/lib/leads/constants";
 import { leadEvent } from "./analytics-events";
 import { normalizePhoneNumber } from "@/lib/leads/phone";
+import { isValidWebsiteInput, normalizeWebsiteInput } from "@/lib/leads/website";
 import { getAttribution } from "./attribution";
 import { Field, inputClass } from "./form-field";
 import { InternationalPhoneInput } from "./international-phone-input";
@@ -36,15 +37,6 @@ const empty: ContactRequestPayload = {
 };
 
 const uuid = () => crypto.randomUUID();
-
-function validUrl(value: string) {
-  try {
-    const url = new URL(value);
-    return ["http:", "https:"].includes(url.protocol);
-  } catch {
-    return false;
-  }
-}
 
 function subscribeToUrlChange(onChange: () => void) {
   window.addEventListener("popstate", onChange);
@@ -142,8 +134,8 @@ export function ContactForm() {
     if (!normalizePhoneNumber(formData.phoneCountry, formData.phone)) {
       nextErrors.phone = "Enter a valid phone number for the selected country.";
     }
-    if (formData.website && !validUrl(formData.website)) {
-      nextErrors.website = "Enter a full URL, including https://.";
+    if (!isValidWebsiteInput(formData.website)) {
+      nextErrors.website = "Enter a valid website address.";
     }
     if (!formData.service) {
       nextErrors.service = "Choose the service needed.";
@@ -194,7 +186,11 @@ export function ContactForm() {
     )!;
 
     const result = await submitLead(
-      { ...formData, phone: normalizedPhone },
+      {
+        ...formData,
+        phone: normalizedPhone,
+        website: normalizeWebsiteInput(formData.website),
+      },
       {
       submissionId,
       formStartedAt,
@@ -316,15 +312,22 @@ export function ContactForm() {
           />
         </Field>
       </div>
-      <Field id="website" label="Current website" error={errors.website} hint="Optional. Include https:// if you have one.">
+      <Field
+        id="website"
+        label="Current website"
+        error={errors.website}
+        hint="Optional. You can enter your domain without https://."
+      >
         <input
           id="website"
-          type="url"
+          type="text"
+          inputMode="url"
           autoComplete="url"
           className={inputClass}
           value={formData.website}
           onChange={(event) => set("website", event.target.value)}
-          placeholder="https://example.com"
+          placeholder="example.com"
+          aria-invalid={Boolean(errors.website)}
         />
       </Field>
       <Field

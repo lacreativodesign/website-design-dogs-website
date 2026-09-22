@@ -13,6 +13,7 @@ import {
   normalizePhoneNumber,
   type PhoneCountryCode,
 } from "@/lib/leads/phone";
+import { isValidWebsiteInput, normalizeWebsiteInput } from "@/lib/leads/website";
 import { Card } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
@@ -51,17 +52,6 @@ const initial: Fields = {
   consent: false,
   verificationCode: "",
 };
-
-function hasInvalidUrl(value: string) {
-  if (!value) return false;
-
-  try {
-    const url = new URL(value);
-    return !["http:", "https:"].includes(url.protocol);
-  } catch {
-    return true;
-  }
-}
 
 export function CampaignLeadForm({ campaignSlug }: Props) {
   const [values, setValues] = useState(initial);
@@ -115,8 +105,8 @@ export function CampaignLeadForm({ campaignSlug }: Props) {
     if (!normalizePhoneNumber(values.phoneCountry, values.phone)) {
       nextErrors.phone = "Enter a valid phone number for the selected country.";
     }
-    if (hasInvalidUrl(values.website)) {
-      nextErrors.website = "Enter a valid public URL.";
+    if (!isValidWebsiteInput(values.website)) {
+      nextErrors.website = "Enter a valid website address.";
     }
     if (!values.consent) {
       nextErrors.consent = "Confirm consent.";
@@ -150,7 +140,7 @@ export function CampaignLeadForm({ campaignSlug }: Props) {
         },
         business: {
           name: values.businessName,
-          website: values.website || undefined,
+          website: normalizeWebsiteInput(values.website),
         },
         project: {
           type: values.projectType as
@@ -319,14 +309,17 @@ export function CampaignLeadForm({ campaignSlug }: Props) {
               id="website"
               label="Current website"
               error={errors.website}
+              hint="Optional. You can enter your domain without https://."
             >
               <input
                 id="website"
-                type="url"
+                type="text"
+                inputMode="url"
                 autoComplete="url"
                 className={inputClass}
                 value={values.website}
                 onChange={(event) => update("website", event.target.value)}
+                placeholder="example.com"
                 aria-invalid={Boolean(errors.website)}
               />
             </Field>

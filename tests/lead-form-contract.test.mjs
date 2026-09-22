@@ -114,8 +114,32 @@ test('get-started uses one primary submit action and renders a dedicated confirm
   assert.match(source, /formRef\.current\?\.requestSubmit\(\)/);
   assert.match(turnstile, /window\.turnstile\.execute/);
   assert.match(source, /setSubmitted\(true\)/);
-  assert.match(source, /Thanks — your project brief is in\./);
+  assert.match(source, /Thanks — your project brief is safely in\./);
+  assert.match(source, /Confirmation sent/);
+  assert.match(source, /Project received/);
+  assert.match(source, /mascotDesigner/);
   assert.doesNotMatch(source, /setStep\(0\)/);
+});
+
+test('website fields accept scheme-less domains and normalize them before delivery', () => {
+  const contact = fs.readFileSync('src/components/forms/contact-form.tsx', 'utf8');
+  const quote = fs.readFileSync('src/components/forms/quote-form.tsx', 'utf8');
+  const campaign = fs.readFileSync('src/components/campaigns/campaign-lead-form.tsx', 'utf8');
+  const validation = fs.readFileSync('src/lib/leads/validation.ts', 'utf8');
+  const website = fs.readFileSync('src/lib/leads/website.ts', 'utf8');
+
+  for (const source of [contact, quote, campaign]) {
+    assert.match(source, /normalizeWebsiteInput/);
+    assert.match(source, /inputMode="url"/);
+    assert.match(source, /domain without https:\/\//);
+  }
+
+  assert.match(contact, /website: normalizeWebsiteInput\(formData\.website\)/);
+  assert.match(quote, /website: normalizeWebsiteInput\(data\.business\.website\)/);
+  assert.match(campaign, /website: normalizeWebsiteInput\(values\.website\)/);
+  assert.match(validation, /normalizeWebsiteInput\(s\)/);
+  assert.match(website, /https:\/\/\$\{raw\}/);
+  assert.match(website, /localHosts/);
 });
 
 test('phone number remains mandatory and country-aware across every WDD website lead form', () => {
@@ -169,7 +193,7 @@ test('successful lead UX tells customers to check their inbox when confirmation 
   assert.match(route, /confirmationEmailSent: delivery\.customerConfirmationSent/);
   assert.match(route, /Please check your inbox, including spam or junk if needed/);
   assert.match(quote, /Check your inbox at \{data\.contact\.email\}/);
-  assert.match(quote, /complete copy of your submitted brief for your records/);
+  assert.match(quote, /complete copy of\s+your submitted brief for your records/);
   assert.match(email, /sendCustomerConfirmationEmail/);
   assert.match(email, /wdd-confirmation\/\$\{envelope\.submissionId\}/);
   assert.match(email, /Your Website Design Dogs project brief/);
