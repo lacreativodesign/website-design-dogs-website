@@ -91,7 +91,7 @@ test("Offers captures an October lead on-page with attribution and friendly webs
   await form.getByLabel("Full name").fill("Jane Smith");
   await form.getByLabel("Business name").fill("Acme Services");
   await form.getByLabel("Email").fill("jane@example.com");
-  await form.getByLabel("Phone").fill("(415) 900-2374");
+  await form.getByPlaceholder("(415) 900-2374").fill("(415) 900-2374");
   await form.getByLabel("Current website").fill("bizosto.com");
   await form.getByLabel("Project type").selectOption("E-Commerce Solutions");
   await form
@@ -132,7 +132,7 @@ test("Offers remains conversion-ready without horizontal overflow at paid-social
     await expect(page.getByRole("heading", { level: 1 })).toContainText("40% OFF");
     await expect(page.locator('[data-offer-lead-form="hero"]')).toBeVisible();
     await expect(page.locator("[data-offer-lead-form]")).toHaveCount(3);
-    await expect(page.getByText("New Website", { exact: true }).first()).toBeVisible();
+    await expect(page.getByRole("heading", { name: "New Website", exact: true }).first()).toBeVisible();
     await expectNoOverflow(page);
 
     const bodyWidth = await page.evaluate(() => document.body.scrollWidth);
