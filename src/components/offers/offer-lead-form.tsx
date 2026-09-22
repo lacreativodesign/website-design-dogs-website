@@ -73,7 +73,7 @@ export function OfferLeadForm({
 
   const id = (field: string) => `offer-${placement}-${field}`;
 
-  const update = (key: keyof Fields, value: string | boolean) => {
+  const update = <K extends keyof Fields>(key: K, value: Fields[K]) => {
     setValues((current) => ({ ...current, [key]: value }));
 
     if (!startedRef.current) {
@@ -350,7 +350,12 @@ export function OfferLeadForm({
             id={id("projectType")}
             className={inputClass}
             value={values.projectType}
-            onChange={(event) => update("projectType", event.target.value)}
+            onChange={(event) =>
+              update(
+                "projectType",
+                event.target.value as Fields["projectType"],
+              )
+            }
           >
             {projectTypes.map((type) => (
               <option key={type}>{type}</option>
