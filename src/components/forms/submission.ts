@@ -24,7 +24,8 @@ export type CampaignRequestPayload = {
     | "cleaning"
     | "roofing"
     | "landscaping"
-    | "home-services";
+    | "home-services"
+    | "october-offer";
   contact: {
     fullName: string;
     email: string;
@@ -36,7 +37,12 @@ export type CampaignRequestPayload = {
     website?: string;
   };
   project: {
-    type: "New Website" | "Website Redesign" | "Not Sure Yet";
+    type:
+      | "New Website"
+      | "Website Redesign"
+      | "E-Commerce Solutions"
+      | "Campaign Landing Page"
+      | "Not Sure Yet";
     note?: string;
   };
   consent: boolean;
