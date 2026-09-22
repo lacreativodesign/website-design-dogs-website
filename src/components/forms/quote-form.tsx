@@ -475,8 +475,8 @@ export function QuoteForm({
                 </strong>
                 <p className="mt-2 text-sm leading-6 text-[var(--color-text-muted)]">
                   We sent a professional confirmation email with a complete copy of
-                  your submitted brief. If it does not appear within a few minutes,
-                  please check spam or junk.
+                  your submitted brief for your records. If it does not appear within
+                  a few minutes, please check spam or junk.
                 </p>
               </div>
             ) : (
