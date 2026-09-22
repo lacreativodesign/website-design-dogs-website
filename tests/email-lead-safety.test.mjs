@@ -127,6 +127,11 @@ test('email adapter sends the complete lead to the permanent WDD safety inbox', 
     assert.match(body.text, /UTM campaign: wdd-launch/);
     assert.match(body.text, /Meta click ID: meta-click-id/);
     assert.match(body.text, /Phone country: United States/);
+    assert.match(body.html, /WEBSITE DESIGN/);
+    assert.match(body.html, /New lead received/);
+    assert.match(body.html, /Lead details/);
+    assert.match(body.html, /Reply to Customer/);
+    assert.match(body.html, /Permanent WDD lead-safety copy/);
     assert.match(toLeadEmailText(envelope), /Privacy policy consent: yes/);
   } finally {
     globalThis.fetch = originalFetch;
