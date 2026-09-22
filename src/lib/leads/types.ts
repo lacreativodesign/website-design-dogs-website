@@ -96,7 +96,7 @@ export type LeadSubmissionEnvelope = {
     promotionalPrice: number;
     savings: number;
     currency: "USD";
-    qualifyingScope: "Campaign Starter";
+    qualifyingScope: "Campaign Starter" | "October Website Offer";
   };
   attribution: Attribution;
   consent: {
