@@ -131,9 +131,10 @@ test('website fields accept scheme-less domains and normalize them before delive
   for (const source of [contact, quote, campaign]) {
     assert.match(source, /normalizeWebsiteInput/);
     assert.match(source, /inputMode="url"/);
-    assert.match(source, /domain without https:\/\//);
   }
 
+  assert.doesNotMatch(contact, /Optional\. You can enter your domain without https:\/\//);
+  assert.match(contact, /placeholder="www\.yourwebsite\.com"/);
   assert.match(contact, /website: normalizeWebsiteInput\(formData\.website\)/);
   assert.match(quote, /website: normalizeWebsiteInput\(data\.business\.website\)/);
   assert.match(campaign, /website: normalizeWebsiteInput\(values\.website\)/);
@@ -215,6 +216,8 @@ test('phone country control stays compact, readable, and responsive for long dia
   assert.match(phone, /country === "INTL" \? "INTL" : country/);
   assert.match(phone, /\+\{selected\.dialCode\}/);
   assert.match(phone, /whitespace-nowrap/);
+  assert.match(phone, /pl-3 pr-4/);
+  assert.match(phone, /mr-1 shrink-0/);
   assert.match(phone, /min-w-0/);
   assert.match(phone, /min-\[360px\]:grid-cols-\[8\.25rem_minmax\(0,1fr\)\]/);
   assert.doesNotMatch(phone, /truncate/);
