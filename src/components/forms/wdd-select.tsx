@@ -58,12 +58,6 @@ export function WddSelect({
     return () => document.removeEventListener("mousedown", onPointerDown);
   }, [open]);
 
-  useEffect(() => {
-    if (open) {
-      setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
-    }
-  }, [open, selectedIndex]);
-
   function choose(index: number) {
     const option = options[index];
     if (!option) return;
@@ -71,11 +65,21 @@ export function WddSelect({
     setOpen(false);
   }
 
+  function openMenu() {
+    setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
+    setOpen(true);
+  }
+
+  function toggleMenu() {
+    if (open) setOpen(false);
+    else openMenu();
+  }
+
   function onKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
     if (event.key === "ArrowDown") {
       event.preventDefault();
       if (!open) {
-        setOpen(true);
+        openMenu();
         return;
       }
       setActiveIndex((index) => Math.min(index + 1, options.length - 1));
@@ -85,7 +89,7 @@ export function WddSelect({
     if (event.key === "ArrowUp") {
       event.preventDefault();
       if (!open) {
-        setOpen(true);
+        openMenu();
         return;
       }
       setActiveIndex((index) => Math.max(index - 1, 0));
@@ -95,7 +99,7 @@ export function WddSelect({
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
       if (open) choose(activeIndex);
-      else setOpen(true);
+      else openMenu();
       return;
     }
 
@@ -127,7 +131,7 @@ export function WddSelect({
             : "border-[var(--color-border)] hover:border-[rgb(255_255_255_/_0.2)]",
           buttonClassName,
         ].join(" ")}
-        onClick={() => setOpen((current) => !current)}
+        onClick={toggleMenu}
         onKeyDown={onKeyDown}
       >
         <span
