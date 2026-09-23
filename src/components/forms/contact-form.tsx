@@ -316,7 +316,6 @@ export function ContactForm() {
         id="website"
         label="Current website"
         error={errors.website}
-        hint="Optional. You can enter your domain without https://."
       >
         <input
           id="website"
@@ -326,7 +325,7 @@ export function ContactForm() {
           className={inputClass}
           value={formData.website}
           onChange={(event) => set("website", event.target.value)}
-          placeholder="example.com"
+          placeholder="www.yourwebsite.com"
           aria-invalid={Boolean(errors.website)}
         />
       </Field>
