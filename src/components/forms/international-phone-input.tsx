@@ -1,6 +1,7 @@
 "use client";
 
 import { inputClass } from "./form-field";
+import { WddSelect } from "./wdd-select";
 import {
   phoneCountries,
   phonePlaceholder,
@@ -22,47 +23,25 @@ export function InternationalPhoneInput({
   onNumberChange: (number: string) => void;
   invalid?: boolean;
 }) {
-  const selected = phoneCountries.find((option) => option.code === country);
-
   return (
     <div className="grid min-w-0 grid-cols-1 gap-2 min-[360px]:grid-cols-[8.25rem_minmax(0,1fr)]">
-      <div className="relative min-w-0 rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-surface)] focus-within:border-[var(--color-primary-orange)]">
-        <div
-          aria-hidden="true"
-          className="flex min-h-[3rem] min-w-0 items-center justify-between gap-2 whitespace-nowrap py-3 pl-3 pr-4 text-[var(--color-foreground)]"
-        >
-          <span className="inline-flex min-w-0 items-center gap-2 font-bold">
-            <span className="text-xs font-black tracking-wide">
-              {country === "INTL" ? "INTL" : country}
-            </span>
-            {selected?.dialCode ? (
-              <span className="tabular-nums">+{selected.dialCode}</span>
-            ) : null}
-          </span>
-          <span
-            aria-hidden="true"
-            className="mr-1 shrink-0 text-xs text-[var(--color-text-muted)]"
-          >
-            ▾
-          </span>
-        </div>
-        <select
-          aria-label="Phone country"
-          autoComplete="tel-country-code"
-          className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-          value={country}
-          onChange={(event) =>
-            onCountryChange(event.target.value as PhoneCountryCode)
-          }
-        >
-          {phoneCountries.map((option) => (
-            <option key={option.code} value={option.code}>
-              {option.name}
-              {option.dialCode ? ` (+${option.dialCode})` : ""}
-            </option>
-          ))}
-        </select>
-      </div>
+      <WddSelect
+        id={`${id}-country`}
+        ariaLabel="Phone country"
+        value={country}
+        options={phoneCountries.map((option) => ({
+          value: option.code,
+          label: `${option.name}${option.dialCode ? ` (+${option.dialCode})` : ""}`,
+          displayLabel:
+            option.code === "INTL"
+              ? "INTL"
+              : `${option.code}${option.dialCode ? ` +${option.dialCode}` : ""}`,
+        }))}
+        onChange={(value) => onCountryChange(value as PhoneCountryCode)}
+        placeholder="Country"
+        buttonClassName="px-3"
+        menuClassName="w-[min(18rem,calc(100vw-2rem))]"
+      />
 
       <input
         id={id}
