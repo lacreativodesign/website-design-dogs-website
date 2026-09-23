@@ -213,17 +213,13 @@ test('phone country control stays compact, readable, and responsive for long dia
     fs.readFileSync('src/components/campaigns/campaign-lead-form.tsx', 'utf8'),
   ];
 
-  assert.match(phone, /country === "INTL" \? "INTL" : country/);
-  assert.match(phone, /\+\{selected\.dialCode\}/);
-  assert.match(phone, /whitespace-nowrap/);
-  assert.match(phone, /pl-3 pr-4/);
-  assert.match(phone, /mr-1 shrink-0/);
-  assert.match(phone, /min-w-0/);
-  assert.match(phone, /min-\[360px\]:grid-cols-\[8\.25rem_minmax\(0,1fr\)\]/);
-  assert.doesNotMatch(phone, /truncate/);
-  assert.match(phone, /option\.name/);
-  assert.match(phone, /opacity-0/);
+  assert.match(phone, /WddSelect/);
+  assert.match(phone, /displayLabel:/);
   assert.match(phone, /Phone country/);
+  assert.match(phone, /menuClassName="w-\[min\(18rem,calc\(100vw-2rem\)\)\]"/);
+  assert.match(phone, /min-\[360px\]:grid-cols-\[8\.25rem_minmax\(0,1fr\)\]/);
+  assert.doesNotMatch(phone, /<select/);
+  assert.doesNotMatch(phone, /opacity-0/);
   assert.match(countries, /dialCode: "965"/);
   assert.match(countries, /dialCode: "966"/);
   assert.match(countries, /dialCode: "971"/);
@@ -237,6 +233,25 @@ test('phone country control stays compact, readable, and responsive for long dia
 });
 
 
+
+test('contact form uses the same custom WDD dropdown for service and phone country', () => {
+  const contact = fs.readFileSync('src/components/forms/contact-form.tsx', 'utf8');
+  const phone = fs.readFileSync(
+    'src/components/forms/international-phone-input.tsx',
+    'utf8',
+  );
+  const select = fs.readFileSync('src/components/forms/wdd-select.tsx', 'utf8');
+
+  assert.match(contact, /<WddSelect[\s\S]*id="service"/);
+  assert.match(contact, /placeholder="Select a service"/);
+  assert.doesNotMatch(contact, /<select[\s\S]*id="service"/);
+  assert.match(phone, /<WddSelect/);
+  assert.match(select, /role="combobox"/);
+  assert.match(select, /role="listbox"/);
+  assert.match(select, /role="option"/);
+  assert.match(select, /rotate-180/);
+  assert.match(select, /d="m5\.5 7\.5 4\.5 4\.5 4\.5-4\.5"/);
+});
 
 test('get-started keeps one simple Tawk-ready help route without recommendation copy', () => {
   const quote = fs.readFileSync('src/components/forms/quote-form.tsx', 'utf8');
