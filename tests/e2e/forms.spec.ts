@@ -56,7 +56,8 @@ test("contact form validation, failure preservation, and mocked success", async 
   await businessName.fill("Example Business");
   await email.fill("person@example.test");
   await phone.fill("(415) 900-2374");
-  await service.selectOption({ label: "New Website" });
+  await service.click();
+  await page.getByRole("option", { name: "New Website" }).click();
   await summary.fill(
     "We need a professional website for our growing service business.",
   );
@@ -136,7 +137,8 @@ test("contact form retains first-landing attribution across navigation", async (
     .fill("(415) 900-2374");
   await page
     .getByRole("combobox", { name: /^Service needed/ })
-    .selectOption({ label: "New Website" });
+    .click();
+  await page.getByRole("option", { name: "New Website" }).click();
   await page
     .getByRole("textbox", { name: /^Project summary/ })
     .fill("We need a professional website for our growing service business.");
