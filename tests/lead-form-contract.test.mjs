@@ -134,7 +134,7 @@ test('website fields accept scheme-less domains and normalize them before delive
   }
 
   assert.doesNotMatch(contact, /Optional\. You can enter your domain without https:\/\//);
-  assert.match(contact, /placeholder="www\.yourwebsite\.com"/);
+  assert.match(contact, /placeholder="yourbusiness\.com"/);
   assert.match(contact, /website: normalizeWebsiteInput\(formData\.website\)/);
   assert.match(quote, /website: normalizeWebsiteInput\(data\.business\.website\)/);
   assert.match(campaign, /website: normalizeWebsiteInput\(values\.website\)/);
