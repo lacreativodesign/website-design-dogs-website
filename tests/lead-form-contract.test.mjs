@@ -134,13 +134,32 @@ test('website fields accept scheme-less domains and normalize them before delive
   }
 
   assert.doesNotMatch(contact, /Optional\. You can enter your domain without https:\/\//);
-  assert.match(contact, /placeholder="www\.yourwebsite\.com"/);
+  assert.match(contact, /placeholder="yourbusiness\.com"/);
   assert.match(contact, /website: normalizeWebsiteInput\(formData\.website\)/);
   assert.match(quote, /website: normalizeWebsiteInput\(data\.business\.website\)/);
   assert.match(campaign, /website: normalizeWebsiteInput\(values\.website\)/);
   assert.match(validation, /normalizeWebsiteInput\(s\)/);
   assert.match(website, /https:\/\/\$\{raw\}/);
   assert.match(website, /localHosts/);
+});
+
+test('contact form keeps professional placeholders on every customer-entry field', () => {
+  const contact = fs.readFileSync('src/components/forms/contact-form.tsx', 'utf8');
+  const phone = fs.readFileSync(
+    'src/components/forms/international-phone-input.tsx',
+    'utf8',
+  );
+
+  assert.match(contact, /placeholder="John Smith"/);
+  assert.match(contact, /placeholder="Your Business Name"/);
+  assert.match(contact, /placeholder="john@yourbusiness\.com"/);
+  assert.match(contact, /placeholder="yourbusiness\.com"/);
+  assert.match(contact, /placeholder="Select a service"/);
+  assert.match(
+    contact,
+    /placeholder="Briefly tell us what you need help with\.\.\."/,
+  );
+  assert.match(phone, /placeholder=\{phonePlaceholder\(country\)\}/);
 });
 
 test('phone number remains mandatory and country-aware across every WDD website lead form', () => {

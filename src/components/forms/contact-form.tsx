@@ -263,6 +263,7 @@ export function ContactForm() {
             className={inputClass}
             value={formData.fullName}
             onChange={(event) => set("fullName", event.target.value)}
+            placeholder="John Smith"
             aria-invalid={Boolean(errors.fullName)}
           />
         </Field>
@@ -278,6 +279,7 @@ export function ContactForm() {
             className={inputClass}
             value={formData.businessName}
             onChange={(event) => set("businessName", event.target.value)}
+            placeholder="Your Business Name"
             aria-invalid={Boolean(errors.businessName)}
           />
         </Field>
@@ -294,6 +296,7 @@ export function ContactForm() {
             className={inputClass}
             value={formData.email}
             onChange={(event) => set("email", event.target.value)}
+            placeholder="john@yourbusiness.com"
             aria-invalid={Boolean(errors.email)}
           />
         </Field>
@@ -326,7 +329,7 @@ export function ContactForm() {
           className={inputClass}
           value={formData.website}
           onChange={(event) => set("website", event.target.value)}
-          placeholder="www.yourwebsite.com"
+          placeholder="yourbusiness.com"
           aria-invalid={Boolean(errors.website)}
         />
       </Field>
@@ -360,6 +363,7 @@ export function ContactForm() {
           className={inputClass}
           value={formData.summary}
           onChange={(event) => set("summary", event.target.value)}
+          placeholder="Briefly tell us what you need help with..."
           aria-invalid={Boolean(errors.summary)}
         />
       </Field>
