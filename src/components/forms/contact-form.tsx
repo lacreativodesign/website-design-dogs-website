@@ -17,6 +17,7 @@ import { isValidWebsiteInput, normalizeWebsiteInput } from "@/lib/leads/website"
 import { getAttribution } from "./attribution";
 import { Field, inputClass } from "./form-field";
 import { InternationalPhoneInput } from "./international-phone-input";
+import { WddSelect } from "./wdd-select";
 import {
   submitLead,
   type ContactRequestPayload,
@@ -335,18 +336,17 @@ export function ContactForm() {
         required
         error={errors.service}
       >
-        <select
+        <WddSelect
           id="service"
-          className={inputClass}
           value={formData.service}
-          onChange={(event) => set("service", event.target.value)}
+          options={SERVICES.map((service) => ({
+            value: service,
+            label: service,
+          }))}
+          onChange={(value) => set("service", value)}
+          placeholder="Select a service"
           aria-invalid={Boolean(errors.service)}
-        >
-          <option value="">Select a service</option>
-          {SERVICES.map((service) => (
-            <option key={service}>{service}</option>
-          ))}
-        </select>
+        />
       </Field>
       <Field
         id="summary"
