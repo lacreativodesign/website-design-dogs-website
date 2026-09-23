@@ -23,8 +23,6 @@ export function InternationalPhoneInput({
   onNumberChange: (number: string) => void;
   invalid?: boolean;
 }) {
-  const selected = phoneCountries.find((option) => option.code === country);
-
   return (
     <div className="grid min-w-0 grid-cols-1 gap-2 min-[360px]:grid-cols-[8.25rem_minmax(0,1fr)]">
       <WddSelect
