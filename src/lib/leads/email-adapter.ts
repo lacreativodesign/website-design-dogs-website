@@ -34,18 +34,12 @@ function escapeHtml(value: string | undefined) {
     .replace(/'/g, "&#039;");
 }
 
-function isOctoberOfferLead(envelope: LeadSubmissionEnvelope) {
-  return envelope.campaign?.offerCode === "OCTOBER-2026-40-OFF";
-}
-
 function customerSubject(envelope: LeadSubmissionEnvelope) {
   if (envelope.formType === "quote") {
     return "Your Website Design Dogs project brief";
   }
   if (envelope.formType === "campaign") {
-    return isOctoberOfferLead(envelope)
-      ? "Your Website Design Dogs October offer request"
-      : "Your Website Design Dogs Starter Website request";
+    return "Your Website Design Dogs Starter Website request";
   }
   return "We received your Website Design Dogs enquiry";
 }
@@ -53,9 +47,7 @@ function customerSubject(envelope: LeadSubmissionEnvelope) {
 function customerHeading(envelope: LeadSubmissionEnvelope) {
   if (envelope.formType === "quote") return "Your project brief is safely in.";
   if (envelope.formType === "campaign") {
-    return isOctoberOfferLead(envelope)
-      ? "Your October offer request is safely in."
-      : "Your Starter Website request is in.";
+    return "Your Starter Website request is in.";
   }
   return "We’ve received your enquiry.";
 }
@@ -65,9 +57,7 @@ function customerIntro(envelope: LeadSubmissionEnvelope) {
     return "Thanks for taking the time to complete the project brief. This email is your record of the information you submitted.";
   }
   if (envelope.formType === "campaign") {
-    return isOctoberOfferLead(envelope)
-      ? "Thanks for requesting an October website-offer review. We’ll confirm eligibility, scope, regular service-fee value, exclusions, timing, and the applicable 40% promotion before work begins."
-      : "Thanks for requesting a Starter Website review. This email is your record of the information you submitted.";
+    return "Thanks for requesting a Starter Website review. This email is your record of the information you submitted.";
   }
   return "Thanks for getting in touch. This email is your record of the enquiry you submitted.";
 }
