@@ -133,7 +133,7 @@ export function ContactForm() {
       nextErrors.email = "Enter a valid email address.";
     }
     if (!normalizePhoneNumber(formData.phoneCountry, formData.phone)) {
-      nextErrors.phone = "Enter a valid phone number for the selected country.";
+      nextErrors.phone = "Enter a valid phone number. Include +country code for international numbers.";
     }
     if (!isValidWebsiteInput(formData.website)) {
       nextErrors.website = "Enter a valid website address.";
