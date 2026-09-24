@@ -104,7 +104,7 @@ export function OfferLeadForm({
     }
     const normalizedPhone = normalizePhoneNumber(values.phoneCountry, values.phone);
     if (!normalizedPhone) {
-      nextErrors.phone = "Enter a valid phone number for the selected country.";
+      nextErrors.phone = "Enter a valid phone number. Include +country code for international numbers.";
     }
     if (!isValidWebsiteInput(values.website)) {
       nextErrors.website = "Enter a valid website address.";
