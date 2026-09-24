@@ -103,7 +103,7 @@ export function CampaignLeadForm({ campaignSlug }: Props) {
       nextErrors.email = "Enter a valid email address.";
     }
     if (!normalizePhoneNumber(values.phoneCountry, values.phone)) {
-      nextErrors.phone = "Enter a valid phone number for the selected country.";
+      nextErrors.phone = "Enter a valid phone number. Include +country code for international numbers.";
     }
     if (!isValidWebsiteInput(values.website)) {
       nextErrors.website = "Enter a valid website address.";
