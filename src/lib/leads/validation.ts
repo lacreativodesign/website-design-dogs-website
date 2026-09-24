@@ -30,7 +30,6 @@ export function validateLeadPayload(input: unknown): LeadSubmissionEnvelope { co
     roofing: "Roofing Contractors",
     landscaping: "Landscaping Businesses",
     "home-services": "Home-Service Businesses",
-    "october-offer": "October Website Offer",
   };
   const slug = clean(p.campaignSlug, 80);
   const projectTypes = [
@@ -43,7 +42,6 @@ export function validateLeadPayload(input: unknown): LeadSubmissionEnvelope { co
   const projectType = enumValue(p.project?.type, "projectType", projectTypes, errs);
   const note = opt(p.project?.note, 2500);
   if (!Object.prototype.hasOwnProperty.call(campaignMap, slug)) errs.campaignSlug = "Invalid campaign slug.";
-  const isOctoberOffer = slug === "october-offer";
   const service =
     projectType === "E-Commerce Solutions"
       ? "E-Commerce Solutions"
@@ -53,47 +51,28 @@ export function validateLeadPayload(input: unknown): LeadSubmissionEnvelope { co
   envelope.business = { ...envelope.business, industry: campaignMap[slug] };
   envelope.enquiry = {
     service,
-    summary:
-      note ||
-      (isOctoberOffer
-        ? `${projectType} October 40% offer enquiry.`
-        : `${projectType} Starter website enquiry.`),
+    summary: note || `${projectType} Starter website enquiry.`,
   };
   envelope.project = {
     types: [projectType],
     pages: "1–5 pages",
-    goal: isOctoberOffer ? "October promotion project review" : "Starter website scope review",
+    goal: "Starter website scope review",
     features: ["Contact or quote form"],
     contentStatus: "Not sure yet",
     brandingStatus: "Not sure yet",
-    notWorking: isOctoberOffer
-      ? "October offer enquiry submitted for review."
-      : "Starter website enquiry submitted for review.",
-    accomplish: isOctoberOffer
-      ? "Confirm project requirements, eligibility, regular service-fee value, and the October 40% discount."
-      : "Confirm the project requirements and whether the Starter package fits the requested scope.",
+    notWorking: "Starter website enquiry submitted for review.",
+    accomplish: "Confirm the project requirements and whether the Starter package fits the requested scope.",
     ...(note ? { details: note } : {}),
   };
-  envelope.campaign = isOctoberOffer
-    ? {
-        slug,
-        industry: campaignMap[slug] || "",
-        offerCode: "OCTOBER-2026-40-OFF",
-        regularPrice: 0,
-        promotionalPrice: 0,
-        savings: 0,
-        currency: "USD",
-        qualifyingScope: "October Website Offer",
-      }
-    : {
-        slug,
-        industry: campaignMap[slug] || "",
-        offerCode: "WDD-STARTER-499",
-        regularPrice: 499,
-        promotionalPrice: 499,
-        savings: 0,
-        currency: "USD",
-        qualifyingScope: "Campaign Starter",
-      };
+  envelope.campaign = {
+    slug,
+    industry: campaignMap[slug] || "",
+    offerCode: "WDD-STARTER-499",
+    regularPrice: 499,
+    promotionalPrice: 499,
+    savings: 0,
+    currency: "USD",
+    qualifyingScope: "Campaign Starter",
+  };
  }
  if (Object.keys(errs).length) throw new LeadError("VALIDATION_FAILED", "Please review the highlighted fields and try again.", 400, errs); return envelope; }
