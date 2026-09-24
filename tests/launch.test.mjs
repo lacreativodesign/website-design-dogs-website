@@ -4,8 +4,8 @@ import test from "node:test";
 
 test("retired /offers URL permanently redirects without restoring the route", () => {
   const source = fs.readFileSync("next.config.ts", "utf8");
-  assert.match(source, /source: "\\/offers"/);
-  assert.match(source, /destination: "\\/"/);
+  assert.ok(source.includes('source: "/offers"'));
+  assert.ok(source.includes('destination: "/"'));
   assert.match(source, /permanent: true/);
 });
 
