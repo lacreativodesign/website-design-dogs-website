@@ -90,6 +90,23 @@ export const phoneCountries: readonly PhoneCountry[] = [
 ] as const;
 
 const countryByCode = new Map(phoneCountries.map((country) => [country.code, country]));
+const countriesByDialCode = phoneCountries
+  .filter((country) => country.dialCode)
+  .slice()
+  .sort((a, b) => b.dialCode.length - a.dialCode.length);
+
+export function inferPhoneCountryFromInput(input: string): PhoneCountryCode {
+  const raw = input.trim();
+  if (!raw.startsWith("+") && !raw.startsWith("00")) return "US";
+
+  const digits = raw.replace(/\D/g, "");
+  const internationalDigits = raw.startsWith("00") ? digits.slice(2) : digits;
+  const country = countriesByDialCode.find((option) =>
+    internationalDigits.startsWith(option.dialCode),
+  );
+
+  return country?.code || "INTL";
+}
 
 export function isPhoneCountryCode(value: string): value is PhoneCountryCode {
   return countryByCode.has(value as PhoneCountryCode);
