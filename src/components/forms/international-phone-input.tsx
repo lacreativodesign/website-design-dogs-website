@@ -1,16 +1,11 @@
 "use client";
 
 import { inputClass } from "./form-field";
-import {
-  inferPhoneCountryFromInput,
-  type PhoneCountryCode,
-} from "@/lib/leads/phone";
+import type { PhoneCountryCode } from "@/lib/leads/phone";
 
 export function InternationalPhoneInput({
   id,
-  country,
   number,
-  onCountryChange,
   onNumberChange,
   invalid,
 }: {
@@ -30,15 +25,7 @@ export function InternationalPhoneInput({
       className={`${inputClass} min-w-0`}
       value={number}
       placeholder="(000) 000-0000"
-      onChange={(event) => {
-        const value = event.target.value;
-        onNumberChange(value);
-
-        const inferred = inferPhoneCountryFromInput(value);
-        if (inferred !== country) {
-          onCountryChange(inferred);
-        }
-      }}
+      onChange={(event) => onNumberChange(event.target.value)}
       aria-invalid={invalid || undefined}
     />
   );
