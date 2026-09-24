@@ -90,6 +90,23 @@ export const phoneCountries: readonly PhoneCountry[] = [
 ] as const;
 
 const countryByCode = new Map(phoneCountries.map((country) => [country.code, country]));
+const countriesByDialCode = phoneCountries
+  .filter((country) => country.dialCode)
+  .slice()
+  .sort((a, b) => b.dialCode.length - a.dialCode.length);
+
+export function inferPhoneCountryFromInput(input: string): PhoneCountryCode {
+  const raw = input.trim();
+  if (!raw.startsWith("+") && !raw.startsWith("00")) return "US";
+
+  const digits = raw.replace(/\D/g, "");
+  const internationalDigits = raw.startsWith("00") ? digits.slice(2) : digits;
+  const country = countriesByDialCode.find((option) =>
+    internationalDigits.startsWith(option.dialCode),
+  );
+
+  return country?.code || "INTL";
+}
 
 export function isPhoneCountryCode(value: string): value is PhoneCountryCode {
   return countryByCode.has(value as PhoneCountryCode);
@@ -118,24 +135,19 @@ export function normalizePhoneNumber(
   const international = raw.startsWith("+") || raw.startsWith("00");
   const digits = raw.replace(/\D/g, "");
 
-  if (countryCode === "INTL") {
-    if (!international) return undefined;
+  if (international) {
     const normalized = `+${raw.startsWith("00") ? digits.slice(2) : digits}`;
     return isE164Phone(normalized) ? normalized : undefined;
   }
 
+  if (countryCode === "INTL") return undefined;
+
   let national = digits;
 
-  if (international) {
-    const internationalDigits = raw.startsWith("00") ? digits.slice(2) : digits;
-    if (!internationalDigits.startsWith(country.dialCode)) return undefined;
-    national = internationalDigits.slice(country.dialCode.length);
-  } else {
-    if (country.dialCode === "1" && national.length === 11 && national.startsWith("1")) {
-      national = national.slice(1);
-    } else if (country.stripNationalPrefix && national.startsWith("0")) {
-      national = national.slice(1);
-    }
+  if (country.dialCode === "1" && national.length === 11 && national.startsWith("1")) {
+    national = national.slice(1);
+  } else if (country.stripNationalPrefix && national.startsWith("0")) {
+    national = national.slice(1);
   }
 
   if (
