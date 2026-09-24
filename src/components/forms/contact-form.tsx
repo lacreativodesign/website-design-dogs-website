@@ -101,8 +101,8 @@ export function ContactForm() {
   const [submitting, setSubmitting] = useState(false);
   const [turnstile, setTurnstile] = useState("");
   const [resetKey, setResetKey] = useState(0);
-  const [submissionId, setSubmissionId] = useState(uuid);
-  const [formStartedAt, setFormStartedAt] = useState(() =>
+  const [submissionId] = useState(uuid);
+  const [formStartedAt] = useState(() =>
     new Date().toISOString(),
   );
   const statusRef = useRef<HTMLParagraphElement>(null);
@@ -213,8 +213,6 @@ export function ContactForm() {
         formType: "contact",
         serviceSlug: formData.service,
         utmCampaign: attribution.utmCampaign,
-        confirmationEmailSent: result.confirmationEmailSent === true,
-        referenceId: result.referenceId,
       });
       router.replace("/thank-you");
       return;
