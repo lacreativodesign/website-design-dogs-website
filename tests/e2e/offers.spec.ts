@@ -91,7 +91,7 @@ test("Offers captures an October lead on-page with attribution and friendly webs
   await form.getByLabel("Full name").fill("Jane Smith");
   await form.getByLabel("Business name").fill("Acme Services");
   await form.getByLabel("Email").fill("jane@example.com");
-  await form.getByPlaceholder("(415) 900-2374").fill("(415) 900-2374");
+  await form.getByPlaceholder("(000) 000-0000").fill("(415) 900-2374");
   await form.getByLabel("Current website").fill("bizosto.com");
   await form.getByLabel("Project type").selectOption("E-Commerce Solutions");
   await form
