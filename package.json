@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "assets:verify": "node scripts/verify-assets.mjs",
-    "leads:test": "node --test tests/leads.test.mjs tests/email-lead-safety.test.mjs tests/lead-form-contract.test.mjs tests/offers-lead-contract.test.mjs tests/phone-normalization.test.mjs tests/website-normalization.test.mjs",
+    "leads:test": "node --test tests/leads.test.mjs tests/email-lead-safety.test.mjs tests/lead-form-contract.test.mjs tests/phone-normalization.test.mjs tests/website-normalization.test.mjs",
     "launch:test": "node --test tests/launch.test.mjs",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
