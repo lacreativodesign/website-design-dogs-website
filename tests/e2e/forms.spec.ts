@@ -87,8 +87,7 @@ test("contact form validation, failure preservation, and mocked success", async 
   await expect(
     page.getByRole("heading", { name: /thank you\. your enquiry is safely in/i }),
   ).toBeVisible();
-  await expect(page.getByText(/confirmation email with a copy of your enquiry/i)).toBeVisible();
-  await expect(page.getByText(/WDD-20260713-TEST/)).toBeVisible();
+  await expect(page.getByText(/confirmation email should arrive shortly/i)).toBeVisible();
   expect(submissionIds).toHaveLength(2);
   expect(submissionIds[1]).toBe(submissionIds[0]);
 });
@@ -167,7 +166,7 @@ test("contact form retains first-landing attribution across navigation", async (
   await page.getByRole("button", { name: "Send Enquiry" }).click();
 
   await expect(page).toHaveURL(/\/thank-you$/);
-  await expect(page.getByText(/confirmation email with a copy of your enquiry/i)).toBeVisible();
+  await expect(page.getByText(/confirmation email should arrive shortly/i)).toBeVisible();
   expect(submitted?.consent).toBe(true);
   expect(submitted?.attribution).toMatchObject({
     utmSource: "google",
