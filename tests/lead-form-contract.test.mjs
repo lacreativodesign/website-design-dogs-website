@@ -159,33 +159,37 @@ test('contact form keeps professional placeholders on every customer-entry field
     contact,
     /placeholder="Briefly tell us what you need help with\.\.\."/,
   );
-  assert.match(phone, /placeholder=\{phonePlaceholder\(country\)\}/);
+  assert.match(phone, /placeholder="\(000\) 000-0000"/);
 });
 
-test('phone number remains mandatory and country-aware across every WDD website lead form', () => {
+test('phone number remains mandatory with smart US-default and international handling', () => {
   const contact = fs.readFileSync('src/components/forms/contact-form.tsx', 'utf8');
   const quote = fs.readFileSync('src/components/forms/quote-form.tsx', 'utf8');
   const campaign = fs.readFileSync('src/components/campaigns/campaign-lead-form.tsx', 'utf8');
   const submission = fs.readFileSync('src/components/forms/submission.ts', 'utf8');
   const validation = fs.readFileSync('src/lib/leads/validation.ts', 'utf8');
   const phone = fs.readFileSync('src/lib/leads/phone.ts', 'utf8');
+  const input = fs.readFileSync(
+    'src/components/forms/international-phone-input.tsx',
+    'utf8',
+  );
 
   for (const source of [contact, quote, campaign]) {
     assert.match(source, /normalizePhoneNumber/);
-    assert.match(source, /Enter a valid phone number for the selected country/);
+    assert.match(source, /Include \+country code for international numbers/);
     assert.match(source, /label="Phone number"[\s\S]{0,160}required/);
     assert.match(source, /InternationalPhoneInput/);
   }
 
-  assert.match(phone, /code: "US"/);
-  assert.match(phone, /name: "United States"/);
-  assert.match(phone, /code: "INTL"/);
-  assert.match(phone, /Other international/);
-  assert.match(phone, /return isE164Phone\(normalized\)/);
+  assert.match(input, /placeholder="\(000\) 000-0000"/);
+  assert.doesNotMatch(input, /WddSelect/);
+  assert.doesNotMatch(input, /Phone country/);
+  assert.match(phone, /inferPhoneCountryFromInput/);
+  assert.match(phone, /if \(!raw\.startsWith\("\+"\) && !raw\.startsWith\("00"\)\) return "US"/);
+  assert.match(phone, /return country\?\.code \|\| "INTL"/);
+  assert.match(validation, /inferPhoneCountryFromInput\(phone\)/);
   assert.match(validation, /isE164Phone\(phone\)/);
-  assert.match(validation, /isPhoneCountryCode\(rawPhoneCountry\)/);
-  assert.match(validation, /phoneCountry/);
-  assert.match(validation, /normalizePhoneNumber\(phoneCountry, phone\) !== phone/);
+  assert.doesNotMatch(validation, /Phone number does not match the selected country/);
   assert.doesNotMatch(submission, /phone\?: string/);
 });
 
@@ -220,40 +224,7 @@ test('successful lead UX tells customers to check their inbox when confirmation 
   assert.match(email, /This email is your record of the information you submitted/);
 });
 
-test('phone country control stays compact, readable, and responsive for long dial codes', () => {
-  const phone = fs.readFileSync(
-    'src/components/forms/international-phone-input.tsx',
-    'utf8',
-  );
-  const countries = fs.readFileSync('src/lib/leads/phone.ts', 'utf8');
-  const forms = [
-    fs.readFileSync('src/components/forms/contact-form.tsx', 'utf8'),
-    fs.readFileSync('src/components/forms/quote-form.tsx', 'utf8'),
-    fs.readFileSync('src/components/campaigns/campaign-lead-form.tsx', 'utf8'),
-  ];
-
-  assert.match(phone, /WddSelect/);
-  assert.match(phone, /displayLabel:/);
-  assert.match(phone, /Phone country/);
-  assert.match(phone, /menuClassName="w-\[min\(18rem,calc\(100vw-2rem\)\)\]"/);
-  assert.match(phone, /min-\[360px\]:grid-cols-\[8\.25rem_minmax\(0,1fr\)\]/);
-  assert.doesNotMatch(phone, /<select/);
-  assert.doesNotMatch(phone, /opacity-0/);
-  assert.match(countries, /dialCode: "965"/);
-  assert.match(countries, /dialCode: "966"/);
-  assert.match(countries, /dialCode: "971"/);
-
-  for (const source of forms) {
-    assert.doesNotMatch(
-      source,
-      /United States \(\+1\) is selected by default\. Change the country for international numbers\./,
-    );
-  }
-});
-
-
-
-test('contact form uses the same custom WDD dropdown for service and phone country', () => {
+test('phone input is one clean field while service keeps the WDD dropdown', () => {
   const contact = fs.readFileSync('src/components/forms/contact-form.tsx', 'utf8');
   const phone = fs.readFileSync(
     'src/components/forms/international-phone-input.tsx',
@@ -264,12 +235,17 @@ test('contact form uses the same custom WDD dropdown for service and phone count
   assert.match(contact, /<WddSelect[\s\S]*id="service"/);
   assert.match(contact, /placeholder="Select a service"/);
   assert.doesNotMatch(contact, /<select[\s\S]*id="service"/);
-  assert.match(phone, /<WddSelect/);
+
+  assert.match(phone, /type="tel"/);
+  assert.match(phone, /autoComplete="tel"/);
+  assert.match(phone, /placeholder="\(000\) 000-0000"/);
+  assert.doesNotMatch(phone, /WddSelect/);
+  assert.doesNotMatch(phone, /role="combobox"/);
+
   assert.match(select, /role="combobox"/);
   assert.match(select, /role="listbox"/);
   assert.match(select, /role="option"/);
   assert.match(select, /rotate-180/);
-  assert.match(select, /d="m5\.5 7\.5 4\.5 4\.5 4\.5-4\.5"/);
 });
 
 test('get-started keeps one simple Tawk-ready help route without recommendation copy', () => {
