@@ -432,7 +432,10 @@ async function sendOnce(
             : `wdd-confirmation/${envelope.submissionId}`,
       },
       body: JSON.stringify({
-        from: config.emailFrom,
+        from:
+          options.kind === "customer-confirmation"
+            ? "Website Design Dogs <no-reply@websitedesigndogs.com>"
+            : config.emailFrom,
         to: [options.to],
         reply_to: options.replyTo,
         subject: options.subject,
