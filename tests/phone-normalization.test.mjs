@@ -37,7 +37,7 @@ test('normalizes familiar US local formatting to E.164', () => {
   );
 });
 
-test('normalizes Pakistan and UK national formats using the selected country', () => {
+test('keeps national-format normalization available for existing integrations', () => {
   const { normalizePhoneNumber } = loadPhoneModule();
   assert.equal(
     normalizePhoneNumber('PK', '0300 1234567'),
@@ -49,16 +49,34 @@ test('normalizes Pakistan and UK national formats using the selected country', (
   );
 });
 
-test('other international accepts an explicit international number', () => {
+test('accepts explicit international numbers without requiring a country selector', () => {
   const { normalizePhoneNumber } = loadPhoneModule();
+
   assert.equal(
-    normalizePhoneNumber('INTL', '+254 712 345678'),
-    '+254712345678',
+    normalizePhoneNumber('US', '+971 50 123 4567'),
+    '+971501234567',
+  );
+  assert.equal(
+    normalizePhoneNumber('US', '+44 20 7946 0018'),
+    '+442079460018',
+  );
+  assert.equal(
+    normalizePhoneNumber('US', '+92 300 1234567'),
+    '+923001234567',
   );
 });
 
-test('rejects a country-code mismatch and implausible US number', () => {
+test('infers country metadata from explicit international numbers', () => {
+  const { inferPhoneCountryFromInput } = loadPhoneModule();
+
+  assert.equal(inferPhoneCountryFromInput('(415) 900-2374'), 'US');
+  assert.equal(inferPhoneCountryFromInput('+971 50 123 4567'), 'AE');
+  assert.equal(inferPhoneCountryFromInput('+44 20 7946 0018'), 'GB');
+  assert.equal(inferPhoneCountryFromInput('+92 300 1234567'), 'PK');
+  assert.equal(inferPhoneCountryFromInput('+254 712 345678'), 'INTL');
+});
+
+test('rejects implausible local US numbers', () => {
   const { normalizePhoneNumber } = loadPhoneModule();
-  assert.equal(normalizePhoneNumber('US', '+92 300 1234567'), undefined);
   assert.equal(normalizePhoneNumber('US', '555-0100'), undefined);
 });

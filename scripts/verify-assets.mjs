@@ -34,10 +34,6 @@ const requiredFiles = [
   "public/brand/icons/ecommerce.svg",
   "public/brand/icons/seo.svg",
   "public/brand/icons/website-care.svg",
-  "public/campaigns/october-2026/hero-environment.svg",
-  "public/campaigns/october-2026/why-environment.svg",
-  "public/campaigns/october-2026/faq-environment.svg",
-  "public/campaigns/october-2026/cta-environment.svg",
   "public/portfolio/concepts/saas-launch-thumb.svg",
   "public/portfolio/concepts/creative-portfolio-thumb.svg",
   "public/portfolio/concepts/wellness-membership-thumb.svg",
@@ -58,7 +54,7 @@ for (const name of finalIllustrationSceneNames) {
   }
 }
 for (const format of ["webp", "avif"]) requiredFiles.push(`public/brand/illustrations/final/mascot-designer.${format}`);
-const requiredDirs = ["public/portfolio/concepts", "public/campaigns/october-2026", "public/campaigns/cleaning", "public/campaigns/landscaping", "public/campaigns/home-services", "public/campaigns/roofing"];
+const requiredDirs = ["public/portfolio/concepts", "public/campaigns/cleaning", "public/campaigns/landscaping", "public/campaigns/home-services", "public/campaigns/roofing"];
 const errors = [];
 function checkFile(relativePath) { const absolutePath = path.join(root, relativePath); if (!existsSync(absolutePath)) { errors.push(`Missing file: ${relativePath}`); return; } if (!statSync(absolutePath).isFile()) { errors.push(`Not a file: ${relativePath}`); return; } if (statSync(absolutePath).size === 0) errors.push(`Zero-byte file: ${relativePath}`); }
 for (const file of requiredFiles) checkFile(file);

@@ -56,6 +56,15 @@ function withPreviewRobots(
 }
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/offers",
+        destination: "/",
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     return [
       {

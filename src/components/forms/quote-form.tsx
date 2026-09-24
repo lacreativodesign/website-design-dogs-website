@@ -262,7 +262,7 @@ export function QuoteForm({
         nextErrors.email = "Enter a valid email.";
       }
       if (!normalizePhoneNumber(data.contact.phoneCountry, data.contact.phone)) {
-        nextErrors.phone = "Enter a valid phone number for the selected country.";
+        nextErrors.phone = "Enter a valid phone number. Include +country code for international numbers.";
       }
       if (data.business.website && !normalizeWebsiteInput(data.business.website)) {
         nextErrors.website = "Enter a valid website address.";

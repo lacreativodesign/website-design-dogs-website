@@ -24,8 +24,7 @@ export type CampaignRequestPayload = {
     | "cleaning"
     | "roofing"
     | "landscaping"
-    | "home-services"
-    | "october-offer";
+    | "home-services";
   contact: {
     fullName: string;
     email: string;
