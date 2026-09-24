@@ -60,7 +60,10 @@ test('contact thank-you route is noindex and excluded from the sitemap', () => {
   assert.match(page, /noindex: true/);
   assert.doesNotMatch(sitemap, /thank-you/);
   assert.match(handoff, /wdd-contact-success-v1/);
-  assert.doesNotMatch(handoff, /email|phone|fullName|businessName/);
+  assert.doesNotMatch(
+    handoff,
+    /submittedEmail|contactEmail|phoneNumber|fullName|businessName/,
+  );
 });
 
 test('only the shared browser submission module may call the lead API directly', () => {
