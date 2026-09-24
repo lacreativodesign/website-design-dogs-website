@@ -31,6 +31,8 @@ test("contact form validation, failure preservation, and mocked success", async 
   const status = page.locator("#contact-status");
   const submissionIds: string[] = [];
 
+  await expect(phone).toHaveAttribute("placeholder", "(000) 000-0000");
+  await expect(page.getByRole("combobox", { name: "Phone country" })).toHaveCount(0);
   await expect(status).toHaveClass("sr-only");
   await expect(page.getByText(/loading secure enquiry/i)).toHaveCount(0);
 
