@@ -2,6 +2,13 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "node:test";
 
+test("retired /offers URL permanently redirects without restoring the route", () => {
+  const source = fs.readFileSync("next.config.ts", "utf8");
+  assert.match(source, /source: "\\/offers"/);
+  assert.match(source, /destination: "\\/"/);
+  assert.match(source, /permanent: true/);
+});
+
 test("sitemap excludes campaigns and api", () => {
   const source = fs.readFileSync("src/app/sitemap.ts", "utf8");
   assert.match(source, /privacy-policy/);
