@@ -121,6 +121,10 @@ test('email adapter sends the complete lead to the permanent WDD safety inbox', 
     );
 
     const body = JSON.parse(requests[0].options.body);
+    assert.equal(
+      body.from,
+      'Website Design Dogs <leads@websitedesigndogs.com>',
+    );
     assert.deepEqual(body.to, ['leads@websitedesigndogs.com']);
     assert.equal(body.reply_to, envelope.contact.email);
     assert.match(body.subject, /WDD quote lead/);
@@ -162,6 +166,10 @@ test('customer receives a branded transactional confirmation with the complete q
     );
 
     const body = JSON.parse(requests[0].options.body);
+    assert.equal(
+      body.from,
+      'Website Design Dogs <no-reply@websitedesigndogs.com>',
+    );
     assert.deepEqual(body.to, [envelope.contact.email]);
     assert.equal(body.reply_to, 'leads@websitedesigndogs.com');
     assert.match(body.subject, /project brief/i);
@@ -216,6 +224,10 @@ test('contact enquiry sends both the permanent WDD safety copy and customer conf
     assert.equal(requests.length, 2);
 
     const internal = JSON.parse(requests[0].options.body);
+    assert.equal(
+      internal.from,
+      'Website Design Dogs <leads@websitedesigndogs.com>',
+    );
     assert.deepEqual(internal.to, ['leads@websitedesigndogs.com']);
     assert.equal(internal.reply_to, contactEnvelope.contact.email);
     assert.match(internal.subject, /WDD contact lead/);
@@ -223,6 +235,10 @@ test('contact enquiry sends both the permanent WDD safety copy and customer conf
     assert.match(internal.text, /professional lead-generating website/);
 
     const customer = JSON.parse(requests[1].options.body);
+    assert.equal(
+      customer.from,
+      'Website Design Dogs <no-reply@websitedesigndogs.com>',
+    );
     assert.deepEqual(customer.to, [contactEnvelope.contact.email]);
     assert.equal(customer.reply_to, 'leads@websitedesigndogs.com');
     assert.equal(
