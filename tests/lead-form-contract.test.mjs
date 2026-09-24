@@ -33,10 +33,34 @@ test('all approved WDD lead entry points remain wired to the shared hardened sub
     assert.match(source, /TurnstileWidget/);
     assert.match(source, new RegExp(form.action));
     assert.match(source, /wdd_lead_submit/);
-    assert.match(source, /wdd_lead_success/);
     assert.match(source, /wdd_lead_error/);
-    assert.match(source, /eventId:\s*submissionId/);
+
+    if (form.componentName === "ContactForm") {
+      const success = fs.readFileSync(
+        "src/components/forms/contact-thank-you-state.tsx",
+        "utf8",
+      );
+      assert.match(source, /storeContactSuccess/);
+      assert.match(source, /router\.replace\("\/thank-you"\)/);
+      assert.match(success, /wdd_lead_success/);
+      assert.match(success, /eventId:\s*success\.eventId/);
+    } else {
+      assert.match(source, /wdd_lead_success/);
+      assert.match(source, /eventId:\s*submissionId/);
+    }
   }
+});
+
+test('contact thank-you route is noindex and excluded from the sitemap', () => {
+  const page = fs.readFileSync('src/app/thank-you/page.tsx', 'utf8');
+  const sitemap = fs.readFileSync('src/app/sitemap.ts', 'utf8');
+  const handoff = fs.readFileSync('src/lib/leads/contact-success.ts', 'utf8');
+
+  assert.match(page, /path: "\/thank-you"/);
+  assert.match(page, /noindex: true/);
+  assert.doesNotMatch(sitemap, /thank-you/);
+  assert.match(handoff, /wdd-contact-success-v1/);
+  assert.doesNotMatch(handoff, /email|phone|fullName|businessName/);
 });
 
 test('only the shared browser submission module may call the lead API directly', () => {
