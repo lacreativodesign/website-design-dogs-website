@@ -135,24 +135,19 @@ export function normalizePhoneNumber(
   const international = raw.startsWith("+") || raw.startsWith("00");
   const digits = raw.replace(/\D/g, "");
 
-  if (countryCode === "INTL") {
-    if (!international) return undefined;
+  if (international) {
     const normalized = `+${raw.startsWith("00") ? digits.slice(2) : digits}`;
     return isE164Phone(normalized) ? normalized : undefined;
   }
 
+  if (countryCode === "INTL") return undefined;
+
   let national = digits;
 
-  if (international) {
-    const internationalDigits = raw.startsWith("00") ? digits.slice(2) : digits;
-    if (!internationalDigits.startsWith(country.dialCode)) return undefined;
-    national = internationalDigits.slice(country.dialCode.length);
-  } else {
-    if (country.dialCode === "1" && national.length === 11 && national.startsWith("1")) {
-      national = national.slice(1);
-    } else if (country.stripNationalPrefix && national.startsWith("0")) {
-      national = national.slice(1);
-    }
+  if (country.dialCode === "1" && national.length === 11 && national.startsWith("1")) {
+    national = national.slice(1);
+  } else if (country.stripNationalPrefix && national.startsWith("0")) {
+    national = national.slice(1);
   }
 
   if (
