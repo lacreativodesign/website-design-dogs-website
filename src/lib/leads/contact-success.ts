@@ -5,8 +5,6 @@ export type ContactSuccessState = {
   formType: "contact";
   serviceSlug?: string;
   utmCampaign?: string;
-  confirmationEmailSent: boolean;
-  referenceId?: string;
 };
 
 export function storeContactSuccess(state: ContactSuccessState) {
@@ -45,11 +43,6 @@ export function consumeContactSuccess(): ContactSuccessState | null {
       utmCampaign:
         typeof parsed.utmCampaign === "string"
           ? parsed.utmCampaign
-          : undefined,
-      confirmationEmailSent: parsed.confirmationEmailSent === true,
-      referenceId:
-        typeof parsed.referenceId === "string"
-          ? parsed.referenceId
           : undefined,
     };
   } catch {
