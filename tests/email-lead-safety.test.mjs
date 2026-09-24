@@ -182,6 +182,61 @@ test('customer receives a branded transactional confirmation with the complete q
   }
 });
 
+
+test('contact enquiry sends both the permanent WDD safety copy and customer confirmation', async () => {
+  const {
+    sendCustomerConfirmationEmail,
+    sendLeadEmail,
+  } = loadTypeScriptModule('../src/lib/leads/email-adapter.ts');
+  const originalFetch = globalThis.fetch;
+  const requests = [];
+  const contactEnvelope = {
+    ...envelope,
+    formType: 'contact',
+    project: undefined,
+    package: undefined,
+    enquiry: {
+      service: 'New Website',
+      summary: 'We need a professional lead-generating website for our service business.',
+    },
+  };
+
+  globalThis.fetch = async (url, options) => {
+    requests.push({ url, options });
+    return Response.json(
+      { id: requests.length === 1 ? 'internal-contact-copy' : 'customer-contact-copy' },
+      { status: 200 },
+    );
+  };
+
+  try {
+    await sendLeadEmail(contactEnvelope, config);
+    await sendCustomerConfirmationEmail(contactEnvelope, config);
+
+    assert.equal(requests.length, 2);
+
+    const internal = JSON.parse(requests[0].options.body);
+    assert.deepEqual(internal.to, ['leads@websitedesigndogs.com']);
+    assert.equal(internal.reply_to, contactEnvelope.contact.email);
+    assert.match(internal.subject, /WDD contact lead/);
+    assert.match(internal.text, /Service: New Website/);
+    assert.match(internal.text, /professional lead-generating website/);
+
+    const customer = JSON.parse(requests[1].options.body);
+    assert.deepEqual(customer.to, [contactEnvelope.contact.email]);
+    assert.equal(customer.reply_to, 'leads@websitedesigndogs.com');
+    assert.equal(
+      customer.subject,
+      'We received your Website Design Dogs enquiry',
+    );
+    assert.match(customer.text, /We’ve received your enquiry/);
+    assert.match(customer.text, /Service: New Website/);
+    assert.match(customer.html, /Request received/);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
+
 test('email remains successful when Bizosto rejects the lead', async () => {
   const { deliverLead } = loadTypeScriptModule('../src/lib/leads/delivery.ts');
   const originalFetch = globalThis.fetch;

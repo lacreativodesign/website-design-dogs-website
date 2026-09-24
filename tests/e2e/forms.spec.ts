@@ -11,6 +11,7 @@ const successfulResponse = {
   ok: true,
   message: "Thanks — your request was received successfully.",
   referenceId: "WDD-20260713-TEST",
+  confirmationEmailSent: true,
 };
 
 test("contact form validation, failure preservation, and mocked success", async ({
@@ -82,11 +83,28 @@ test("contact form validation, failure preservation, and mocked success", async 
   });
 
   await submit.click();
-  await expect(status).toContainText(/thanks/i);
-  await expect(status).toContainText("WDD-20260713-TEST");
-  await expect(fullName).toHaveValue("");
+  await expect(page).toHaveURL(/\/thank-you$/);
+  await expect(
+    page.getByRole("heading", { name: /thank you\. your enquiry is safely in/i }),
+  ).toBeVisible();
+  await expect(page.getByText(/confirmation email should arrive shortly/i)).toBeVisible();
   expect(submissionIds).toHaveLength(2);
   expect(submissionIds[1]).toBe(submissionIds[0]);
+});
+
+test("contact thank-you page is noindex and does not manufacture a conversion on direct visit", async ({ page }) => {
+  await page.goto("/thank-you");
+
+  await expect(
+    page.getByRole("heading", { name: /thank you\. your enquiry is safely in/i }),
+  ).toBeVisible();
+  await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+    "content",
+    /noindex/i,
+  );
+  expect(
+    await page.evaluate(() => sessionStorage.getItem("wdd-contact-success-v1")),
+  ).toBeNull();
 });
 
 test("contact form retains first-landing attribution across navigation", async ({
@@ -147,7 +165,8 @@ test("contact form retains first-landing attribution across navigation", async (
   await page.getByRole("checkbox", { name: /I consent/i }).check();
   await page.getByRole("button", { name: "Send Enquiry" }).click();
 
-  await expect(page.locator("#contact-status")).toContainText(/thanks/i);
+  await expect(page).toHaveURL(/\/thank-you$/);
+  await expect(page.getByText(/confirmation email should arrive shortly/i)).toBeVisible();
   expect(submitted?.consent).toBe(true);
   expect(submitted?.attribution).toMatchObject({
     utmSource: "google",

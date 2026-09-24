@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   useCallback,
   useRef,
@@ -13,6 +14,7 @@ import { serviceBySlug } from "@/content/services";
 import { SERVICES } from "@/lib/leads/constants";
 import { leadEvent } from "./analytics-events";
 import { normalizePhoneNumber } from "@/lib/leads/phone";
+import { storeContactSuccess } from "@/lib/leads/contact-success";
 import { isValidWebsiteInput, normalizeWebsiteInput } from "@/lib/leads/website";
 import { getAttribution } from "./attribution";
 import { Field, inputClass } from "./form-field";
@@ -84,6 +86,7 @@ function getPreferences(search: string) {
 }
 
 export function ContactForm() {
+  const router = useRouter();
   const search = useSyncExternalStore(
     subscribeToUrlChange,
     getClientSearch,
@@ -95,12 +98,11 @@ export function ContactForm() {
   const [data, setData] = useState<ContactRequestPayload>(empty);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState("");
-  const [reference, setReference] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [turnstile, setTurnstile] = useState("");
   const [resetKey, setResetKey] = useState(0);
-  const [submissionId, setSubmissionId] = useState(uuid);
-  const [formStartedAt, setFormStartedAt] = useState(() =>
+  const [submissionId] = useState(uuid);
+  const [formStartedAt] = useState(() =>
     new Date().toISOString(),
   );
   const statusRef = useRef<HTMLParagraphElement>(null);
@@ -163,7 +165,6 @@ export function ContactForm() {
     }
 
     setStatus("");
-    setReference("");
     if (!validate()) {
       setStatus("Please review the highlighted fields and try again.");
       requestAnimationFrame(() => {
@@ -204,35 +205,31 @@ export function ContactForm() {
     );
 
     setSubmitting(false);
-    setStatus(result.message);
-    statusRef.current?.focus();
-    setResetKey((key) => key + 1);
 
     if (result.ok) {
-      leadEvent("wdd_lead_success", {
+      const attribution = getAttribution();
+      storeContactSuccess({
         eventId: submissionId,
         formType: "contact",
         serviceSlug: formData.service,
-        utmCampaign: getAttribution().utmCampaign,
-        pagePath: location.pathname,
+        utmCampaign: attribution.utmCampaign,
       });
-      setReference(result.referenceId || "");
-      setData(empty);
-      setStarted(true);
-      setErrors({});
-      setSubmissionId(uuid());
-      setFormStartedAt(new Date().toISOString());
-    } else {
-      leadEvent("wdd_lead_error", {
-        formType: "contact",
-        serviceSlug: formData.service,
-        utmCampaign: getAttribution().utmCampaign,
-        failureCategory: result.code,
-        pagePath: location.pathname,
-      });
-      if (result.fieldErrors) {
-        setErrors(result.fieldErrors);
-      }
+      router.replace("/thank-you");
+      return;
+    }
+
+    setStatus(result.message);
+    statusRef.current?.focus();
+    setResetKey((key) => key + 1);
+    leadEvent("wdd_lead_error", {
+      formType: "contact",
+      serviceSlug: formData.service,
+      utmCampaign: getAttribution().utmCampaign,
+      failureCategory: result.code,
+      pagePath: location.pathname,
+    });
+    if (result.fieldErrors) {
+      setErrors(result.fieldErrors);
     }
   }
 
@@ -415,7 +412,6 @@ export function ContactForm() {
         }
       >
         {status || "Form status"}
-        {reference ? ` Reference: ${reference}` : ""}
       </p>
     </form>
   );
